@@ -1,0 +1,51 @@
+{
+  "name": "gip-mapjs",
+  "version": "2.3.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ansur/leaflet-pulse-icon": "^0.1.1",
+    "@mapbox/geojsonhint": "^3.0.0",
+    "@turf/turf": "^5.1.6",
+    "beautifymarker": "^1.0.7",
+    "font-awesome": "^4.7.0",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat-css": "^3.1.0",
+    "jquery": "^3.4.1",
+    "jsonpath-plus": "^3.0.0",
+    "leaflet": "^1.6.0",
+    "leaflet-canvasicon": "^0.1.6",
+    "leaflet-easybutton": "^2.4.0",
+    "leaflet-groupedlayercontrol": "^0.6.1",
+    "leaflet-piechart": "github:sashakavun/leaflet-piechart",
+    "leaflet-providers": "^1.9.1",
+    "leaflet-pulse-icon": "^0.1.0",
+    "leaflet-realtime": "^2.2.0",
+    "leaflet-rotatedmarker": "^0.2.0",
+    "leaflet-search": "^2.9.8",
+    "leaflet-sidebar-v2": "^3.2.2",
+    "leaflet.label": "^0.2.4",
+    "mapbox-gl": "^1.8.1",
+    "modernizr": "^3.9.1",
+    "moment": "^2.24.0",
+    "mustache": "^4.0.1",
+    "peity": "^3.3.0",
+    "renderjson": "^1.4.0",
+    "rtree": "^1.4.2",
+    "sieve": "0.0.4",
+    "slideout": "^1.0.1",
+    "tagsort": "^1.4.0",
+    "underscore": "^1.9.2"
+  },
+  "devDependencies": {
+    "gulp-concat": "^2.6.1",
+    "leaflet-zoom-min": "^1.1.0",
+    "list.js": "^1.5.0",
+    "typeahead.js": "^0.11.1"
+  }
+}

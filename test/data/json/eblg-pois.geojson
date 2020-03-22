@@ -1,0 +1,170 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#da5000",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "FUEL0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.462570786476135,
+          50.64578004562484
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#da5000",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "FUEL1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.462769269943236,
+          50.645654184531935
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#669d34",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "CATERING1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.455634593963623,
+          50.63971792036136
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#669d34",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "CATERING2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.455935001373291,
+          50.6398948284722
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#5c0600",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "SEWAGE"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.465376377105713,
+          50.644466991689676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ffffff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "CARGO2",
+        "handler": "handler2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.427889823913574,
+          50.634655344551845
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ffffff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "CARGO1",
+        "handler": "handler1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.432889461517334,
+          50.63666955293341
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ffffff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "CARGO3",
+        "handler": "handler3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.449991226196289,
+          50.636016305618256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ffffff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "handler": "handler4",
+        "name": "CARGO4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.4537248611450195,
+          50.63842511010626
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ffffff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "CARGO5",
+        "handler": "handler5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.454733371734618,
+          50.6391735835358
+        ]
+      }
+    }
+  ]
+}

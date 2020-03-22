@@ -1,0 +1,2080 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "way/24269520",
+      "properties": {
+        "timestamp": "2012-02-11T13:38:07Z",
+        "version": 3,
+        "changeset": 10652656,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "S3",
+        "id": "way/24269520"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4518857,
+            50.6400063
+          ],
+          [
+            5.4511979,
+            50.6399299
+          ],
+          [
+            5.4492703,
+            50.6396582
+          ],
+          [
+            5.4474897,
+            50.6395295
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/24269521",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:04Z",
+        "version": 5,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "S6",
+        "id": "way/24269521"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4643986,
+            50.6501997
+          ],
+          [
+            5.4646605,
+            50.650225
+          ],
+          [
+            5.4649134,
+            50.6502206
+          ],
+          [
+            5.4651873,
+            50.6501226
+          ],
+          [
+            5.465974,
+            50.6496416
+          ],
+          [
+            5.4661036,
+            50.6494902
+          ],
+          [
+            5.4661847,
+            50.6493299
+          ],
+          [
+            5.4661706,
+            50.649174
+          ],
+          [
+            5.4661004,
+            50.6490315
+          ],
+          [
+            5.4659178,
+            50.6488534
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/24269522",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:04Z",
+        "version": 6,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "C0",
+        "id": "way/24269522"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4310207,
+            50.6291347
+          ],
+          [
+            5.4304817,
+            50.6293835
+          ],
+          [
+            5.4300774,
+            50.6296149
+          ],
+          [
+            5.4298103,
+            50.6298997
+          ],
+          [
+            5.4295921,
+            50.6302232
+          ],
+          [
+            5.4295492,
+            50.6305662
+          ],
+          [
+            5.429564,
+            50.6308751
+          ],
+          [
+            5.4301481,
+            50.6312738
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/24269523",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:05Z",
+        "version": 2,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "C3",
+        "id": "way/24269523"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4466961,
+            50.6390287
+          ],
+          [
+            5.4445657,
+            50.6403829
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/24269524",
+      "properties": {
+        "timestamp": "2012-02-11T13:38:06Z",
+        "version": 3,
+        "changeset": 10652656,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "S4",
+        "id": "way/24269524"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4579866,
+            50.6438407
+          ],
+          [
+            5.4574637,
+            50.6438492
+          ],
+          [
+            5.4556265,
+            50.643889
+          ],
+          [
+            5.4551031,
+            50.6439322
+          ],
+          [
+            5.4546769,
+            50.6440652
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/24269525",
+      "properties": {
+        "timestamp": "2012-02-11T13:38:07Z",
+        "version": 3,
+        "changeset": 10652656,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "S5",
+        "id": "way/24269525"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4620339,
+            50.6464037
+          ],
+          [
+            5.4621185,
+            50.6465979
+          ],
+          [
+            5.4621382,
+            50.6466851
+          ],
+          [
+            5.4621246,
+            50.646788
+          ],
+          [
+            5.4620957,
+            50.6468952
+          ],
+          [
+            5.4619807,
+            50.6470364
+          ],
+          [
+            5.4618107,
+            50.6471624
+          ],
+          [
+            5.4615717,
+            50.6473091
+          ],
+          [
+            5.4606909,
+            50.6478602
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/24269526",
+      "properties": {
+        "timestamp": "2011-11-13T20:12:30Z",
+        "version": 3,
+        "changeset": 9818577,
+        "user": "Oli-Wan",
+        "uid": 293774,
+        "aeroway": "taxiway",
+        "id": "way/24269526"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4536176,
+            50.6460955
+          ],
+          [
+            5.4537538,
+            50.646191
+          ],
+          [
+            5.4539335,
+            50.6462714
+          ],
+          [
+            5.4541893,
+            50.64635
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28725995",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:05Z",
+        "version": 9,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "C4",
+        "id": "way/28725995"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4546769,
+            50.6440652
+          ],
+          [
+            5.4544442,
+            50.6444616
+          ],
+          [
+            5.4544347,
+            50.6449337
+          ],
+          [
+            5.4544356,
+            50.6454383
+          ],
+          [
+            5.4543923,
+            50.6457334
+          ],
+          [
+            5.4543191,
+            50.6459674
+          ],
+          [
+            5.4541893,
+            50.64635
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726003",
+      "properties": {
+        "timestamp": "2012-04-04T10:06:51Z",
+        "version": 3,
+        "changeset": 11174430,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "N3",
+        "id": "way/28726003"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4436087,
+            50.6416499
+          ],
+          [
+            5.4435648,
+            50.6414366
+          ],
+          [
+            5.4435829,
+            50.641225
+          ],
+          [
+            5.4436393,
+            50.641024
+          ],
+          [
+            5.4437734,
+            50.6408792
+          ],
+          [
+            5.4439776,
+            50.6407186
+          ],
+          [
+            5.4445657,
+            50.6403829
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726013",
+      "properties": {
+        "timestamp": "2011-11-13T20:12:32Z",
+        "version": 2,
+        "changeset": 9818577,
+        "user": "Oli-Wan",
+        "uid": 293774,
+        "aeroway": "taxiway",
+        "id": "way/28726013"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4423648,
+            50.6407263
+          ],
+          [
+            5.4427353,
+            50.6408397
+          ],
+          [
+            5.443093,
+            50.640876
+          ],
+          [
+            5.4434407,
+            50.6408603
+          ],
+          [
+            5.4437138,
+            50.6408067
+          ],
+          [
+            5.4439776,
+            50.6407186
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726072",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:05Z",
+        "version": 3,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "N2",
+        "id": "way/28726072"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4342909,
+            50.6366595
+          ],
+          [
+            5.4364807,
+            50.6352799
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726078",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:06Z",
+        "version": 3,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "D2",
+        "id": "way/28726078"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4342909,
+            50.6366595
+          ],
+          [
+            5.4390411,
+            50.6396367
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726080",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:06Z",
+        "version": 3,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "D1",
+        "id": "way/28726080"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4342909,
+            50.6366595
+          ],
+          [
+            5.4337774,
+            50.636302
+          ],
+          [
+            5.4313353,
+            50.6347915
+          ],
+          [
+            5.4303787,
+            50.6345397
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726361",
+      "properties": {
+        "timestamp": "2019-02-11T12:22:46Z",
+        "version": 8,
+        "changeset": 67098478,
+        "user": "Anakil",
+        "uid": 3401173,
+        "aeroway": "taxiway",
+        "id": "way/28726361"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4397347,
+            50.6483726
+          ],
+          [
+            5.4405402,
+            50.6480815
+          ],
+          [
+            5.441829,
+            50.6476206
+          ],
+          [
+            5.4424049,
+            50.6474361
+          ],
+          [
+            5.4433971,
+            50.6471294
+          ],
+          [
+            5.4435244,
+            50.64709
+          ],
+          [
+            5.4438893,
+            50.6469889
+          ],
+          [
+            5.4442883,
+            50.6468589
+          ],
+          [
+            5.4443392,
+            50.6468429
+          ],
+          [
+            5.4465792,
+            50.6461602
+          ],
+          [
+            5.4466824,
+            50.646119
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726388",
+      "properties": {
+        "timestamp": "2009-09-25T21:27:35Z",
+        "version": 4,
+        "changeset": 2627539,
+        "user": "BugBuster",
+        "uid": 166129,
+        "aeroway": "taxiway",
+        "id": "way/28726388"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4470986,
+            50.6451076
+          ],
+          [
+            5.4471274,
+            50.645309
+          ],
+          [
+            5.4471025,
+            50.645592
+          ],
+          [
+            5.446948,
+            50.6458533
+          ],
+          [
+            5.4466824,
+            50.646119
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726428",
+      "properties": {
+        "timestamp": "2008-11-30T16:21:18Z",
+        "version": 2,
+        "changeset": 812696,
+        "user": "Skratz",
+        "uid": 50214,
+        "aeroway": "taxiway",
+        "created_by": "Potlatch 0.10f",
+        "id": "way/28726428"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4483813,
+            50.6459512
+          ],
+          [
+            5.4479179,
+            50.6458696
+          ],
+          [
+            5.4473943,
+            50.6458914
+          ],
+          [
+            5.447051,
+            50.6459621
+          ],
+          [
+            5.4466824,
+            50.646119
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726610",
+      "properties": {
+        "timestamp": "2019-11-14T20:51:58Z",
+        "version": 6,
+        "changeset": 77094555,
+        "user": "Patrick Bous",
+        "uid": 223763,
+        "aeroway": "taxiway",
+        "area": "no",
+        "id": "way/28726610"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4373778,
+            50.6491931
+          ],
+          [
+            5.4369555,
+            50.6490502
+          ],
+          [
+            5.4367024,
+            50.6489807
+          ],
+          [
+            5.4361008,
+            50.6485854
+          ],
+          [
+            5.4353604,
+            50.648099
+          ],
+          [
+            5.4351264,
+            50.6480187
+          ],
+          [
+            5.4349673,
+            50.6479983
+          ],
+          [
+            5.4347835,
+            50.6479748
+          ],
+          [
+            5.434359,
+            50.6480003
+          ],
+          [
+            5.4337521,
+            50.6481964
+          ],
+          [
+            5.4326575,
+            50.6485501
+          ],
+          [
+            5.4322452,
+            50.6486833
+          ],
+          [
+            5.4320821,
+            50.6489065
+          ],
+          [
+            5.4320821,
+            50.6491296
+          ],
+          [
+            5.4324894,
+            50.6500907
+          ],
+          [
+            5.4326057,
+            50.650365
+          ],
+          [
+            5.4328117,
+            50.6505772
+          ],
+          [
+            5.433155,
+            50.650735
+          ],
+          [
+            5.4335927,
+            50.6508548
+          ],
+          [
+            5.4351182,
+            50.6509132
+          ],
+          [
+            5.4355153,
+            50.6508439
+          ],
+          [
+            5.4357606,
+            50.6507758
+          ],
+          [
+            5.4360253,
+            50.6506589
+          ],
+          [
+            5.4362656,
+            50.6504647
+          ],
+          [
+            5.436398,
+            50.6502836
+          ],
+          [
+            5.4369581,
+            50.6495178
+          ],
+          [
+            5.4371313,
+            50.6493737
+          ],
+          [
+            5.4373355,
+            50.6492417
+          ],
+          [
+            5.4373778,
+            50.6491931
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726724",
+      "properties": {
+        "timestamp": "2011-11-13T20:12:44Z",
+        "version": 6,
+        "changeset": 9818577,
+        "user": "Oli-Wan",
+        "uid": 293774,
+        "aeroway": "taxiway",
+        "id": "way/28726724"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4585363,
+            50.6495118
+          ],
+          [
+            5.4583112,
+            50.6494141
+          ],
+          [
+            5.4564409,
+            50.6485675
+          ],
+          [
+            5.4563296,
+            50.6485171
+          ],
+          [
+            5.4560686,
+            50.6484499
+          ],
+          [
+            5.4555781,
+            50.648385
+          ],
+          [
+            5.4553577,
+            50.6483538
+          ],
+          [
+            5.4547289,
+            50.648265
+          ],
+          [
+            5.4536576,
+            50.6481008
+          ],
+          [
+            5.4533681,
+            50.648033
+          ],
+          [
+            5.4520542,
+            50.6475021
+          ],
+          [
+            5.4517392,
+            50.6473807
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726734",
+      "properties": {
+        "timestamp": "2019-03-18T16:21:02Z",
+        "version": 2,
+        "changeset": 68264054,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "id": "way/28726734"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4515207,
+            50.6473073
+          ],
+          [
+            5.4515138,
+            50.6474232
+          ],
+          [
+            5.4515313,
+            50.6475568
+          ],
+          [
+            5.4517766,
+            50.6497222
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28726747",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:07Z",
+        "version": 3,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "C5",
+        "id": "way/28726747"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4583866,
+            50.6464062
+          ],
+          [
+            5.4567666,
+            50.6474618
+          ],
+          [
+            5.456547,
+            50.6475664
+          ],
+          [
+            5.4547289,
+            50.648265
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28739947",
+      "properties": {
+        "timestamp": "2008-12-01T06:38:06Z",
+        "version": 2,
+        "changeset": 6643,
+        "user": "Skratz",
+        "uid": 50214,
+        "aeroway": "taxiway",
+        "created_by": "Potlatch 0.10f",
+        "id": "way/28739947"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4373778,
+            50.6491931
+          ],
+          [
+            5.4391569,
+            50.6485861
+          ],
+          [
+            5.4397347,
+            50.6483726
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28740000",
+      "properties": {
+        "timestamp": "2008-12-01T06:49:50Z",
+        "version": 2,
+        "changeset": 6643,
+        "user": "Skratz",
+        "uid": 50214,
+        "aeroway": "taxiway",
+        "created_by": "Potlatch 0.10f",
+        "id": "way/28740000"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.448206,
+            50.646722
+          ],
+          [
+            5.4487832,
+            50.6461104
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28740001",
+      "properties": {
+        "timestamp": "2008-12-01T06:49:48Z",
+        "version": 2,
+        "changeset": 6643,
+        "user": "Skratz",
+        "uid": 50214,
+        "aeroway": "taxiway",
+        "created_by": "Potlatch 0.10f",
+        "id": "way/28740001"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4503516,
+            50.6468087
+          ],
+          [
+            5.4498651,
+            50.6473084
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28740003",
+      "properties": {
+        "timestamp": "2008-12-01T06:50:06Z",
+        "version": 1,
+        "changeset": 6643,
+        "user": "Skratz",
+        "uid": 50214,
+        "aeroway": "taxiway",
+        "created_by": "Potlatch 0.10f",
+        "id": "way/28740003"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.451626,
+            50.648266
+          ],
+          [
+            5.4508997,
+            50.6483145
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28740004",
+      "properties": {
+        "timestamp": "2008-12-01T06:50:23Z",
+        "version": 1,
+        "changeset": 6643,
+        "user": "Skratz",
+        "uid": 50214,
+        "aeroway": "taxiway",
+        "created_by": "Potlatch 0.10f",
+        "id": "way/28740004"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.451784,
+            50.6494714
+          ],
+          [
+            5.4509747,
+            50.6495228
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/28740018",
+      "properties": {
+        "timestamp": "2008-12-01T06:52:47Z",
+        "version": 1,
+        "changeset": 6643,
+        "user": "Skratz",
+        "uid": 50214,
+        "aeroway": "taxiway",
+        "created_by": "Potlatch 0.10f",
+        "id": "way/28740018"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4446556,
+            50.6473427
+          ],
+          [
+            5.4442883,
+            50.6468589
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/29099612",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:07Z",
+        "version": 3,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "C1",
+        "id": "way/29099612"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4323776,
+            50.6326899
+          ],
+          [
+            5.4334993,
+            50.6327534
+          ],
+          [
+            5.436365,
+            50.6331855
+          ],
+          [
+            5.4371867,
+            50.6333548
+          ],
+          [
+            5.4377732,
+            50.633397
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/136912423",
+      "properties": {
+        "timestamp": "2011-11-13T20:12:15Z",
+        "version": 1,
+        "changeset": 9818577,
+        "user": "Oli-Wan",
+        "uid": 293774,
+        "aeroway": "taxiway",
+        "id": "way/136912423"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4363339,
+            50.6480169
+          ],
+          [
+            5.4361008,
+            50.6485854
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/136912429",
+      "properties": {
+        "timestamp": "2011-11-13T20:12:16Z",
+        "version": 1,
+        "changeset": 9818577,
+        "user": "Oli-Wan",
+        "uid": 293774,
+        "aeroway": "taxiway",
+        "id": "way/136912429"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4374112,
+            50.6497939
+          ],
+          [
+            5.4373355,
+            50.6492417
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/136912437",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:08Z",
+        "version": 2,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "N0",
+        "id": "way/136912437"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4263736,
+            50.6337061
+          ],
+          [
+            5.4287085,
+            50.6321618
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/136912438",
+      "properties": {
+        "timestamp": "2011-11-13T20:12:16Z",
+        "version": 1,
+        "changeset": 9818577,
+        "user": "Oli-Wan",
+        "uid": 293774,
+        "aeroway": "taxiway",
+        "id": "way/136912438"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.436398,
+            50.6502836
+          ],
+          [
+            5.4368306,
+            50.6506533
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/136912443",
+      "properties": {
+        "timestamp": "2011-11-13T20:12:16Z",
+        "version": 1,
+        "changeset": 9818577,
+        "user": "Oli-Wan",
+        "uid": 293774,
+        "aeroway": "taxiway",
+        "id": "way/136912443"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4333629,
+            50.6477297
+          ],
+          [
+            5.4337521,
+            50.6481964
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/136912445",
+      "properties": {
+        "timestamp": "2011-11-13T20:12:17Z",
+        "version": 1,
+        "changeset": 9818577,
+        "user": "Oli-Wan",
+        "uid": 293774,
+        "aeroway": "taxiway",
+        "id": "way/136912445"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4349151,
+            50.6476451
+          ],
+          [
+            5.4349673,
+            50.6479983
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/136912449",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:08Z",
+        "version": 2,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "D0",
+        "id": "way/136912449"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4257387,
+            50.6335678
+          ],
+          [
+            5.4263736,
+            50.6337061
+          ],
+          [
+            5.4303787,
+            50.6345397
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/147550766",
+      "properties": {
+        "timestamp": "2012-01-27T16:16:24Z",
+        "version": 1,
+        "changeset": 10513947,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "id": "way/147550766"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4573218,
+            50.6400803
+          ],
+          [
+            5.4575713,
+            50.6402487
+          ],
+          [
+            5.4576759,
+            50.6401926
+          ],
+          [
+            5.458156,
+            50.6405107
+          ],
+          [
+            5.458223,
+            50.6404766
+          ],
+          [
+            5.4577567,
+            50.640153
+          ],
+          [
+            5.4578395,
+            50.6400922
+          ],
+          [
+            5.4575981,
+            50.6399187
+          ],
+          [
+            5.4573218,
+            50.6400803
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/157702073",
+      "properties": {
+        "timestamp": "2012-03-31T13:14:59Z",
+        "version": 1,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "C2",
+        "id": "way/157702073"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4386194,
+            50.6339311
+          ],
+          [
+            5.4379333,
+            50.6343643
+          ],
+          [
+            5.4364807,
+            50.6352799
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/157702075",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:00Z",
+        "version": 1,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "id": "way/157702075"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4377732,
+            50.633397
+          ],
+          [
+            5.4380637,
+            50.633425
+          ],
+          [
+            5.4382018,
+            50.6333493
+          ],
+          [
+            5.4384296,
+            50.6332666
+          ],
+          [
+            5.4385264,
+            50.6331488
+          ],
+          [
+            5.4386005,
+            50.63302
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/157702076",
+      "properties": {
+        "timestamp": "2012-03-31T13:22:37Z",
+        "version": 2,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "N4",
+        "id": "way/157702076"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4541893,
+            50.64635
+          ],
+          [
+            5.4539943,
+            50.6466331
+          ],
+          [
+            5.453658,
+            50.6470709
+          ],
+          [
+            5.4531573,
+            50.6472664
+          ],
+          [
+            5.4517392,
+            50.6473807
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/157702079",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:01Z",
+        "version": 1,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "N1",
+        "id": "way/157702079"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4303787,
+            50.6345397
+          ],
+          [
+            5.4299597,
+            50.6339133
+          ],
+          [
+            5.4287085,
+            50.6321618
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/157702083",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:01Z",
+        "version": 1,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "id": "way/157702083"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4287085,
+            50.6321618
+          ],
+          [
+            5.4290592,
+            50.6317864
+          ],
+          [
+            5.429564,
+            50.6308751
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/157702084",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:02Z",
+        "version": 1,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "id": "way/157702084"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4659178,
+            50.6488534
+          ],
+          [
+            5.4620339,
+            50.6464037
+          ],
+          [
+            5.4617635,
+            50.6462389
+          ],
+          [
+            5.4579866,
+            50.6438407
+          ],
+          [
+            5.4518857,
+            50.6400063
+          ],
+          [
+            5.4395059,
+            50.6321954
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/157702089",
+      "properties": {
+        "timestamp": "2012-03-31T13:15:02Z",
+        "version": 1,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "name": "S2",
+        "id": "way/157702089"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4395059,
+            50.6321954
+          ],
+          [
+            5.4391817,
+            50.6319828
+          ],
+          [
+            5.4388738,
+            50.6319058
+          ],
+          [
+            5.438622,
+            50.6319411
+          ],
+          [
+            5.4384032,
+            50.6320239
+          ],
+          [
+            5.4382927,
+            50.6321371
+          ],
+          [
+            5.4382508,
+            50.6323331
+          ],
+          [
+            5.4386005,
+            50.63302
+          ],
+          [
+            5.4387417,
+            50.633321
+          ],
+          [
+            5.4386902,
+            50.6336531
+          ],
+          [
+            5.4386194,
+            50.6339311
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/157703012",
+      "properties": {
+        "timestamp": "2012-03-31T13:22:35Z",
+        "version": 1,
+        "changeset": 11166069,
+        "user": "Leodium",
+        "uid": 594342,
+        "aeroway": "taxiway",
+        "id": "way/157703012"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4517392,
+            50.6473807
+          ],
+          [
+            5.4515207,
+            50.6473073
+          ],
+          [
+            5.4503516,
+            50.6468087
+          ],
+          [
+            5.4487832,
+            50.6461104
+          ],
+          [
+            5.4483813,
+            50.6459512
+          ],
+          [
+            5.4477805,
+            50.6456954
+          ],
+          [
+            5.4470986,
+            50.6451076
+          ],
+          [
+            5.4455878,
+            50.6436095
+          ],
+          [
+            5.4452244,
+            50.6432492
+          ],
+          [
+            5.4449321,
+            50.6429593
+          ],
+          [
+            5.4438084,
+            50.6418451
+          ],
+          [
+            5.4436087,
+            50.6416499
+          ],
+          [
+            5.4432567,
+            50.6413259
+          ],
+          [
+            5.4429987,
+            50.6411343
+          ],
+          [
+            5.4423648,
+            50.6407263
+          ],
+          [
+            5.4406033,
+            50.6396178
+          ],
+          [
+            5.4397816,
+            50.6390973
+          ],
+          [
+            5.4379822,
+            50.6379581
+          ],
+          [
+            5.4372106,
+            50.6374547
+          ],
+          [
+            5.4368597,
+            50.6376762
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/745464799",
+      "properties": {
+        "timestamp": "2019-11-14T20:51:58Z",
+        "version": 1,
+        "changeset": 77094555,
+        "user": "Patrick Bous",
+        "uid": 223763,
+        "aeroway": "taxiway",
+        "id": "way/745464799"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4320545,
+            50.6482887
+          ],
+          [
+            5.4326575,
+            50.6485501
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/745464800",
+      "properties": {
+        "timestamp": "2019-11-14T20:51:58Z",
+        "version": 1,
+        "changeset": 77094555,
+        "user": "Patrick Bous",
+        "uid": 223763,
+        "aeroway": "taxiway",
+        "id": "way/745464800"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4314591,
+            50.6492309
+          ],
+          [
+            5.4320821,
+            50.6491296
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/745464801",
+      "properties": {
+        "timestamp": "2019-11-14T20:51:58Z",
+        "version": 1,
+        "changeset": 77094555,
+        "user": "Patrick Bous",
+        "uid": 223763,
+        "aeroway": "taxiway",
+        "id": "way/745464801"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4317005,
+            50.6502071
+          ],
+          [
+            5.4324894,
+            50.6500907
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TH:22L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.465344190597534,
+          50.650018306128565
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TOH:22L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.464389324188232,
+          50.650195175463196
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TH:22R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.454422235488892,
+          50.645507913108524
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TOH:22R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.453392267227173,
+          50.64594672601275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TH:04L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.429112911224365,
+          50.63167470217028
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TH:04R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.429767370223999,
+          50.62995972638347
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TOH:04L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.430700778961182,
+          50.63156581667872
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TOH:04R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.43123722076416,
+          50.6292383289869
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TO:04R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.45796275138855,
+          50.64613551635022
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TO:04L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.450034141540527,
+          50.643800245593596
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TO:22R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.434842109680176,
+          50.634233438619965
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TO:22L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.439037084579468,
+          50.63419260881268
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#555555",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "RWY:04L/22R"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.453617572784424,
+            50.64609639769395
+          ],
+          [
+            5.430145561695099,
+            50.63127488701885
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#555555",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "RWY:04R/22L"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.427374839782715,
+            50.62683585973076
+          ],
+          [
+            5.464394688606261,
+            50.65020537944295
+          ],
+          [
+            5.464984774589539,
+            50.65057612253766
+          ]
+        ]
+      }
+    }
+  ]
+}

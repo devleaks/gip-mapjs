@@ -1,0 +1,8 @@
+"properties" : {
+	"name" : "BELGIUM",
+	"display_name": "Cities",
+	"type" : "CITY",
+	"display_type": "Villes",
+	"status": "ACTIVE",
+	"layer_group_display_name": "Belgium"
+},

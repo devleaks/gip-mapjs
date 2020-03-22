@@ -1,0 +1,1241 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "SID:BUB7R"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.486297607421875,
+            50.66339047047327
+          ],
+          [
+            5.549125671386719,
+            50.7014591889697
+          ],
+          [
+            5.55084228515625,
+            50.70635149797655
+          ],
+          [
+            5.551357269287109,
+            50.71439551849199
+          ],
+          [
+            5.543460845947266,
+            50.72428559737425
+          ],
+          [
+            5.529041290283203,
+            50.73384764465462
+          ],
+          [
+            5.508441925048828,
+            50.7411265311222
+          ],
+          [
+            5.4828643798828125,
+            50.747318126029434
+          ],
+          [
+            4.537353515625,
+            50.90303283111257
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#ff9300",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "SID:CIV3S"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.387420654296875,
+            50.60241627093303
+          ],
+          [
+            5.35308837890625,
+            50.58890414471025
+          ],
+          [
+            5.318756103515625,
+            50.58062060169053
+          ],
+          [
+            5.2754974365234375,
+            50.579312540638405
+          ],
+          [
+            5.2294921875,
+            50.592827419653545
+          ],
+          [
+            5.11688232421875,
+            50.64249394010323
+          ],
+          [
+            4.609622955322266,
+            50.88560041288678
+          ],
+          [
+            4.593830108642578,
+            50.885708708915175
+          ],
+          [
+            4.575033187866211,
+            50.88132251839807
+          ],
+          [
+            4.55632209777832,
+            50.87699007305815
+          ],
+          [
+            3.8312244415283208,
+            50.57675081584032
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "SID:LNO5E"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.386819839477539,
+            50.60290655741788
+          ],
+          [
+            5.352401733398437,
+            50.589667029332695
+          ],
+          [
+            5.318670272827148,
+            50.581111115218775
+          ],
+          [
+            5.275669097900391,
+            50.579748565025774
+          ],
+          [
+            5.229921340942383,
+            50.59320883172369
+          ],
+          [
+            5.076026916503906,
+            50.6615950399883
+          ],
+          [
+            5.0701904296875,
+            50.6729649403849
+          ],
+          [
+            5.06195068359375,
+            50.697327508282655
+          ],
+          [
+            5.085296630859375,
+            50.72254683363231
+          ],
+          [
+            5.11962890625,
+            50.736455137010665
+          ],
+          [
+            5.18280029296875,
+            50.73124000713507
+          ],
+          [
+            5.470161437988281,
+            50.653596379290455
+          ],
+          [
+            5.711517333984374,
+            50.584980542817995
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "SID:BUB7S"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.387420654296875,
+            50.60241627093303
+          ],
+          [
+            5.35308837890625,
+            50.58890414471025
+          ],
+          [
+            5.318756103515625,
+            50.58062060169053
+          ],
+          [
+            5.2754974365234375,
+            50.579312540638405
+          ],
+          [
+            5.2294921875,
+            50.592827419653545
+          ],
+          [
+            5.11688232421875,
+            50.64249394010323
+          ],
+          [
+            4.536838531494141,
+            50.90303283111257
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "SID:LNO7S"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.387849807739258,
+            50.60192597934007
+          ],
+          [
+            5.3537750244140625,
+            50.58819574077798
+          ],
+          [
+            5.318927764892578,
+            50.580021078217996
+          ],
+          [
+            5.275068283081055,
+            50.5787675044776
+          ],
+          [
+            5.228977203369141,
+            50.592391516360735
+          ],
+          [
+            5.075082778930664,
+            50.66099654790504
+          ],
+          [
+            5.046844482421875,
+            50.65903779321198
+          ],
+          [
+            5.0042724609375,
+            50.64815433496336
+          ],
+          [
+            4.9822998046875,
+            50.617667235717185
+          ],
+          [
+            4.997406005859375,
+            50.59108378226446
+          ],
+          [
+            5.174560546874999,
+            50.50381955521706
+          ],
+          [
+            5.2294921875,
+            50.47673484653018
+          ],
+          [
+            5.2789306640625,
+            50.46886863569486
+          ],
+          [
+            5.711517333984374,
+            50.58585248260492
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "SID:CIV3R"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.486297607421875,
+            50.66339047047327
+          ],
+          [
+            5.549125671386719,
+            50.7014591889697
+          ],
+          [
+            5.55084228515625,
+            50.70635149797655
+          ],
+          [
+            5.551357269287109,
+            50.71439551849199
+          ],
+          [
+            5.543460845947266,
+            50.72428559737425
+          ],
+          [
+            5.529041290283203,
+            50.73384764465462
+          ],
+          [
+            5.508441925048828,
+            50.7411265311222
+          ],
+          [
+            5.4828643798828125,
+            50.747318126029434
+          ],
+          [
+            4.63897705078125,
+            50.88527552329112
+          ],
+          [
+            4.593658447265625,
+            50.88614189051132
+          ],
+          [
+            4.5558929443359375,
+            50.877477493268096
+          ],
+          [
+            3.8307952880859375,
+            50.57713235815119
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "SID:LNO8R"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.4876708984375,
+            50.66295522090179
+          ],
+          [
+            5.5507564544677725,
+            50.702247428804476
+          ],
+          [
+            5.5515289306640625,
+            50.718199641990765
+          ],
+          [
+            5.533676147460937,
+            50.73341304848222
+          ],
+          [
+            5.5075836181640625,
+            50.74210420580331
+          ],
+          [
+            5.4842376708984375,
+            50.747318126029434
+          ],
+          [
+            5.231552124023437,
+            50.78900858809565
+          ],
+          [
+            5.1848602294921875,
+            50.779023632445714
+          ],
+          [
+            5.1532745361328125,
+            50.761653413004304
+          ],
+          [
+            5.164947509765625,
+            50.70819957076006
+          ],
+          [
+            5.189666748046874,
+            50.69428287906098
+          ],
+          [
+            5.513763427734375,
+            50.55881484085447
+          ],
+          [
+            5.5556488037109375,
+            50.551834865795165
+          ],
+          [
+            5.5872344970703125,
+            50.552271144516624
+          ],
+          [
+            5.71014404296875,
+            50.58585248260492
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:KOK5D"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            2.6508808135986324,
+            51.09274180657607
+          ],
+          [
+            4.441223144531249,
+            50.45138348100283
+          ],
+          [
+            5.10165810585022,
+            50.41784308358097
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#ff9300",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "FINAL:04L"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.1021409034729,
+            50.41802766177509
+          ],
+          [
+            5.4351264238357535,
+            50.63441036737502
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#ff9300",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "FINAL:04R"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.1021409034729,
+            50.41802766177509
+          ],
+          [
+            5.435700416564941,
+            50.63209663106795
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff2600",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "RUDIX"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.10194444,
+          50.41777778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:CIV5D"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.832855224609375,
+            50.57364385626088
+          ],
+          [
+            4.442596435546875,
+            50.45225789225832
+          ],
+          [
+            5.10165810585022,
+            50.417890937255926
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:NIK5D"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            4.1809844970703125,
+            51.01937021189444
+          ],
+          [
+            4.4384765625,
+            50.45225789225832
+          ],
+          [
+            5.101604461669922,
+            50.41795246333838
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff40ff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "GIREL"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.54138889,
+          50.25388889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:LNO4D"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.71014404296875,
+            50.58672440624587
+          ],
+          [
+            5.5426025390625,
+            50.2594979383533
+          ],
+          [
+            5.1019906997680655,
+            50.4179798082383
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff40ff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "GESLO"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.005,
+          50.07916667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff40ff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "RITAX"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.80694444,
+          50.07777778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:GESLO4D"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.005401611328125,
+            50.07917583535692
+          ],
+          [
+            5.804901123046875,
+            50.07741324322202
+          ],
+          [
+            5.53985595703125,
+            50.25861996946578
+          ],
+          [
+            5.10215163230896,
+            50.41781573860215
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#fffc00",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "GILOM"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.8075,
+          50.75194444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff9300",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "FAF"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.569725036621093,
+          50.716678029642765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#fffc00",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "IF"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.64422607421875,
+          50.761219074875356
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#000000",
+        "stroke-width": 4,
+        "stroke-opacity": 0.5,
+        "name": "AXIS04R22L"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.101861953735352,
+            50.41795246333838
+          ],
+          [
+            5.642852783203124,
+            50.761870580556966
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#ff9300",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "FINAL:22R"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.469088554382324,
+            50.65373242232146
+          ],
+          [
+            5.514106750488281,
+            50.739279756586456
+          ],
+          [
+            5.5323028564453125,
+            50.74427674312442
+          ],
+          [
+            5.551872253417969,
+            50.73949702795903
+          ],
+          [
+            5.564918518066406,
+            50.729936133938146
+          ],
+          [
+            5.569725036621093,
+            50.721242718483154
+          ],
+          [
+            5.567321777343749,
+            50.71493898360998
+          ],
+          [
+            5.449647903442383,
+            50.6436097449713
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#ff9300",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "FINAL:22L"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.469088554382324,
+            50.65373242232146
+          ],
+          [
+            5.514106750488281,
+            50.739279756586456
+          ],
+          [
+            5.5323028564453125,
+            50.74427674312442
+          ],
+          [
+            5.551872253417969,
+            50.73949702795903
+          ],
+          [
+            5.564918518066406,
+            50.729936133938146
+          ],
+          [
+            5.569725036621093,
+            50.721242718483154
+          ],
+          [
+            5.567321777343749,
+            50.71493898360998
+          ],
+          [
+            5.456385612487793,
+            50.645120121549574
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:CIV5X"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            3.83148193359375,
+            50.57626025689928
+          ],
+          [
+            4.805874824523926,
+            50.75122818518003
+          ],
+          [
+            5.469034910202026,
+            50.653671203006276
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:NIK5X"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            4.1809844970703125,
+            51.01850632466553
+          ],
+          [
+            4.805746078491211,
+            50.75128248925768
+          ],
+          [
+            5.469002723693848,
+            50.653596379290455
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#00fa00",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:KOK5X"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            2.6507949829101562,
+            51.0929574339252
+          ],
+          [
+            5.4691314697265625,
+            50.65381404795093
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#669d34",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:LNO4X"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.7073974609375,
+            50.59021193935192
+          ],
+          [
+            5.469174385070801,
+            50.65367800515634
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#669d34",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "name": "STAR:GESLO4X"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            6.01226806640625,
+            50.08181960206069
+          ],
+          [
+            5.7073974609375,
+            50.59021193935192
+          ],
+          [
+            5.469174385070801,
+            50.65367800515634
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TD:04R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.435957908630371,
+          50.63216468376131
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TD:04L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.435249805450439,
+          50.63439675749442
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TD:22R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.449326038360596,
+          50.64340563630473
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#000000",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "STAR:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.4709553718566895,
+          50.65392288190292
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#000000",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "STAR:04"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.101776123046875,
+          50.417706358529024
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff40ff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "BUB"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.53805556,
+          50.90222222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff40ff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "CIV"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.83277778,
+          50.57388889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff40ff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "NICKY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.18388889,
+          51.015
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff40ff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "KOKSY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.65138889,
+          51.09444444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff40ff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "ONL"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.54916667,
+          50.70111111
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "TD:22L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.455999374389648,
+          50.64491601944357
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff40ff",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "LGE"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.47027778,
+          50.65388889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#00fa00",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "SID:22"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.388193130493164,
+          50.60268865294411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#00fa00",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "SID:04"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.48689842224121,
+          50.66306403367287
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ab7942",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "RX:04R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.460722744464874,
+          50.64783629600142
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ab7942",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "RX:04L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.453596115112305,
+          50.64607938957235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ab7942",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "RX:22R"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.430142879486084,
+          50.63126638027653
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ab7942",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "RX:22L"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.437835454940796,
+          50.63339642048213
+        ]
+      }
+    }
+  ]
+}

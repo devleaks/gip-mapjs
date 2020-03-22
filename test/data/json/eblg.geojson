@@ -1,0 +1,38 @@
+{
+    "type": "Feature",
+    "properties":
+    { "note": "Airport's average altitude is 201m according to Wikipedia"},
+    "geometry":
+    {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [
+                    5.418,
+                    50.622,
+                    201
+                ],
+                [
+                    5.474,
+                    50.622,
+                    201
+                ],
+                [
+                    5.474,
+                    50.654,
+                    201
+                ],
+                [
+                    5.418,
+                    50.654,
+                    201
+                ],
+                [
+                    5.418,
+                    50.622,
+                    201
+                ]
+            ]
+        ]
+    }
+}

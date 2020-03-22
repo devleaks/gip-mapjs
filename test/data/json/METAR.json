@@ -1,0 +1,65 @@
+{
+  "raw_text": [
+    "EBLG 111120Z 24019KT 9999 SCT010 BKN012 13/11 Q1014 NOSIG"
+  ],
+  "station_id": [
+    "EBLG"
+  ],
+  "observation_time": [
+    "2020-03-11T11:20:00Z"
+  ],
+  "latitude": [
+    "50.63"
+  ],
+  "longitude": [
+    "5.45"
+  ],
+  "temp_c": [
+    "13.0"
+  ],
+  "dewpoint_c": [
+    "11.0"
+  ],
+  "wind_dir_degrees": [
+    "240"
+  ],
+  "wind_speed_kt": [
+    "19"
+  ],
+  "visibility_statute_mi": [
+    "6.21"
+  ],
+  "altim_in_hg": [
+    "29.940945"
+  ],
+  "quality_control_flags": [
+    {
+      "no_signal": [
+        "TRUE"
+      ]
+    }
+  ],
+  "sky_condition": [
+    {
+      "$": {
+        "sky_cover": "SCT",
+        "cloud_base_ft_agl": "1000"
+      }
+    },
+    {
+      "$": {
+        "sky_cover": "BKN",
+        "cloud_base_ft_agl": "1200"
+      }
+    }
+  ],
+  "flight_category": [
+    "MVFR"
+  ],
+  "metar_type": [
+    "METAR"
+  ],
+  "elevation_m": [
+    "178.0"
+  ]
+}

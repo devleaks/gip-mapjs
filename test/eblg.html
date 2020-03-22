@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GIP Viewer</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="../src/images/favicons/favicon-32x32.png" />
+    <!-- MAP & LEAFLET PLUGINS -->
+    <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="../node_modules/leaflet-pulse-icon/src/L.Icon.Pulse.css" />
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="../node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css" />
+    <link rel="stylesheet" href="../node_modules/beautifymarker/leaflet-beautify-marker-icon.css" />
+    <link rel="stylesheet" href="../node_modules/leaflet-sidebar-v2/css/leaflet-sidebar.css" />
+    <link rel="stylesheet" href="../lib/leaflet-betterscale/L.Control.BetterScale.css" />
+    <link rel="stylesheet" href="../node_modules/leaflet-search/dist/leaflet-search.src.css" />
+    <link rel="stylesheet" href="../node_modules/leaflet-easybutton/src/easy-button.css" />
+    <link rel="stylesheet" href="../lib/line-awesome/css/line-awesome.css" />
+    <!-- DEBUG -->
+    <link rel="stylesheet" href="../lib/Leaflet.zoomdisplay/dist/leaflet.zoomdisplay.css" />
+    <!-- DASHBOARD -->
+    <link rel="stylesheet" href="../src/css/materialadmin.css" />
+    <link rel="stylesheet" href="../src/css/tagsort.css" />
+    <link rel="stylesheet" href="../src/css/wire.css" />
+    <!-- OSCARS GIP OVERRIDES -->
+    <link rel="stylesheet" href="../src/L-oscars.css" />
+</head>
+
+<body>
+    <div id="map" class="sidebar-map eblg"></div>
+    <!-- MAP & LEAFLET PLUGINS -->
+    <script src="../node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="../node_modules/leaflet-realtime/dist/leaflet-realtime.js"></script>
+    <script src="../node_modules/leaflet-pulse-icon/src/L.Icon.Pulse.js"></script>
+    <script src="../node_modules/beautifymarker/leaflet-beautify-marker-icon.js"></script>
+    <script src="../node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js"></script>
+    <script src="../node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.js"></script>
+    <script src="../node_modules/leaflet-sidebar-v2/js/leaflet-sidebar.js"></script>
+    <script src="../node_modules/leaflet-canvasicon/leaflet-canvasicon.js"></script>
+    <script src="../node_modules/leaflet-piechart/leaflet-piechart.js"></script>
+    <script src="../node_modules/leaflet-search/dist/leaflet-search.src.js"></script>
+    <script src="../node_modules/leaflet-easybutton/src/easy-button.js"></script>
+    <script src="../lib/leaflet-betterscale/L.Control.BetterScale.js"></script>
+    <!-- OSCARS LAYER CLASSES & UTILITIES -->
+    <script src="../node_modules/jsonpath-plus/dist/index-umd.js"></script>
+    <script src="../node_modules/mustache/mustache.js"></script>
+    <script src="../node_modules/moment/moment.js"></script>
+    <script src="../node_modules/@turf/turf/turf.min.js"></script>
+    <script src="../node_modules/@mapbox/geojsonhint/geojsonhint.js"></script>
+    <script src="../src/L-oscars-util.js"></script>
+    <script src="../src/L-oscars-zone-group.js"></script>
+    <script src="../src/L-oscars-device-group.js"></script>
+    <!-- DASHBOARD -->
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/renderjson/renderjson.js"></script>
+    <script src="../node_modules/peity/jquery.peity.js"></script>
+    <script src="../src/js/jquery.sieve.js"></script>
+    <script src="../src/js/tagsort.min.js"></script>
+    <script src="../src/js/sortElements.js"></script>
+    <script src="../src/js/jquery.growl.js"></script>
+    <!-- DASHBOARD ELEMENTS -->
+    <script src="../src/js/parse_metar.js"></script>
+    <script src="../src/L-oscars-dashboard.js"></script>
+    <script src="../src/L-oscars-wire.js"></script>
+    <script>
+    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    var OpenStreetMap_France = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+        maxZoom: 20,
+        attribution: '&copy; Openstreetmap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    });
+
+    var Stadia_AlidadeSmoothDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+        maxZoom: 20,
+        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+    });
+
+    var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+
+
+    var baseLayers = {
+        "OSM France": OpenStreetMap_France,
+        "OpenTopo": OpenTopoMap,
+        "Stadia Alidade Smooth Dark": Stadia_AlidadeSmoothDark,
+        "ESRI World Imagery": Esri_WorldImagery
+    };
+
+    var airportOverlay = new L.ImageOverlay("data/EBLG_GMC01_v13.svg", new L.LatLngBounds(
+        new L.LatLng(50.62250, 5.41630), // en bas à gauche
+        new L.LatLng(50.65655, 5.47567)), { // en haut à droite 
+        opacity: 0.8
+    });
+
+    var airportNightOverlay = new L.ImageOverlay("data/EBLG_GMC01_v13-night.svg", new L.LatLngBounds(
+        new L.LatLng(50.62250, 5.41630), // en bas à gauche
+        new L.LatLng(50.65655, 5.47567)), { // en haut à droite 
+        opacity: 1
+    });
+
+
+    // Create map
+    var map = L.map("map", {
+        center: [50.64, 5.445],
+        zoom: 15,
+        layers: [OpenStreetMap_France],
+        attributionControl: false
+    });
+
+    const options = {
+        name: "GIPVIEWER",
+        display_name: "GIP Viewer",
+        layers: [OpenStreetMap_France],
+        layerControlOptions: { useGrouped: true },
+        layerControl: {
+            baseLayers: baseLayers,
+            overlays: {
+                "<span style='color: #0C64AF;'><img src='data/liegeairport-14.png'>&nbsp;Liège Airport</span>": {
+                    "<span style='color: #EE850A;'>Day</span>": airportOverlay,
+                    "<span style='color: #EE850A;'>Night</span>": airportNightOverlay
+                }
+            },
+            options: { groupCheckboxes: true, collapsed: false }
+        },
+        sidebar: true,
+        reset: true,
+        info: true,
+        wire: true,
+        search: true,
+        layerControlOptions: { useGrouped: true },
+        client: 'oscars',
+        debug: true
+    }
+
+    L.Oscars.Util.prepareMap(map, options);
+
+    if (options.debug) // ping at tower if debugging
+        L.marker([50.63725474594362, 5.453993082046508], { icon: L.icon.pulse({ iconSize: [10, 10], color: 'red' }) }).addTo(map);
+    </script>
+</body>
+
+</html>
