@@ -29,6 +29,7 @@
     "leaflet-rotatedmarker": "^0.2.0",
     "leaflet-search": "^2.9.8",
     "leaflet-sidebar-v2": "^3.2.2",
+    "leaflet-timedimension": "^1.1.1",
     "leaflet.label": "^0.2.4",
     "mapbox-gl": "^1.8.1",
     "modernizr": "^3.9.1",
@@ -40,7 +41,8 @@
     "sieve": "0.0.4",
     "slideout": "^1.0.1",
     "tagsort": "^1.4.0",
-    "underscore": "^1.9.2"
+    "underscore": "^1.9.2",
+    "ws": "^7.2.3"
   },
   "devDependencies": {
     "gulp-concat": "^2.6.1",

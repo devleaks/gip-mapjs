@@ -18,10 +18,9 @@
     <link rel="stylesheet" href="../lib/line-awesome/css/line-awesome.css" />
     <!-- DEBUG -->
     <link rel="stylesheet" href="../lib/Leaflet.zoomdisplay/dist/leaflet.zoomdisplay.css" />
-    <!-- DASHBOARD -->
+    <!-- DASHBOARD FRAMEWORK -->
     <link rel="stylesheet" href="../src/css/materialadmin.css" />
     <link rel="stylesheet" href="../src/css/tagsort.css" />
-    <link rel="stylesheet" href="../src/css/wire.css" />
     <!-- OSCARS GIP OVERRIDES -->
     <link rel="stylesheet" href="../src/L-oscars.css" />
 </head>
@@ -50,6 +49,7 @@
     <script src="../src/L-oscars-util.js"></script>
     <script src="../src/L-oscars-zone-group.js"></script>
     <script src="../src/L-oscars-device-group.js"></script>
+    <!-- DASHBOARD FRAMEWORK -->
     <!-- DASHBOARD -->
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/renderjson/renderjson.js"></script>
@@ -142,6 +142,41 @@
     }
 
     L.Oscars.Util.prepareMap(map, options);
+
+
+    var aircrafts = L.Oscars.deviceGroup({
+        "type": "FeatureCollection",
+        "properties": {
+            "name": "AIRCRAFTS",
+            "display_name": "Aircfrafts",
+            "type": "AIRCRAFT",
+            "display_type": "Aircfraft",
+            "status": "ACTIVE"
+        },
+        "features": []
+    }, {
+        greyOut:  600000, // 10 mins
+        takeOut: 1800000, // 30 mins
+        search: true
+    }).addTo(map);
+
+
+    var aircrafts = L.Oscars.deviceGroup({
+        "type": "FeatureCollection",
+        "properties": {
+            "name": "SERVICES",
+            "display_name": "Service vehicles",
+            "type": "SERVICE",
+            "display_type": "Service",
+            "status": "ACTIVE"
+        },
+        "features": []
+    }, {
+        greyOut:  600000, // 10 mins
+        takeOut: 1800000, // 30 mins
+        search: true
+    }).addTo(map);
+
 
     if (options.debug) // ping at tower if debugging
         L.marker([50.63725474594362, 5.453993082046508], { icon: L.icon.pulse({ iconSize: [10, 10], color: 'red' }) }).addTo(map);

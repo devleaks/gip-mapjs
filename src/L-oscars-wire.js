@@ -23,10 +23,10 @@ L.Oscars.Dashboard.Wire = (function($) {
         wire_id: "gip-gip-wire",
         wire_container: "ul",
         map_id: "gip-gip-map",
-        websocket: null, // 'ws://localhost:8051', 'ws://hostname.local:8051'
+        websocket: 'ws://localhost:8051', // 'ws://hostname.local:8051'
         markRead: null, // 'gipadmin/wire/read'
         // General presentation
-        color: 'default',
+        "icon-color": 'default',
         icon: 'fa-info',
         size: 'medium',
         speed: 500,
@@ -82,7 +82,10 @@ L.Oscars.Dashboard.Wire = (function($) {
 
         opts.id = opts.wire_id + ' ' + opts.wire_container;
 
+        console.log("Wire.prototype.init", options)
+
         L.Oscars.Dashboard.init({
+            map_id: options.map_id
             //          websocket: 'ws://localhost:8051'
         });
 
@@ -249,7 +252,7 @@ L.Oscars.Dashboard.Wire = (function($) {
             }
 
             // Do we need a new Date reminder in the margin?
-            if (lastDateReminder == null || ((Date() - lastDateReminder) > (opts.dateReminder * 60000))) {
+            if (lastDateReminder == null || ((Date() - lastDateReminder) > (opts.dateReminder * 6000))) {
                 $('<li>').addClass('time-label')
                     .append($('<span>').addClass('bg-blue').html(moment().format("ddd D MMM H:mm")))
                     .prependTo("#" + opts.id);
@@ -470,7 +473,8 @@ L.Oscars.Dashboard.Wire = (function($) {
         }, tmax);
 
         [ // test messages
-            { source: 'gip', type: 'metar', body: 'EBLG 300450Z 34007KT 1600 RA BR FEW002 BKN003 15/13 Q1005 TEMPO 1200 RADZ BKN002', subject: 'Metar EBLG 300450Z', priority: 1, icon: 'fa-cloud', "icon-color": 'info' }, {
+            { source: 'gip', type: 'metar', body: 'EBLG 300450Z 34007KT 1600 RA BR FEW002 BKN003 15/13 Q1005 TEMPO 1200 RADZ BKN002', subject: 'Metar EBLG 300450Z', priority: 1, icon: 'fa-cloud', "icon-color": 'info' },
+            {
                 source: 'gip',
                 type: 'lorem',
                 ack: true,
@@ -481,7 +485,9 @@ L.Oscars.Dashboard.Wire = (function($) {
                 priority: 1,
                 icon: 'fa-info',
                 "icon-color": 'default'
-            }, { source: 'aodb', type: 'qfu', subject: "QFU Changed to 05", priority: 6, icon: "fa-plane" }, { source: 'aodb', type: 'notam', subject: "A1234/06 NOTAMR A1212/06", body: "A1234/06 NOTAMR A1212/06<br/>Q)EGTT/QMXLC/IV/NBO/A/000/999/5129N00028W005<br/>A)EGLL<br/>B)0609050500<br/>C)0704300500<br/>E)DUE WIP TWY B SOUTH CLSD BTN 'F' AND 'R'. TWY 'R' CLSD BTN 'A' AND 'B' AND DIVERTED VIA NEW GREEN CL AND BLUE EDGE LGT.<br/>CTN ADZ", priority: 4, icon: 'fa-plane', "icon-color": 'warning' }
+            },
+            { source: 'aodb', type: 'qfu', subject: "QFU Changed to 05", priority: 6, icon: "fa-plane" },
+            { source: 'aodb', type: 'notam', subject: "A1234/06 NOTAMR A1212/06", body: "A1234/06 NOTAMR A1212/06<br/>Q)EGTT/QMXLC/IV/NBO/A/000/999/5129N00028W005<br/>A)EGLL<br/>B)0609050500<br/>C)0704300500<br/>E)DUE WIP TWY B SOUTH CLSD BTN 'F' AND 'R'. TWY 'R' CLSD BTN 'A' AND 'B' AND DIVERTED VIA NEW GREEN CL AND BLUE EDGE LGT.<br/>CTN ADZ", priority: 4, icon: 'fa-plane', "icon-color": 'warning' }
         ].forEach(function(msg, idx) {
             setTimeout(function() { // starts in 5000 msec
                 L.Oscars.Dashboard.broadcast(msg);

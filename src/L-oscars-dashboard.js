@@ -24,7 +24,7 @@ L.Oscars.Dashboard = (function($) {
         message_source: 'gip',
         message_type: 'news',
         // Websocket feeds
-        websocket: null, // 'ws://localhost:8051', 'ws://hostname.local:8051'
+        websocket: 'ws://localhost:8051', // 'ws://localhost:8051', 'ws://hostname.local:8051'
         initSeed: null, //gipadmin/wire/seed
         markRead: null, //gipadmin/wire/read
         moreOlder: null, //gipadmin/wire/older
@@ -37,7 +37,7 @@ L.Oscars.Dashboard = (function($) {
                 source: 'websocket',
                 type: 'warning',
                 icon: 'fa-info',
-                color: 'success'
+                "icon-color": 'success'
             },
             closing: {
                 subject: 'Closing connection...',
@@ -46,7 +46,7 @@ L.Oscars.Dashboard = (function($) {
                 source: 'websocket',
                 type: 'warning',
                 icon: 'fa-info',
-                color: '#ff0'
+                "icon-color": '#ff0'
             },
             starting: {
                 subject: 'Connection',
@@ -55,7 +55,7 @@ L.Oscars.Dashboard = (function($) {
                 source: 'websocket',
                 type: 'info',
                 icon: 'fa-info',
-                color: '#0f0'
+                "icon-color": '#0f0'
             },
             error: {
                 subject: 'Dashboard Error',
@@ -64,7 +64,7 @@ L.Oscars.Dashboard = (function($) {
                 source: 'dashboard',
                 type: 'error',
                 icon: 'fa-danger',
-                color: '#f00'
+                "icon-color": '#f00'
             }
         }
     };
@@ -83,8 +83,10 @@ L.Oscars.Dashboard = (function($) {
     }
 
     Dashboard.prototype.init = function(options) {
-        opts = $.extend({}, defaults, options);
         if (_inited) return;
+
+        opts = $.extend({}, defaults, options);
+        console.log("Dashboard.prototype.init", options, defaults, opts.map_id)
 
         // install();
         if (opts.websocket !== null) {
@@ -93,6 +95,7 @@ L.Oscars.Dashboard = (function($) {
         if (opts.initSeed !== null) {
             initSeed();
         }
+        console.log("Dashboard.prototype.init", opts.map_id)
         if (opts.debug) {
             opts.intro_messages.starting.created_at = new Date();
             send_to_wire(opts.intro_messages.starting);
@@ -144,9 +147,9 @@ L.Oscars.Dashboard = (function($) {
 
     function get_giplet_id(msg) {
         var id = '#gip-';
-        id += msg.source ? msg.source.toLowerCase() : 'gip';
-        id += msg.type ? msg.type.toLowerCase() : 'news';
-        if (typeof msg.channel !== "undefined") {
+        id += msg.source ? msg.source.toLowerCase() : opts.message_source;
+        id += msg.type ? msg.type.toLowerCase() : opts.message_type;
+        if (msg.hasOwnProperty("channel")) {
             if (msg.channel !== null) {
                 id += ('-' + msg.channel);
             }
@@ -162,7 +165,6 @@ L.Oscars.Dashboard = (function($) {
     }
 
     function send_to_map(msg) {
-        //console.log('Dashboard::send_to_map', msg);
         $('#' + opts.map_id).trigger('gip:update', msg);
     }
 
@@ -218,6 +220,7 @@ L.Oscars.Dashboard = (function($) {
     }
 
     Dashboard.prototype.broadcast = function(msg) {
+        //console.log('Dashboard::broadcast', msg);
         Dashboard.prototype.init();
         if (isGeoJSON(msg)) {
             return send_to_map(msg);
@@ -256,7 +259,7 @@ L.Oscars.Dashboard = (function($) {
         ws.onmessage = function(evt) {
             try {
                 //console.log('wsStart::onMessage', evt.data);
-                var msg = $.parseJSON(evt.data);
+                var msg = JSON.parse(evt.data);
                 Dashboard.prototype.broadcast(msg);
             } catch (e) {
                 console.log('Dashboard::wsStart: cannot decode message');

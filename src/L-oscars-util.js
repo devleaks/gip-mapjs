@@ -733,7 +733,6 @@ L.Oscars.Util = (function() {
                 });
                 // relocate layer control to sidebar
                 var newloc = document.getElementById(LAYERCONTROLID);
-                console.log(newloc)
                 newloc.appendChild(_layerControl._container);
             }
 
@@ -836,11 +835,12 @@ L.Oscars.Util = (function() {
                     wrap: false
                 });
                 L.Oscars.Dashboard.init({
-                    //				websocket: 'ws://locahost:8051'
+                    // websocket: 'ws://locahost:8051',
+                    map_id: opts.id
                 });
                 L.Oscars.Dashboard.Wire.init({ // @todo: set wire elem id from sidebarHTML.
                     map_id: opts.id,
-                    debug: true,
+                    debug: false,
                     voice: false
                 });
             }
