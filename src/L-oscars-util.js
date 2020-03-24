@@ -7,7 +7,7 @@
 
 L.Oscars = L.Oscars || {};
 
-L.Oscars.version = '3.0.0';
+L.Oscars.version = '3.1.0';
 
 L.Oscars.Util = (function() {
     /**
@@ -744,7 +744,19 @@ L.Oscars.Util = (function() {
                     title: "Reset Map",
                     info: "Center Map",
                     subtitle: "&nbsp;",
-                    icon: "home",
+                    icon: "location-arrow",
+                    icon_extra: null,
+                    tab_content: null,
+                    nocontent: true
+                });
+                addSidebarTab({
+                    client: client,
+                    zone: 1,
+                    id: "overview",
+                    title: "Area Map",
+                    info: "Area Map",
+                    subtitle: "&nbsp;",
+                    icon: "globe",
                     icon_extra: null,
                     tab_content: null,
                     nocontent: true
@@ -931,18 +943,34 @@ L.Oscars.Util = (function() {
             if (resetloc.length > 0) {
                 resetloc.click(function(event) {
                     event.preventDefault();
-                    L.Oscars.Util.resetLocation();
+                    L.Oscars.Util.resetLocation(false);
+                });
+            }
+
+            var resetloc = $('.leaflet-sidebar-tabs a[href="#overview"]');
+            if (resetloc.length > 0) {
+                resetloc.click(function(event) {
+                    event.preventDefault();
+                    L.Oscars.Util.resetLocation(true);
                 });
             }
 
             return _map;
         },
 
-        resetLocation: function() {
+        resetLocation: function(mode) {
             if (isSet(_mapCenter)) {
+                if(mode) {
+                _map.setView(_mapCenter.center, 8);
+                }  else {
                 _map.setView(_mapCenter.center, _mapCenter.zoom);
+                }             
             } else if (isSet(_map.options.center) && isSet(_map.options.zoom)) {
+                if(mode) {
+                _map.setView(_map.options.center, 8);
+                }  else {
                 _map.setView(_map.options.center, _map.options.zoom);
+                }             
             }
             if (_sidebar)
                 _sidebar.close();
