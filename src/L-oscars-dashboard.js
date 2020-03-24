@@ -24,7 +24,7 @@ L.Oscars.Dashboard = (function($) {
         message_source: 'gip',
         message_type: 'news',
         // Websocket feeds
-        websocket: 'ws://localhost:8051', // 'ws://localhost:8051', 'ws://hostname.local:8051'
+        websocket: null, // 'ws://localhost:8051', 'ws://hostname.local:8051'
         initSeed: null, //gipadmin/wire/seed
         markRead: null, //gipadmin/wire/read
         moreOlder: null, //gipadmin/wire/older
@@ -36,16 +36,16 @@ L.Oscars.Dashboard = (function($) {
                 priority: 1,
                 source: 'websocket',
                 type: 'warning',
-                icon: 'fa-info',
+                icon: 'fa-plug',
                 "icon-color": 'success'
             },
             closing: {
-                subject: 'Closing connection...',
-                body: 'Connection closed. Trying to reconnect...',
+                subject: 'Connection closed.',
+                body: 'Trying to reconnect...',
                 priority: 1,
                 source: 'websocket',
                 type: 'warning',
-                icon: 'fa-info',
+                icon: 'fa-plug',
                 "icon-color": '#ff0'
             },
             starting: {
@@ -54,7 +54,7 @@ L.Oscars.Dashboard = (function($) {
                 priority: 1,
                 source: 'websocket',
                 type: 'info',
-                icon: 'fa-info',
+                icon: 'fa-plug',
                 "icon-color": '#0f0'
             },
             error: {
@@ -86,7 +86,6 @@ L.Oscars.Dashboard = (function($) {
         if (_inited) return;
 
         opts = $.extend({}, defaults, options);
-        console.log("Dashboard.prototype.init", options, defaults, opts.map_id)
 
         // install();
         if (opts.websocket !== null) {
@@ -95,7 +94,6 @@ L.Oscars.Dashboard = (function($) {
         if (opts.initSeed !== null) {
             initSeed();
         }
-        console.log("Dashboard.prototype.init", opts.map_id)
         if (opts.debug) {
             opts.intro_messages.starting.created_at = new Date();
             send_to_wire(opts.intro_messages.starting);
@@ -250,11 +248,18 @@ L.Oscars.Dashboard = (function($) {
             opts.intro_messages.opening.created_at = new Date();
             send_to_wire(opts.intro_messages.opening);
         };
-        ws.onclose = function() {
+        ws.onclose = function(e) {
+            const RECONNECT_TRY = 10 // seconds
             if (opts.debug) {
                 opts.intro_messages.closing.created_at = new Date();
                 send_to_wire(opts.intro_messages.closing);
             }
+        
+            console.log('Socket is closed. Reconnect will be attempted in 10 second.', e.reason);
+            setTimeout(function() {
+                wsStart();
+            }, RECONNECT_TRY * 1000)
+        
         };
         ws.onmessage = function(evt) {
             try {

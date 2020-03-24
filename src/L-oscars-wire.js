@@ -72,7 +72,7 @@ L.Oscars.Dashboard.Wire = (function($) {
         return _inited ? opts : defaults;
     }
 
-    Wire.prototype.init = function(options) {
+    Wire.prototype.init = function(options) { // note L.Oscars.Dashboard.init should have been called before...
         if (_inited) return;
 
         //console.log(options);
@@ -81,13 +81,6 @@ L.Oscars.Dashboard.Wire = (function($) {
         opts = $.extend(opts, options);
 
         opts.id = opts.wire_id + ' ' + opts.wire_container;
-
-        console.log("Wire.prototype.init", options)
-
-        L.Oscars.Dashboard.init({
-            map_id: options.map_id
-            //          websocket: 'ws://localhost:8051'
-        });
 
         //console.log(opts, opts.voice);
         install_handlers();

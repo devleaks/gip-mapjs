@@ -835,8 +835,8 @@ L.Oscars.Util = (function() {
                     wrap: false
                 });
                 L.Oscars.Dashboard.init({
-                    // websocket: 'ws://locahost:8051',
-                    map_id: opts.id
+                    map_id: opts.id,
+                    websocket: 'ws://localhost:8051'
                 });
                 L.Oscars.Dashboard.Wire.init({ // @todo: set wire elem id from sidebarHTML.
                     map_id: opts.id,

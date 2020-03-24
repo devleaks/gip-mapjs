@@ -161,13 +161,30 @@
     }).addTo(map);
 
 
-    var aircrafts = L.Oscars.deviceGroup({
+    var services = L.Oscars.deviceGroup({
         "type": "FeatureCollection",
         "properties": {
             "name": "SERVICES",
             "display_name": "Service vehicles",
             "type": "SERVICE",
             "display_type": "Service",
+            "status": "ACTIVE"
+        },
+        "features": []
+    }, {
+        greyOut:  600000, // 10 mins
+        takeOut: 1800000, // 30 mins
+        search: true
+    }).addTo(map);
+
+
+    var trucks = L.Oscars.deviceGroup({
+        "type": "FeatureCollection",
+        "properties": {
+            "name": "TRUCKS",
+            "display_name": "Trucks",
+            "type": "TRUCK",
+            "display_type": "Truck",
             "status": "ACTIVE"
         },
         "features": []
