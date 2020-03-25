@@ -46,7 +46,7 @@ L.Oscars.Dashboard = (function($) {
                 source: 'websocket',
                 type: 'warning',
                 icon: 'fa-plug',
-                "icon-color": '#ff0'
+                "icon-color": 'warning'
             },
             starting: {
                 subject: 'Connection',

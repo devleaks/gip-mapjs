@@ -23,7 +23,7 @@ L.Oscars.Dashboard.Wire = (function($) {
         wire_id: "gip-gip-wire",
         wire_container: "ul",
         map_id: "gip-gip-map",
-        websocket: 'ws://localhost:8051', // 'ws://hostname.local:8051'
+        websocket: null, // 'ws://hostname.local:8051'
         markRead: null, // 'gipadmin/wire/read'
         // General presentation
         "icon-color": 'default',
@@ -286,8 +286,8 @@ L.Oscars.Dashboard.Wire = (function($) {
                                         )
                                         .append($('<span>')
                                             .attr('style', 'font-weight:bold;font-size:140%;')
-                                            .append(moment().format("H:mm")))
-                                        .append(moment().format(" ddd D"))
+                                            .append(moment(message.created_at).format("H:mm")))
+                                        .append(moment(message.created_at).format(" ddd D"))
                                     )
                                     .append($('<span>').addClass('title').html(title))
                                 )
@@ -301,7 +301,7 @@ L.Oscars.Dashboard.Wire = (function($) {
                                         $('<span>')
                                         .addClass('text-' + message["icon-color"])
                                         .append($('<p>')
-                                            .html('Published on ' + moment(message.created_at).format('ddd D MMM YY H:mm'))
+                                            .html('Published on ' + moment().format('ddd D MMM YY H:mm'))
                                         )
                                     )
                                     .append(expjson)

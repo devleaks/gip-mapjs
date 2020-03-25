@@ -381,7 +381,7 @@ L.Oscars.Util = (function() {
         if (isSet(style.markerRotationOffset)) { // has rotation offset = need to rotate icon
             rotation = parseFloat(style.markerRotationOffset);
             ['heading', 'bearing', 'orientation', 'orient'].forEach(function(prop) {
-                if (isSet(feature.properties[prop]) && notdone) { // has rotation
+                if (feature.properties.hasOwnProperty(prop) && notdone) { // has rotation
                     rotation += parseFloat(feature.properties[prop]);
                     notdone = false;
                 }
@@ -827,23 +827,25 @@ L.Oscars.Util = (function() {
                     icon_extra: "<span id='alert-counter' class='badge " + client + "'>0</span></a>",
                     tab_content: $('<div>')
                     		.append($('<div>')
-	                        .attr("id", "gip-gip-wire")
-	                        .append($('<header>')
-	                            .addClass("wire-top")
-	                            .append($('<div>')
-	                                .addClass("wire-seave"))
-	                            .append($('<div>')
-	                                .addClass("wire-tagsort")
-	                                .append($('<div>')
-	                                    .addClass("tagsort-tags-container"))))
-	                        .append($('<div>')
-	                            .addClass("wire-tagsort")
-	                            .append($('<ul>')
-	                                .attr("id", "the-wire")
-	                                .addClass("timeline")
-	                                .addClass("collapse-lg")
-	                                .addClass("timeline-hairline")
-	                                .addClass("cd-timeline")))),
+    	                        .attr("id", "gip-gip-wire")
+                                .append($('<div>')
+                                    .attr("id", "gip-clock"))
+    	                        .append($('<header>')
+    	                            .addClass("wire-top")
+    	                            .append($('<div>')
+    	                                .addClass("wire-seave"))
+    	                            .append($('<div>')
+    	                                .addClass("wire-tagsort")
+    	                                .append($('<div>')
+    	                                    .addClass("tagsort-tags-container"))))
+    	                        .append($('<div>')
+    	                            .addClass("wire-tagsort")
+    	                            .append($('<ul>')
+    	                                .attr("id", "the-wire")
+    	                                .addClass("timeline")
+    	                                .addClass("collapse-lg")
+    	                                .addClass("timeline-hairline")
+    	                                .addClass("cd-timeline")))),
                     wrap: false
                 });
                 L.Oscars.Dashboard.init({
@@ -947,9 +949,9 @@ L.Oscars.Util = (function() {
                 });
             }
 
-            var resetloc = $('.leaflet-sidebar-tabs a[href="#overview"]');
-            if (resetloc.length > 0) {
-                resetloc.click(function(event) {
+            var overviewloc = $('.leaflet-sidebar-tabs a[href="#overview"]');
+            if (overviewloc.length > 0) {
+                overviewloc.click(function(event) {
                     event.preventDefault();
                     L.Oscars.Util.resetLocation(true);
                 });
