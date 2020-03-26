@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>GIP Viewer</title>
+    <title>New Simplified Elegant GIP Viewer</title>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="../src/images/favicons/favicon-32x32.png" />
     <!-- MAP & LEAFLET PLUGINS -->
@@ -46,24 +46,26 @@
     <script src="../node_modules/moment/moment.js"></script>
     <script src="../node_modules/@turf/turf/turf.min.js"></script>
     <script src="../node_modules/@mapbox/geojsonhint/geojsonhint.js"></script>
-    <script src="../src/L-oscars-util.js"></script>
-    <script src="../src/L-oscars-zone-group.js"></script>
-    <script src="../src/L-oscars-device-group.js"></script>
-    <!-- DASHBOARD FRAMEWORK -->
-    <!-- DASHBOARD -->
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="../node_modules/renderjson/renderjson.js"></script>
     <script src="../node_modules/peity/jquery.peity.js"></script>
+    <script src="../node_modules/renderjson/renderjson.js"></script>
     <script src="../src/js/jquery.sieve.js"></script>
     <script src="../src/js/tagsort.min.js"></script>
     <script src="../src/js/sortElements.js"></script>
     <script src="../src/js/jquery.growl.js"></script>
-    <!-- DASHBOARD ELEMENTS -->
     <script src="../src/js/parse_metar.js"></script>
-    <script src="../src/L-oscars-dashboard.js"></script>
-    <script src="../src/L-oscars-wire.js"></script>
-
+    <!-- OSCARS -->
+    <script src="../src/L-oscars-util-min.js"></script>
+    <script src="../src/L-oscars-dashboard-min.js"></script>
+    <script src="../src/L-oscars-map-min.js"></script>
+    <script src="../src/L-oscars-zone-group-min.js"></script>
+    <script src="../src/L-oscars-device-group-min.js"></script>
+    <script src="../src/L-oscars-wire-min.js"></script>
+    <!-- ZONES -->
+    <script src="data/eblg-parkings.js"></script>
     <script>
+    /* ENVIRONMENT
+     */
     var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -108,51 +110,81 @@
         opacity: 1
     });
 
-
-    // Create map
-    var map = L.map("map", {
-        center: [50.64, 5.445],
-        zoom: 15,
-        layers: [OpenStreetMap_France],
-        attributionControl: false
-    });
-
-    
-    const options = {
-        name: "GIPVIEWER",
-        display_name: "GIP Viewer",
-        layers: [OpenStreetMap_France],
-        layerControlOptions: { useGrouped: true },
-        layerControl: {
-            baseLayers: baseLayers,
-            overlays: {
-                "<span style='color: #0C64AF;'><img src='data/liegeairport-14.png'>&nbsp;Liège Airport</span>": {
-                    "<span style='color: #EE850A;'>Day</span>": airportOverlay,
-                    "<span style='color: #EE850A;'>Night</span>": airportNightOverlay
-                }
-            },
-            options: { groupCheckboxes: true, collapsed: false }
+    /* GIP OPTIONS
+     */
+    var dashboard_options = {
+            elemprefix: "",
+            msgprefix: "GIP-",
+            websocket: 'ws://localhost:8051',
+            reconnect_retry: 120, // seconds
+            debug: false
         },
-        sidebar: true,
-        reset: true,  // includes overview as well
-        wire: true,
-        search: false,
-        info: false,
-        layerControlOptions: { useGrouped: true },
-        client: 'oscars',
-        debug: true
-    }
+        map_options = {
+            map_id: "map",
+            map_message: "map",
+            center: [50.64, 5.445],
+            zoom: 15,
+            layers: [OpenStreetMap_France],
+            layerControl: {
+                baseLayers: baseLayers,
+                overlays: {
+                    "<span style='color: #0C64AF;'><img src='data/liegeairport-14.png'>&nbsp;Liège Airport</span>": {
+                        "<span style='color: #EE850A;'>Day</span>": airportOverlay,
+                        "<span style='color: #EE850A;'>Night</span>": airportNightOverlay
+                    }
+                },
+                options: { groupCheckboxes: true, collapsed: false }
+            },
+            layerControlOptions: { useGrouped: true, groupCheckboxes: true, collapsed: false },
+            name: "GIPVIEWER",
+            display_name: "GIP Viewer",
+            sidebar: true,
+            reset: true, // includes overview as well
+            wire: true,
+            search: false,
+            betterScale: true,
+            track: false,
+            speedVector: true,
+            info: false,
+            info_id: "info",
+            info_content_id: "device-info",
+            voice: false,
+            stylesets: false,
+            about: true,
+            client: "oscars",
+            debug: false
+        },
+        wire_options = {
+            wire_id: "wire_id",
+            wire_message: "wire",
+            voice: false,
+            debug: false
+        }
 
-    L.Oscars.Util.prepareMap(map, options)
+
+    /*  INITIALIZE OSCARS GIP VIEWER
+     */
+    var dashboard = Oscars.Dashboard
+
+    dashboard.init(dashboard_options)
+
+    map_options.dashboard_options = dashboard_options
+    map_options.wire_options = wire_options
+    var map = Oscars.Map.map(map_options, dashboard)
+
+    wire_options.dashboard_options = dashboard_options
+    var wire = Oscars.Wire.init(wire_options, dashboard)
 
 
+    /* POPULATE WITH BASIC DATA
+     */
     const tower = [50.63725474594362, 5.453993082046508]
     var radar = L.layerGroup().addTo(map)
-    L.circle(tower, {radius:  80000, color: "darkred",  opacity: 0.5, weight: 1, fill: false}).addTo(radar)
-    L.circle(tower, {radius: 160000, color: "darkblue", opacity: 0.4, weight: 1, fill: false}).addTo(radar)
+    L.circle(tower, { radius: 80000, color: "darkred", opacity: 0.5, weight: 1, fill: false }).addTo(radar)
+    L.circle(tower, { radius: 160000, color: "darkblue", opacity: 0.4, weight: 1, fill: false }).addTo(radar)
 
 
-    var aircrafts = L.Oscars.deviceGroup({
+    var aircrafts = Oscars.deviceGroup({
         "type": "FeatureCollection",
         "properties": {
             "name": "AIRCRAFTS",
@@ -163,13 +195,13 @@
         },
         "features": []
     }, {
-        greyOut:  600000, // 10 mins
+        greyOut: 600000, // 10 mins
         takeOut: 1800000, // 30 mins
         search: true
     }).addTo(map);
 
 
-    var services = L.Oscars.deviceGroup({
+    var services = Oscars.deviceGroup({
         "type": "FeatureCollection",
         "properties": {
             "name": "SERVICES",
@@ -180,13 +212,13 @@
         },
         "features": []
     }, {
-        greyOut:  600000, // 10 mins
+        greyOut: 600000, // 10 mins
         takeOut: 1800000, // 30 mins
         search: true
     }).addTo(map);
 
 
-    var trucks = L.Oscars.deviceGroup({
+    var trucks = Oscars.deviceGroup({
         "type": "FeatureCollection",
         "properties": {
             "name": "TRUCKS",
@@ -197,13 +229,69 @@
         },
         "features": []
     }, {
-        greyOut:  600000, // 10 mins
+        greyOut: 600000, // 10 mins
         takeOut: 1800000, // 30 mins
         search: true
     }).addTo(map);
 
 
-    if (options.debug) // ping at tower if debugging
+    var parkingStyle = {
+        available: {
+            markerSymbol: "map-marker",
+            markerSize: 24, // px
+            markerColor: "rgb(0,128,256)", // lighter blue
+            color: "green", // stroke color
+            opacity: 0.6, // stroke opacity 0 = transparent
+            weight: 1, // stroke width
+            fillColor: "green", // fill color
+            fillOpacity: 0.2, // fill opacity 1 = opaque
+            fillPattern: "solid", // fill pattern (currently unused)
+            inactiveMarkerColor: "darkgrey"
+        },
+        busy: {
+            markerSymbol: "map-marker",
+            markerSize: 24, // px
+            markerColor: "rgb(0,128,256)", // lighter blue
+            color: "red", // stroke color
+            opacity: 0.6, // stroke opacity 0 = transparent
+            weight: 1, // stroke width
+            fillColor: "red", // fill color
+            fillOpacity: 0.2, // fill opacity 1 = opaque
+            fillPattern: "solid", // fill pattern (currently unused)
+            inactiveMarkerColor: "darkgrey"
+        }
+    }
+
+    var parkings = Oscars.zoneGroup({
+        "type": "FeatureCollection",
+        "properties": {
+            "name": "PARKINGS",
+            "display_name": "Parkings",
+            "type": "PARKING",
+            "display_type": "Parking",
+            "status": "ACTIVE"
+        },
+        "features": eblgParkings.features
+    }, {
+        gipDefaults: {
+            STYLE: parkingStyle.available
+        }
+    }).addTo(map);
+
+
+    function parking(name, avail) {
+        const parr = eblgParkings.features.filter(f => f.properties.name == name)
+        if (parr.length > 0) {
+            const park = parr[0]
+            park.properties._style = parkingStyle[avail]
+            parkings.update(park)
+        }
+
+    }
+    parking(124, "busy")
+
+
+    if (map_options.debug) // ping at tower if debugging
         L.marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: 'red' }) }).addTo(radar);
     </script>
 </body>

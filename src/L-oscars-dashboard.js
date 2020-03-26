@@ -4,6 +4,10 @@
  * License: MIT
  */
 
+/*  Dashboard helper connects external sources (websocket)
+ *  and broadcast events inside a web page to destination giplet.
+ */
+
 "use strict";
 
 L.Oscars = L.Oscars || {};
@@ -17,10 +21,10 @@ L.Oscars.Dashboard = (function($) {
     var _inited = false;
     var opts;
     var defaults = {
-        debug: true,
+        debug: false,
         wire_id: "gip-gip-wire",
         map_id: "gip-gip-map",
-        //
+        // Defaults
         message_source: 'gip',
         message_type: 'news',
         // Websocket feeds
@@ -28,7 +32,7 @@ L.Oscars.Dashboard = (function($) {
         initSeed: null, //gipadmin/wire/seed
         markRead: null, //gipadmin/wire/read
         moreOlder: null, //gipadmin/wire/older
-        // Debug
+        // Self messages
         intro_messages: {
             opening: {
                 subject: 'Opening connection...',

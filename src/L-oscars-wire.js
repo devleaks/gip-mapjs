@@ -4,6 +4,10 @@
  * License: MIT
  */
 
+/* Wire giplet diplays messages it receives.
+ * Offer a search box (sieve) and tag filtering/selection.
+ */
+
 "use strict";
 
 L.Oscars = L.Oscars || {};
@@ -19,11 +23,10 @@ L.Oscars.Dashboard.Wire = (function($) {
     var opts;
     var defaults = {
         debug: false,
-        voice: false,
-        wire_id: "gip-gip-wire",
-        wire_container: "ul",
         map_id: "gip-gip-map",
-        websocket: null, // 'ws://hostname.local:8051'
+        wire_id: "gip-gip-wire",
+        voice: false,
+        wire_container: "ul",
         markRead: null, // 'gipadmin/wire/read'
         // General presentation
         "icon-color": 'default',
@@ -36,6 +39,7 @@ L.Oscars.Dashboard.Wire = (function($) {
         ellipsestext: '<i class="fa fa-ellipsis-h"></i>',
         moretext: '<i class="fa fa-angle-double-right"></i>',
         lesstext: '<i class="fa fa-angle-double-left"></i>',
+        //
         ignoreTags: ['default', 'unknown'],
         filterNewMessage: false,
         priority_map: [

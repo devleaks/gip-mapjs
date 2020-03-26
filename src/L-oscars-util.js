@@ -850,9 +850,12 @@ L.Oscars.Util = (function() {
                 });
                 L.Oscars.Dashboard.init({
                     map_id: opts.id,
+                    wire_id: "gip-gip-wire",
                     websocket: 'ws://localhost:8051'
                 });
                 L.Oscars.Dashboard.Wire.init({ // @todo: set wire elem id from sidebarHTML.
+                    map_id: opts.id,
+                    wire_id: "gip-gip-wire",
                     map_id: opts.id,
                     debug: false,
                     voice: false
