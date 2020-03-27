@@ -100,6 +100,8 @@ Oscars.Dashboard = (function($) {
         if (_listeners[msgtype].indexOf(elemid) < 0) {
             _listeners[msgtype].push(elemid)
         }
+        if (_options.debug)
+            console.log("Dashboard::register", "#" + elemid, msgtype)
     }
 
     Dashboard.prototype.unregister = function(elemid, msgtype) {

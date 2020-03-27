@@ -265,7 +265,7 @@ Oscars.Map = (function($) {
             _map.setView(_options.center, _options.zoom)
         }
 
-        _map.on('zoomend', showHideLayers)
+//        _map.on('zoomend', showHideLayers)
 
         // Layer Control always present, may be moved to sidebar if present.
         var lclfun = L.control.layers
@@ -346,7 +346,7 @@ Oscars.Map = (function($) {
                 zone: 1,
                 id: _options.map_overview_id,
                 title: "Area Map",
-                info: "Wire area map around airport",
+                info: "Wide area map around airport",
                 subtitle: "&nbsp",
                 icon: "globe",
                 icon_extra: null,
@@ -358,7 +358,7 @@ Oscars.Map = (function($) {
         if (_options.sidebar && _options.info) {
             addSidebarTab({
                 zone: 1,
-                id:  _options.info_id,
+                id: _options.info_id,
                 title: "Info",
                 info: "Info",
                 subtitle: "&nbsp",
@@ -437,6 +437,25 @@ Oscars.Map = (function($) {
                                 .addClass("cd-timeline")))),
                 wrap: false
             })
+
+            setInterval(function() {
+                var stats = Oscars.Map.getStats()
+                console.log('stats', stats)
+                _dashboard.broadcast({
+                    type: "wire",
+                    payload: {
+                        source: 'gip',
+                        type: 'stats',
+                        subject: 'Map Usage Statistics',
+                        body: '<pre>' + JSON.stringify(stats, null, 2) + '</pre>',
+                        priority: 1,
+                        icon: 'fa-bar-chart',
+                        "icon-color": 'info',
+                        timestamp: (new Date().getTime())
+                    }
+                })
+            }, 600000)
+
         }
 
         // Add bottom of sidebar elements
@@ -521,7 +540,7 @@ Oscars.Map = (function($) {
         install_handlers(_options)
 
         // must be done last
-        var resetloc = $('.leaflet-sidebar-tabs a[href="#'+_options.map_focus_id+'"]')
+        var resetloc = $('.leaflet-sidebar-tabs a[href="#' + _options.map_focus_id + '"]')
         if (resetloc.length > 0) {
             resetloc.click(function(event) {
                 event.preventDefault()
@@ -529,7 +548,7 @@ Oscars.Map = (function($) {
             })
         }
 
-        var overviewloc = $('.leaflet-sidebar-tabs a[href="#'+_options.map_overview_id+'"]')
+        var overviewloc = $('.leaflet-sidebar-tabs a[href="#' + _options.map_overview_id + '"]')
         if (overviewloc.length > 0) {
             overviewloc.click(function(event) {
                 event.preventDefault()
@@ -566,7 +585,7 @@ Oscars.Map = (function($) {
             // the layer is supplied through the *_group name property.
             //console.log('L.Oscars::gip:update: Info - ', feature)
             if (_options.debug)
-                console.log("Wire::on", feature)
+                console.log("Map::on", feature)
             console.log()
             if (feature.properties && feature.properties.group_name) {
                 var layer = Oscars.Map.findGIPLayer(feature.properties.group_name)
