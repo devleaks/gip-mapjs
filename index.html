@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GIP FUTURE Viewer 2</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="src/images/favicons/favicon-32x32.png" />
+    <!-- MAP & LEAFLET PLUGINS -->
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-pulse-icon/src/L.Icon.Pulse.css" />
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="node_modules/line-awesome/dist/line-awesome/css/line-awesome.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css" />
+    <link rel="stylesheet" href="node_modules/beautifymarker/leaflet-beautify-marker-icon.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-sidebar-v2/css/leaflet-sidebar.css" />
+    <link rel="stylesheet" href="lib/leaflet-betterscale/L.Control.BetterScale.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-search/dist/leaflet-search.src.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-easybutton/src/easy-button.css" />
+    <!-- DEBUG -->
+    <link rel="stylesheet" href="lib/Leaflet.zoomdisplay/dist/leaflet.zoomdisplay.css" />
+    <!-- DASHBOARD FRAMEWORK -->
+    <link rel="stylesheet" href="src/css/materialadmin.css" />
+    <link rel="stylesheet" href="src/css/tagsort.css" />
+    <!-- OSCARS GIP OVERRIDES -->
+    <link rel="stylesheet" href="src/L-oscars.css" />
+</head>
+
+<body>
+    <div id="map" class="sidebar-map eblg"></div>
+
+    <!-- MAP & LEAFLET PLUGINS -->
+    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="node_modules/leaflet-realtime/dist/leaflet-realtime.js"></script>
+    <script src="node_modules/leaflet-pulse-icon/src/L.Icon.Pulse.js"></script>
+    <script src="node_modules/beautifymarker/leaflet-beautify-marker-icon.js"></script>
+    <script src="node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js"></script>
+    <script src="node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.js"></script>
+    <script src="node_modules/leaflet-sidebar-v2/js/leaflet-sidebar.js"></script>
+    <script src="node_modules/leaflet-canvasicon/leaflet-canvasicon.js"></script>
+    <script src="node_modules/leaflet-piechart/leaflet-piechart.js"></script>
+    <script src="node_modules/leaflet-search/dist/leaflet-search.src.js"></script>
+    <script src="node_modules/leaflet-easybutton/src/easy-button.js"></script>
+    <script src="node_modules/leaflet-ant-path/dist/leaflet-ant-path.js"></script>
+    <script src="lib/leaflet-betterscale/L.Control.BetterScale.js"></script>
+
+    <!-- OSCARS LAYER CLASSES & UTILITIES -->
+    <script src="node_modules/jsonpath-plus/dist/index-umd.js"></script>
+    <script src="node_modules/mustache/mustache.js"></script>
+    <script src="node_modules/moment/moment.js"></script>
+    <script src="node_modules/@turf/turf/turf.min.js"></script>
+    <script src="node_modules/@mapbox/geojsonhint/geojsonhint.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/peity/jquery.peity.js"></script>
+    <script src="node_modules/renderjson/renderjson.js"></script>
+    <script src="src/js/jquery.sieve.js"></script>
+    <script src="src/js/tagsort.min.js"></script>
+    <script src="src/js/sortElements.js"></script>
+    <script src="src/js/jquery.growl.js"></script>
+    <script src="src/js/parse_metar.js"></script>
+    <!-- OSCARS -->
+    <script src="src/L-oscars-util-min.js"></script>
+    <script src="src/L-oscars-dashboard-min.js"></script>
+    <script src="src/L-oscars-map-min.js"></script>
+    <script src="src/L-oscars-zone-group-min.js"></script>
+    <script src="src/L-oscars-device-group-min.js"></script>
+    <script src="src/L-oscars-wire-min.js"></script>
+    <!-- ZONES -->
+    <script src="test/data/eblg-parkings.js"></script>
+    <!-- MAIN -->
+    <script src="src/L-oscars.js"></script>
+
+</body>
+
+</html>

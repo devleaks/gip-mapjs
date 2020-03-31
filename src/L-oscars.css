@@ -149,6 +149,10 @@ div.stamen-logo {
    content:url(i/stamen.png);
    width: 100px;
 }
+div.stadia-logo {
+   content:url(i/stadia.png);
+   width: 100px;
+}
 .leaflet-control-search.search-exp {
 	box-shadow: none;
 }
@@ -186,7 +190,7 @@ div.stamen-logo {
 	font-size: 40px;
 	font-weight: normal;
 }
-.la {
+.liege {
 	padding-left: 18px;
 	font-size: 40px;
 	font-weight: normal;
@@ -210,8 +214,8 @@ h1.sidebar-header.oscars {
 .leaflet-bar a.oscars:hover {
 	color: #db2004;
 }
-.active .oscars.la,
-.oscars.la:hover {
+.active .oscars.liege,
+.oscars.liege:hover {
 	color: #db2004;
 }
 .about.oscars {
@@ -235,8 +239,8 @@ Blue: 0e64ae
 h1.sidebar-header.eblg {
 	color: #f18700;
 }
-.active .eblg.la,
-.eblg.la:hover {
+.active .eblg.liege,
+.eblg.liege:hover {
 	color: #0e64ae;
 }
 
@@ -442,3 +446,47 @@ td.gip-reason {
 .message-footer p {
   margin: 0px;
 }
+
+
+.leaflet-sidebar-tabs ul li a i {
+  padding-left: 18px;
+  font-size: 40px;
+  font-weight: normal;
+  color: rgba(100, 100, 100, 0.2);
+  text-shadow: 2px 2px 2px rgba(127, 127, 127, 0.05);
+}
+
+.leaflet-sidebar-tabs ul li a:hover i {
+  color: #ffffff;
+}
+
+.oscars.form-control {
+  height: 28px;
+  width: 80%;
+}
+
+path, circle {
+  stroke-width: 4px;
+  fill: transparent;
+}
+
+.bg {
+  stroke: white;
+  stroke-dasharray: 4 12;
+}
+
+.move {
+  stroke: red;
+  animation: link-anim 3s infinite steps(21);
+  stroke-dasharray: 4 12 4 12 4 300;
+}
+
+@keyframes link-anim {
+  0% {
+    stroke-dashoffset: 368;
+  }
+  100% {
+    stroke-dashoffset: 32;
+  }
+}
+

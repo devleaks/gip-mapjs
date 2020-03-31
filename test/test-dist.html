@@ -1,261 +1,267 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>GIP Leaflet Map Tests — Testing distribution files</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
-	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="../dist/L-oscars.css" />
 </head>
+
 <body>
-
     <div id="map" class="eblg"></div>
-
     <script src="../node_modules/leaflet/dist/leaflet.js"></script>
     <script src="../node_modules/leaflet-realtime/dist/leaflet-realtime.js"></script>
-	<script src="../dist/L-oscars-util.js"></script>
-	<script src="../dist/L-oscars-zone-group.js"></script>
-	<script src="../dist/L-oscars-device-group.js"></script>
+    <script src="../dist/L-oscars-util.js"></script>
+    <script src="../dist/L-oscars-zone-group.js"></script>
+    <script src="../dist/L-oscars-device-group.js"></script>
+    <script src="data/be.js"></script>
+    <script src="data/eblg-parking.js"></script>
+    <script src="data/eblg-track.js"></script>
+    <script src="data/eblg-snow.js"></script>
+    <script src="data/eblg-snow1.js"></script>
+    <script src="data/eblg-aircrafts.js"></script>
+    <script src="data/eblg-aircrafts1.js"></script>
+    <script src="data/eblg-aircrafts2.js"></script>
+    <script src="data/eblg-ground.js"></script>
+    <script src="data/eblg-ground1.js"></script>
+    <script src="data/eblg-ground2.js"></script>
+    <script src="data/eblg-pol.js"></script>
+    <script src="data/eblg-empty.js"></script>
+    <script src="data/beacons.json"></script>
+    <script>
+    // http://stackoverflow.com/questions/37166172/mapbox-tiles-and-leafletjs
+    //streets-v9
+    //satellite-streets-v9
+    //light-v9
+    //dark-v9
+    //outdoors-v9
+    var mapboxType = 'streets';
+    var mapboxName = "Mapbox " + mapboxType;
+    var mapboxUrl = 'https://api.mapbox.com/styles/v1/mapbox/' + mapboxType + '-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2bGVha3MiLCJhIjoiY2oxcDgyOTZvMDA0NDMyb3R0aW51c3BpZiJ9.4UBU6GK4ziylPRubY-n-KQ',
+        mapboxLink = '<a href="http://www.mapbox.com/">Mapbox</a>';
 
-	<script src="data/be.js"></script>
-	<script src="data/eblg-parking.js"></script>
-	<script src="data/eblg-track.js"></script>
-	<script src="data/eblg-snow.js"></script>
-	<script src="data/eblg-snow1.js"></script>
-	<script src="data/eblg-aircrafts.js"></script>
-	<script src="data/eblg-aircrafts1.js"></script>
-	<script src="data/eblg-aircrafts2.js"></script>
-	<script src="data/eblg-ground.js"></script>
-	<script src="data/eblg-ground1.js"></script>
-	<script src="data/eblg-ground2.js"></script>
-	<script src="data/eblg-pol.js"></script>
-	<script src="data/eblg-empty.js"></script>
-	<script src="data/beacons.json"></script>
+    var osmLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>',
+        thunLink = '<a href="http://thunderforest.com/">Thunderforest</a>';
 
-	<script>
-// http://stackoverflow.com/questions/37166172/mapbox-tiles-and-leafletjs
-//streets-v9
-//satellite-streets-v9
-//light-v9
-//dark-v9
-//outdoors-v9
-var mapboxType = 'streets';
-var mapboxName = "Mapbox "+mapboxType;
-var mapboxUrl = 'https://api.mapbox.com/styles/v1/mapbox/'+mapboxType+'-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2bGVha3MiLCJhIjoiY2oxcDgyOTZvMDA0NDMyb3R0aW51c3BpZiJ9.4UBU6GK4ziylPRubY-n-KQ',
-    mapboxLink = '<a href="http://www.mapbox.com/">Mapbox</a>';
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        osmAttrib = '&copy; ' + osmLink + ' Contributors',
+        landUrl = 'http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png',
+        thunAttrib = '&copy; ' + osmLink + ' Contributors & ' + thunLink;
 
-var osmLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>',
-    thunLink = '<a href="http://thunderforest.com/">Thunderforest</a>';
+    var osmMap = L.tileLayer(osmUrl, { attribution: osmAttrib }),
+        landMap = L.tileLayer(landUrl, { attribution: thunAttrib }),
+        mapboxMap = L.tileLayer(mapboxUrl, { attribution: mapboxLink });
 
-var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    osmAttrib = '&copy; ' + osmLink + ' Contributors',
-    landUrl = 'http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png',
-    thunAttrib = '&copy; '+osmLink+' Contributors & '+thunLink;
+    var Stamen_Watercolor = L.tileLayer('http://tile.stamen.com/watercolor/{z}/{x}/{y}.png', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        subdomains: 'abcd',
+        minZoom: 1,
+        maxZoom: 16,
+        ext: 'png'
+    });
 
-var osmMap = L.tileLayer(osmUrl, {attribution: osmAttrib}),
-    landMap = L.tileLayer(landUrl, {attribution: thunAttrib}),
-    mapboxMap = L.tileLayer(mapboxUrl, {attribution: mapboxLink});
+    var baseLayers = {
+        "OSM Mapnik": osmMap,
+        "Stamen Watercolor": Stamen_Watercolor,
+        "Landscape": landMap
+    };
+    baseLayers[mapboxName] = mapboxMap;
 
-var Stamen_Watercolor = L.tileLayer('http://tile.stamen.com/watercolor/{z}/{x}/{y}.png', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-	subdomains: 'abcd',
-	minZoom: 1,
-	maxZoom: 16,
-	ext: 'png'
-});
-	
-var baseLayers = {
-	"OSM Mapnik": osmMap,
-	"Stamen Watercolor": Stamen_Watercolor,
-	"Landscape": landMap
-};
-baseLayers[mapboxName] = mapboxMap;
+    var airportOverlay = new L.ImageOverlay("data/EBLG_GMC01_v13.svg", new L.LatLngBounds(
+        new L.LatLng(50.62250, 5.41630), // en bas à gauche
+        new L.LatLng(50.65655, 5.47567)), { // en haut à droite 
+        opacity: 0.8
+    });
 
-var airportOverlay = new L.ImageOverlay("data/EBLG_GMC01_v13.svg", new L.LatLngBounds(
-	new L.LatLng(50.62250,5.41630),		// en bas à gauche
-	new L.LatLng(50.65655,5.47567)), {	// en haut à droite 
-	opacity: 0.8
-});
+    // Create map
+    var map = L.map("map", {
+        center: [50.64, 5.445],
+        zoom: 15,
+        layers: [osmMap],
+        attributionControl: false
+    });
 
-// Create map
-var map = L.map("map", {
-	center: [50.64, 5.445],
-	zoom: 15,
-	layers: [osmMap],
-	attributionControl: false
-});
-
-L.Oscars.Util.prepareMap(map, {layerControlOptions: { collapsed: false }, client: 'eblg' });
+    L.Oscars.Util.prepareMap(map, { layerControlOptions: { collapsed: false }, client: 'eblg' });
 
 
-// Add zone groups (decoration)
-var tracks = L.Oscars.zoneGroup(egblLandingTracks);
+    // Add zone groups (decoration)
+    var tracks = L.Oscars.zoneGroup(egblLandingTracks);
 
-var parkings = L.Oscars.zoneGroup(eblgParkings).addTo(map);
+    var parkings = L.Oscars.zoneGroup(eblgParkings).addTo(map);
 
-// var be = L.Oscars.zoneGroup(cities);
+    // var be = L.Oscars.zoneGroup(cities);
 
-// Add device groups (decoration)
-var snow = L.Oscars.deviceGroup({
-   "type":"FeatureCollection",
-	"properties" : {
-		"name" : "SNOWVEHICLE",
-		"display_name": "Snow Vehicles",
-		"type" : "SNOW",
-		"display_type": "Snow Vehicles",
-		"status": "ACTIVE",
-		"layer_group_display_name": "Ground Vehicles"
-	},
-   "features":[]}, {
-	zoom_min: 13,
-	zoom_max: 18
-}).addTo(map);
+    // Add device groups (decoration)
+    var snow = L.Oscars.deviceGroup({
+        "type": "FeatureCollection",
+        "properties": {
+            "name": "SNOWVEHICLE",
+            "display_name": "Snow Vehicles",
+            "type": "SNOW",
+            "display_type": "Snow Vehicles",
+            "status": "ACTIVE",
+            "layer_group_display_name": "Ground Vehicles"
+        },
+        "features": []
+    }, {
+        zoom_min: 13,
+        zoom_max: 18
+    }).addTo(map);
 
-var aircrafts = L.Oscars.deviceGroup(eblgAircrafts, {
-	greyOut: 15000, takeOut: 22000,
-	search: true
-}).addTo(map);
+    var aircrafts = L.Oscars.deviceGroup(eblgAircrafts, {
+        greyOut: 15000,
+        takeOut: 22000,
+        search: true
+    }).addTo(map);
 
-(beaconZones = function() {
-	eblgEmpty.properties.display_name = "Beacons";
-	var beaconLayer = L.Oscars.zoneGroup(eblgEmpty).addTo(map);
-	
-	function getFeature(name) {
-		var ret = JSONPath({
-			path: "$..features[?(@.properties.name=='"+name+"')]",
-			json: beacons
-		});
-		return ret[0];
-	}
+    (beaconZones = function() {
+        eblgEmpty.properties.display_name = "Beacons";
+        var beaconLayer = L.Oscars.zoneGroup(eblgEmpty).addTo(map);
 
-	function getLatLng(feature) {
-		return L.latLng(feature.geometry.coordinates[1],feature.geometry.coordinates[0]);
-	}
+        function getFeature(name) {
+            var ret = JSONPath({
+                path: "$..features[?(@.properties.name=='" + name + "')]",
+                json: beacons
+            });
+            return ret[0];
+        }
 
-	var biw = 0.1,
-	    bmw = 0.2,
-		bow = 0.5;
-	var trackName = "5L";
-	var t1 = getFeature("NO");
-	var t2 = getFeature("NE");
-	var im = getFeature(trackName + "I");
-	var tb = turf.bearing(t1, t2);
+        function getLatLng(feature) {
+            return L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+        }
 
-	// the track's extremity that is the further away from the beacon is the "end" of the track
-	var d1 = turf.distance(t1, im);
-	var d2 = turf.distance(t2, im);
-	var te = d1 > d2 ? t1 : t2;
+        var biw = 0.1,
+            bmw = 0.2,
+            bow = 0.5;
+        var trackName = "5L";
+        var t1 = getFeature("NO");
+        var t2 = getFeature("NE");
+        var im = getFeature(trackName + "I");
+        var tb = turf.bearing(t1, t2);
 
-	// zone corners
-	b1 = turf.destination(im, biw, tb + 90);
-	b2 = turf.destination(im, biw, tb - 90);
-	b3 = turf.destination(te, biw, tb + 90);
-	b4 = turf.destination(te, biw, tb - 90);
+        // the track's extremity that is the further away from the beacon is the "end" of the track
+        var d1 = turf.distance(t1, im);
+        var d2 = turf.distance(t2, im);
+        var te = d1 > d2 ? t1 : t2;
 
-	// draw marker and zone
-	L.circleMarker(getLatLng(im), {radius: 10, fillColor: "white", fillOpacity: 1, weight: 0}).addTo(beaconLayer);
-	beaconLayer.addData({
-		type: "Feature",
-		geometry: {
-			type: "Polygon",
-			coordinates: [[b1.geometry.coordinates, b2.geometry.coordinates, b4.geometry.coordinates, b3.geometry.coordinates, b1.geometry.coordinates]]
-		},
-		properties: {
-			_style: {fillColor: "white", fillOpacity: 0.6, weight: 1, color: "white", dashArray: "4 8"}
-		}
-	});
+        // zone corners
+        b1 = turf.destination(im, biw, tb + 90);
+        b2 = turf.destination(im, biw, tb - 90);
+        b3 = turf.destination(te, biw, tb + 90);
+        b4 = turf.destination(te, biw, tb - 90);
 
-	// for simplicity, we leave the tracks's end to the narrowest width
-	var mm = getFeature(trackName + "M");
-	b1 = turf.destination(mm, bmw, tb + 90);
-	b2 = turf.destination(mm, bmw, tb - 90);
-	L.circleMarker(getLatLng(mm), {radius: 10, fillColor: "orange", fillOpacity: 1, weight: 0}).addTo(beaconLayer);
-	beaconLayer.addData({
-		type: "Feature",
-		geometry: {
-			type: "Polygon",
-			coordinates: [[b1.geometry.coordinates, b2.geometry.coordinates, b4.geometry.coordinates, b3.geometry.coordinates, b1.geometry.coordinates]]
-		},
-		properties: {
-			_style: {fillColor: "orange", fillOpacity: 0.2, weight: 1, color: "orange", dashArray: "16 8 4 8"}
-		}
-	});
+        // draw marker and zone
+        L.circleMarker(getLatLng(im), { radius: 10, fillColor: "white", fillOpacity: 1, weight: 0 }).addTo(beaconLayer);
+        beaconLayer.addData({
+            type: "Feature",
+            geometry: {
+                type: "Polygon",
+                coordinates: [
+                    [b1.geometry.coordinates, b2.geometry.coordinates, b4.geometry.coordinates, b3.geometry.coordinates, b1.geometry.coordinates]
+                ]
+            },
+            properties: {
+                _style: { fillColor: "white", fillOpacity: 0.6, weight: 1, color: "white", dashArray: "4 8" }
+            }
+        });
 
-	var om = getFeature(trackName + "O");
-	b1 = turf.destination(om, bow, tb + 90);
-	b2 = turf.destination(om, bow, tb - 90);
-	L.circleMarker(getLatLng(om), {radius: 10, fillColor: "blue", fillOpacity: 1, weight: 0}).addTo(beaconLayer);
-	beaconLayer.addData({
-		type: "Feature",
-		geometry: {
-			type: "Polygon",
-			coordinates: [[b1.geometry.coordinates, b2.geometry.coordinates, b4.geometry.coordinates, b3.geometry.coordinates, b1.geometry.coordinates]]
-		},
-		properties: {
-			_style: {fillColor: "blue", fillOpacity: 0.1, weight: 1, color: "blue", dashArray: "16 8"}
-		}
-	});
-	beaconLayer.addData({
-		type: "Feature",
-		geometry: {
-			type: "LineString",
-			coordinates: [om.geometry.coordinates, te.geometry.coordinates]
-		},
-		properties: {
-			_style: {weight: 1, color: "black", dashArray: "8 8 2 8"}
-		}
-	});
+        // for simplicity, we leave the tracks's end to the narrowest width
+        var mm = getFeature(trackName + "M");
+        b1 = turf.destination(mm, bmw, tb + 90);
+        b2 = turf.destination(mm, bmw, tb - 90);
+        L.circleMarker(getLatLng(mm), { radius: 10, fillColor: "orange", fillOpacity: 1, weight: 0 }).addTo(beaconLayer);
+        beaconLayer.addData({
+            type: "Feature",
+            geometry: {
+                type: "Polygon",
+                coordinates: [
+                    [b1.geometry.coordinates, b2.geometry.coordinates, b4.geometry.coordinates, b3.geometry.coordinates, b1.geometry.coordinates]
+                ]
+            },
+            properties: {
+                _style: { fillColor: "orange", fillOpacity: 0.2, weight: 1, color: "orange", dashArray: "16 8 4 8" }
+            }
+        });
 
-})();
+        var om = getFeature(trackName + "O");
+        b1 = turf.destination(om, bow, tb + 90);
+        b2 = turf.destination(om, bow, tb - 90);
+        L.circleMarker(getLatLng(om), { radius: 10, fillColor: "blue", fillOpacity: 1, weight: 0 }).addTo(beaconLayer);
+        beaconLayer.addData({
+            type: "Feature",
+            geometry: {
+                type: "Polygon",
+                coordinates: [
+                    [b1.geometry.coordinates, b2.geometry.coordinates, b4.geometry.coordinates, b3.geometry.coordinates, b1.geometry.coordinates]
+                ]
+            },
+            properties: {
+                _style: { fillColor: "blue", fillOpacity: 0.1, weight: 1, color: "blue", dashArray: "16 8" }
+            }
+        });
+        beaconLayer.addData({
+            type: "Feature",
+            geometry: {
+                type: "LineString",
+                coordinates: [om.geometry.coordinates, te.geometry.coordinates]
+            },
+            properties: {
+                _style: { weight: 1, color: "black", dashArray: "8 8 2 8" }
+            }
+        });
 
-/**
- *	Simulate GIP GeoJSON Feature Update
-*/
+    })();
 
-//setInterval(L.bind(aircrafts.cleanUp, aircrafts), 5000);
+    /**
+     *	Simulate GIP GeoJSON Feature Update
+     */
 
-var ground;
+    //setInterval(L.bind(aircrafts.cleanUp, aircrafts), 5000);
 
-setTimeout(function () {
-	// Plane turns on taxiway
-	// Simulate device movement and appareance change
-	console.log('TEST', 'updated device 1');
-	aircrafts.update(eblgAircrafts1);
-	snow.update(eblgSnow1);
+    var ground;
 
-	ground = L.Oscars.deviceGroup(eblgGround).addTo(map);
+    setTimeout(function() {
+        // Plane turns on taxiway
+        // Simulate device movement and appareance change
+        console.log('TEST', 'updated device 1');
+        aircrafts.update(eblgAircrafts1);
+        snow.update(eblgSnow1);
 
-}, 3000);
+        ground = L.Oscars.deviceGroup(eblgGround).addTo(map);
 
-setTimeout(function () {
-	console.log('TEST', 'updated device 2');
-	aircrafts.update(eblgAircrafts2);
-	ground.update(eblgGround1);
-	console.log('TEST', 'updated zones');
-	eblgParkings.features[1].properties.display_status = 'BUSY';
-	eblgParkings.features[1].properties._style = {
-	    color: "rgb(255,0,0)",
-	    weight: 1,
-	    opacity: 0.8,
-		fillColor: "rgb(255,0,0)",
-	    fillOpacity: 0.4
-	};
-	parkings.update(eblgParkings.features[1]);
+    }, 3000);
 
-	var pol = L.Oscars.zoneGroup(eblgPol, {
-		gipDefaults: {
-			STYLE: {
-				color:  "green"
-			}
-		}
-	}).addTo(map);
-}, 6000);
+    setTimeout(function() {
+        console.log('TEST', 'updated device 2');
+        aircrafts.update(eblgAircrafts2);
+        ground.update(eblgGround1);
+        console.log('TEST', 'updated zones');
+        eblgParkings.features[1].properties.display_status = 'BUSY';
+        eblgParkings.features[1].properties._style = {
+            color: "rgb(255,0,0)",
+            weight: 1,
+            opacity: 0.8,
+            fillColor: "rgb(255,0,0)",
+            fillOpacity: 0.4
+        };
+        parkings.update(eblgParkings.features[1]);
 
-setTimeout(function () {
-	console.log('TEST', 'updated device 3');
-	ground.update(eblgGround2);
-}, 9000);
+        var pol = L.Oscars.zoneGroup(eblgPol, {
+            gipDefaults: {
+                STYLE: {
+                    color: "green"
+                }
+            }
+        }).addTo(map);
+    }, 6000);
 
+    setTimeout(function() {
+        console.log('TEST', 'updated device 3');
+        ground.update(eblgGround2);
+    }, 9000);
     </script>
 </body>
+
 </html>

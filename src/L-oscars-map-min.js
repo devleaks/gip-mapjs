@@ -337,7 +337,7 @@ Oscars.Map = (function($) {
                 title: "Local Map",
                 info: "Center map and focus on airport",
                 subtitle: "&nbsp",
-                icon: "location-arrow",
+                icon: "plane",
                 icon_extra: null,
                 tab_content: null,
                 nocontent: true
@@ -348,7 +348,7 @@ Oscars.Map = (function($) {
                 title: "Area Map",
                 info: "Wide area map around airport",
                 subtitle: "&nbsp",
-                icon: "globe",
+                icon: "globe-europe",
                 icon_extra: null,
                 tab_content: null,
                 nocontent: true
@@ -408,8 +408,8 @@ Oscars.Map = (function($) {
             addSidebarTab({ //id, title, subtitle, icon, zone, icon_extra, tab_content
                 id: "messages",
                 zone: 1,
-                title: 'Messages<span class="clean-wire"><i class="fa fa-trash-o"></i>&nbsp</span>' +
-                    '               <span class="sound-onoff"><i class="fa"></i>&nbsp</span>',
+                title: 'Messages<span class="clean-wire"><i class="la la-trash-o"></i>&nbsp</span>' +
+                    '               <span class="sound-onoff"><i class="la"></i>&nbsp</span>',
                 info: 'Wire Messages',
                 subtitle: "Last Updated:&nbsp<span id='last-updated-time'>just now</span>",
                 icon: "envelope",
@@ -525,6 +525,10 @@ Oscars.Map = (function($) {
                     '<tr>' +
                     '   <td><div class="stamen-logo"></div></td>' +
                     '   <td>A library of awesome styles for OpenStreetMap data.</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '   <td><div class="stadia-logo"></div></td>' +
+                    '   <td>Stadia Maps: Location made human.</td>' +
                     '</tr>' +
                     '       </table>' +
                     '   </div>' +

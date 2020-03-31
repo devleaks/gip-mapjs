@@ -63,6 +63,10 @@ Oscars.Util = (function() {
         return typeof property != "undefined" && (property || property === false);
     }
 
+    function nvl(val, dft) {
+        return isSet(val) ? val : dft
+    }
+
     //
     function getDefaults() {
         if (typeof _options.STYLE == "undefined") {
@@ -116,6 +120,7 @@ Oscars.Util = (function() {
         var size = getFontSizePx(feature);
         return L.BeautifyIcon.icon({
             icon: (isSet(style.markerSymbol)) ? style.markerSymbol : _options.STYLE.markerSymbol,
+            prefix: "la",
             textColor: (isSet(style.markerColor)) ? style.markerColor : _options.STYLE.markerColor,
             innerIconStyle: "font-size: " + (size < _options.MARKER_MIN_SIZE ? _options.MARKER_MIN_SIZE : size) + 'px;',
             backgroundColor: (isSet(style.backgroundColor)) ? style.backgroundColor : _options.BACKGROUND_COLOR,
@@ -392,7 +397,7 @@ Oscars.Util = (function() {
             feature.properties._timestamp = Date.now();
         },
 
-        // Return icon for (Point) feature.	
+        // Bind text to feature/layer.	
         bindTexts: function(feature, layer) {
             bindTexts(feature, layer);
         },

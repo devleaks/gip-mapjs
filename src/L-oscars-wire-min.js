@@ -28,15 +28,15 @@ Oscars.Wire = (function($) {
         markRead: null, // 'gipadmin/wire/read'
         // General presentation
         "icon-color": 'default',
-        icon: 'fa-info',
+        icon: 'la-info',
         size: 'medium',
         speed: 500,
         // More
         numWords: 50,
         dateReminder: 3, // minutes
-        ellipsestext: '<i class="fa fa-ellipsis-h"></i>',
-        moretext: '<i class="fa fa-angle-double-right"></i>',
-        lesstext: '<i class="fa fa-angle-double-left"></i>',
+        ellipsestext: '<i class="fa la-ellipsis-h"></i>',
+        moretext: '<i class="fa la-angle-double-right"></i>',
+        lesstext: '<i class="fa la-angle-double-left"></i>',
         //
         ignoreTags: ['default', 'unknown'],
         filterNewMessage: false,
@@ -103,7 +103,7 @@ Oscars.Wire = (function($) {
                     subject: 'Wire ready',
                     body: "Wire initialized and ready.",
                     priority: 1,
-                    icon: 'fa-info',
+                    icon: 'la-info',
                     "icon-color": 'success',
                     timestamp: Date.now(),
                     speak: false
@@ -224,7 +224,7 @@ Oscars.Wire = (function($) {
                 title = 'No subject'
             }
             if (message.link) {
-                title = $('<a>').attr('href', message.link).html('<i class="fa fa-link"></i>&nbsp;' + message.subject)
+                title = $('<a>').attr('href', message.link).html('<i class="la-xs la-link"></i>&nbsp;' + message.subject)
             }
 
             // ACK Checkbox
@@ -287,7 +287,7 @@ Oscars.Wire = (function($) {
                 $('<li>').addClass('timeline-inverted')
                     .append($('<div>').addClass('timeline-circ').addClass('circ-xl').addClass('style-' + message_color)
                         .append(
-                            $('<i>').addClass('fa').addClass(message.icon).html(' ')
+                            $('<i>').addClass('la').addClass('la-3x').addClass(message.icon.replace(/fa/,"la")).html(' ')
                         )
                     )
                     .append($('<div>').addClass('timeline-entry')
@@ -297,7 +297,7 @@ Oscars.Wire = (function($) {
                                     $('<span>').addClass('message-header')
                                     .append($('<span>').addClass('time').addClass('opacity-50')
                                         .append(
-                                            $('<i>').addClass('fa').addClass('fa-clock-o')
+                                            $('<i>').addClass('fa').addClass('la-clock-o')
                                         )
                                         .append($('<span>')
                                             .attr('style', 'font-weight:boldfont-size:140%')
@@ -401,7 +401,7 @@ Oscars.Wire = (function($) {
     function install_wire() {
         $("#the-wire").sieve({
             itemSelector: ".wire-message",
-            searchTemplate: "<div class='o-search'><i class='fa fa-search'>&nbsp;</i><input type='text' id='sieveSearch' class='form-control' placeholder='Enter text to search...'>&nbsp;<i class='fa fa-remove'></i></div>"
+            searchTemplate: "<div class='o-search'><i class='la la-search'>&nbsp;</i><input type='text' id='sieveSearch' class='oscars form-control' placeholder='Enter text to search...'>&nbsp;<i class='la la-remove'></i></div>"
         })
 
         $('.sidebar-tabs a[href="#messages"]').click(function(event) {
@@ -416,12 +416,12 @@ Oscars.Wire = (function($) {
             var that = $(".sound-onoff i")
 
             if (_options.voice) {
-                that.removeClass('fa-volume-up')
-                that.addClass('fa-volume-off')
+                that.removeClass('la-volume-up')
+                that.addClass('la-volume-off')
                 _options.voice = false
             } else {
-                that.removeClass('fa-volume-off')
-                that.addClass('fa-volume-up')
+                that.removeClass('la-volume-off')
+                that.addClass('la-volume-up')
                 _options.voice = true
             }
         })
@@ -434,11 +434,11 @@ Oscars.Wire = (function($) {
             //this info message help reset tags
             _dashboard.broadcast({
                 type: "wire",
-                payload: { source: 'gip', type: 'info', subject: 'Wire reset', priority: 1, icon: 'fa-info', "icon-color": 'info' }
+                payload: { source: 'gip', type: 'info', subject: 'Wire reset', priority: 1, icon: 'la-info', "icon-color": 'info' }
             })
         })
 
-        $(".o-search .fa-remove").click(function() {
+        $(".o-search .la-remove").click(function() {
             $("#sieveSearch").val('').trigger('change')
         })
 
@@ -451,7 +451,7 @@ Oscars.Wire = (function($) {
                 subject: 'Map Usage Statistics',
                 body: '<pre>' + JSON.stringify(stats, null, 2) + '</pre>',
                 priority: 1,
-                icon: 'fa-bar-chart',
+                icon: 'la-bar-chart',
                 "icon-color": 'info',
                 timestamp: (new Date().getTime())
             }})
@@ -461,14 +461,14 @@ Oscars.Wire = (function($) {
     function run_tests(dashboard) {
         const tmax = 10000
         setTimeout(function() { // starts in 5000 msec
-            dashboard.broadcast({type: "wire", payload: { source: 'gip', type: 'news', subject: 'DASHBOARD TESTING STARTED...', priority: 5, icon: 'fa-info', "icon-color": 'accent' }})
+            dashboard.broadcast({type: "wire", payload: { source: 'gip', type: 'news', subject: 'DASHBOARD TESTING STARTED...', priority: 5, icon: 'la-info', "icon-color": 'accent' }})
         }, 10)
         setTimeout(function() { // starts in 5000 msec
-            dashboard.broadcast({type: "wire", payload: { source: 'gip', type: 'news', subject: '... DASHBOARD TESTING COMPLETED!', body: "Please check the browser's console for log", priority: 2, icon: 'fa-info', "icon-color": 'success', timestamp: 1495470000000, speak: false }})
+            dashboard.broadcast({type: "wire", payload: { source: 'gip', type: 'news', subject: '... DASHBOARD TESTING COMPLETED!', body: "Please check the browser's console for log", priority: 2, icon: 'la-info', "icon-color": 'success', timestamp: 1495470000000, speak: false }})
         }, tmax)
 
         const data = [ // test messages
-            { source: 'gip', type: 'metar', body: 'EBLG 300450Z 34007KT 1600 RA BR FEW002 BKN003 15/13 Q1005 TEMPO 1200 RADZ BKN002', subject: 'Metar EBLG 300450Z', priority: 1, icon: 'fa-cloud', "icon-color": 'info' }, {
+            { source: 'gip', type: 'metar', body: 'EBLG 300450Z 34007KT 1600 RA BR FEW002 BKN003 15/13 Q1005 TEMPO 1200 RADZ BKN002', subject: 'Metar EBLG 300450Z', priority: 1, icon: 'la-cloud', "icon-color": 'info' }, {
                 source: 'gip',
                 type: 'lorem',
                 ack: true,
@@ -477,9 +477,9 @@ Oscars.Wire = (function($) {
                     'Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi ratio aut disciplina, ne nos quidem huic uni studio penitus umquam dediti fuimus. Etenim omnes artes, quae ad humanitatem pertinent, habent quoddam commune vinculum, et quasi cognatione quadam inter se continentur.',
                 subject: 'Lorem Ipsum — Extra Link Tester',
                 priority: 1,
-                icon: 'fa-info',
+                icon: 'la-info',
                 "icon-color": 'default'
-            }, { source: 'aodb', type: 'qfu', subject: "QFU Changed to 05", priority: 6, icon: "fa-plane" }, { source: 'aodb', type: 'notam', subject: "A1234/06 NOTAMR A1212/06", body: "A1234/06 NOTAMR A1212/06<br/>Q)EGTT/QMXLC/IV/NBO/A/000/999/5129N00028W005<br/>A)EGLL<br/>B)0609050500<br/>C)0704300500<br/>E)DUE WIP TWY B SOUTH CLSD BTN 'F' AND 'R'. TWY 'R' CLSD BTN 'A' AND 'B' AND DIVERTED VIA NEW GREEN CL AND BLUE EDGE LGT.<br/>CTN ADZ", priority: 4, icon: 'fa-plane', "icon-color": 'warning' }
+            }, { source: 'aodb', type: 'qfu', subject: "QFU Changed to 05", priority: 6, icon: "la-plane" }, { source: 'aodb', type: 'notam', subject: "A1234/06 NOTAMR A1212/06", body: "A1234/06 NOTAMR A1212/06<br/>Q)EGTT/QMXLC/IV/NBO/A/000/999/5129N00028W005<br/>A)EGLL<br/>B)0609050500<br/>C)0704300500<br/>E)DUE WIP TWY B SOUTH CLSD BTN 'F' AND 'R'. TWY 'R' CLSD BTN 'A' AND 'B' AND DIVERTED VIA NEW GREEN CL AND BLUE EDGE LGT.<br/>CTN ADZ", priority: 4, icon: 'la-plane', "icon-color": 'warning' }
         ]
 
         data.forEach(function(msg, idx) {
