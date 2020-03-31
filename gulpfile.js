@@ -39,8 +39,9 @@ gulp.task('concatcss', function () {
   return gulp.src([
 //	'src/L-oscars-version.css',
 	'node_modules/leaflet/dist/leaflet.css',
-//	'node_modules/leaflet-pulse-icon/dist/L.Icon.Pulse.css',
-	'node_modules/font-awesome/css/font-awesome.css',
+	'node_modules/leaflet-pulse-icon/src/L.Icon.Pulse.css',
+  'node_modules/line-awesome/dist/font-awesome-line-awesome/css/all.css',
+  'node_modules/line-awesome/dist/line-awesome/css/line-awesome.css',
 	'node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css',
 	'node_modules/beautifymarker/leaflet-beautify-marker-icon.css',
 	'node_modules/leaflet-sidebar-v2/css/leaflet-sidebar.css',
@@ -49,7 +50,6 @@ gulp.task('concatcss', function () {
 //	'src/css/materialadmin.css',
 //	'src/css/tagsort.css',
 //	'src/css/wire.css',
-	'lib/line-awesome/css/line-awesome.css',
 	'src/L-oscars.css'
 	])
     .pipe(concatCss("L-oscars.css", {rebaseUrls: false}))

@@ -29,6 +29,7 @@ Oscars.Wire = (function($) {
         // General presentation
         "icon-color": 'default',
         icon: 'la-info',
+        "icon-set": "la-"
         size: 'medium',
         speed: 500,
         // More
@@ -215,7 +216,7 @@ Oscars.Wire = (function($) {
                 message.icon = _options.icon
             } else {
                 // addTags('<i class="fa '+message.icon+'"></i>')
-                addTags("• " + message.icon.toLowerCase().replace(/fa-/, ''))
+                addTags("• " + message.icon.toLowerCase().replace(/la-/, ''))
             }
 
             // Link

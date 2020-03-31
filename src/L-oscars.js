@@ -116,6 +116,7 @@ var dashboard_options = {
         display_name: "GIP Viewer",
         sidebar: true,
         reset: true, // includes overview as well
+        flightboard: true,
         wire: true,
         search: false,
         betterScale: true,
@@ -268,10 +269,28 @@ function parking(name, avail) {
 dashboard.register(map_options.map_id, "parking")
 $("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.msgprefix + "parking", function(event, msg) {
     if (dashboard_options.debug)
-        console.log("Map::on", msg)
+        console.log("Map::on:parking", msg)
     parking(msg.name, msg.available)
 })
 
+dashboard.register(map_options.map_id, "flightboard")
+$("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.msgprefix + "flightboard", function(event, msg) {
+    if (dashboard_options.debug)
+        console.log("Map::on:flightboard", msg)
+    /* msg payload: {
+          info: "actual",
+          move: "departure",
+          flight: flight.flight,
+          airport: flight.airport,
+          date: dept.format("DD/MM"),
+          time: dept.format("HH:mm"),
+          parking: flight.parking
+    }
+    Oscars.Util.flightboard(move, flight, airport, timetype, day, time, note)
+    */
+    Oscars.Util.flightboard(msg.move, msg.flight, msg.airport, msg.info, moment(msg.date+" "+msg.time, msg.info == "scheduled" ? "YYYY-MM-DD HH:mi" : "DD/MM HH:mi"), "")
+    Oscars.Util.getFlightboard(msg.move)
+})
 
 if (map_options.debug) // ping at tower if debugging
     L.marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: 'red' }) }).addTo(radar);

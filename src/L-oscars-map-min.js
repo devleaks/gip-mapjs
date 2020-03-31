@@ -36,6 +36,7 @@ Oscars.Map = (function($) {
         reset: true,
         map_focus_id: "map_focus_id",
         map_overview_id: "map_overview_id",
+        flightboard: false,
         info: true,
         info_id: "info",
         info_content_id: "device-info",
@@ -82,13 +83,14 @@ Oscars.Map = (function($) {
     //
     var _gipLayers = {}
     // @todo: Replace ids with random strings.
-
+    var _dashboard = false
 
 
     var Map = function() {}
 
-    Map.prototype.init = function(options) {
+    Map.prototype.init = function(options, dashboard) {
         if (_options) return _options
+        if (dashboard) _dashboard = dashboard
         _options = $.extend({}, DEFAULTS)
         _options = $.extend(_options, options)
         return _options
@@ -265,7 +267,7 @@ Oscars.Map = (function($) {
             _map.setView(_options.center, _options.zoom)
         }
 
-//        _map.on('zoomend', showHideLayers)
+        //        _map.on('zoomend', showHideLayers)
 
         // Layer Control always present, may be moved to sidebar if present.
         var lclfun = L.control.layers
@@ -459,6 +461,54 @@ Oscars.Map = (function($) {
         }
 
         // Add bottom of sidebar elements
+        if (_options.sidebar && _options.flightboard) {
+            addSidebarTab({
+                zone: 1,
+                id: "flightboard",
+                title: "Flight Boards",
+                info: "Flight boards",
+                subtitle: "&nbsp",
+                icon: "table",
+                icon_extra: null,
+                tab_content: $('<div>')
+                    .append($('<div>')
+                        .attr("id", "flightboard")
+                        .append($('<header>')
+                            .addClass("wire-top")
+                            .append($('<div>')
+                                .attr("id", "gip-clock-table")))
+                        .append($('<div>')
+                            .append($("<table id='flightboard-arrival'>")
+                                .addClass("flightboard")
+                                .append($('<caption>').html('Arrival'))
+                                .append($('<thead>')
+                                    .append($('<tr>')
+                                        .append($('<th>').html('Flight'))
+                                        .append($('<th>').html('From'))
+                                        .append($('<th>').html('Time'))
+                                        .append($('<th>').html('Estimated'))
+                                        .append($('<th>').html('Status'))
+                                    ))
+                                .append($('<tbody>'))))
+                        .append($('<div>')
+                            .append($("<table id='flightboard-departure'>")
+                                .addClass("flightboard")
+                                .append($('<caption>').html('Departure'))
+                                .append($('<thead>')
+                                    .append($('<tr>')
+                                        .append($('<th>').html('Flight'))
+                                        .append($('<th>').html('From'))
+                                        .append($('<th>').html('Time'))
+                                        .append($('<th>').html('Estimated'))
+                                        .append($('<th>').html('Status'))
+                                    ))
+                                .append($('<tbody>'))
+                            ))
+                    )
+            })
+        }
+
+        // Add bottom of sidebar elements
         if (_options.sidebar && _options.stylesets) {
             addSidebarTab({
                 zone: 2,
@@ -590,7 +640,6 @@ Oscars.Map = (function($) {
             //console.log('L.Oscars::gip:update: Info - ', feature)
             if (_options.debug)
                 console.log("Map::on", feature)
-            console.log()
             if (feature.properties && feature.properties.group_name) {
                 var layer = Oscars.Map.findGIPLayer(feature.properties.group_name)
                 if (layer) {

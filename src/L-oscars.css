@@ -490,3 +490,14 @@ path, circle {
   }
 }
 
+#flightboard table {
+  width: 100%;
+}
+#flightboard caption {
+  font-weight: bold;
+  font-size: 140%;
+}
+#flightboard th,
+#flightboard caption {
+  color: white;
+}

@@ -9,7 +9,7 @@ var Oscars = Oscars || {};
 
 Oscars.Util = (function() {
     /**
-     *	DEFAULT VALUES
+     *  DEFAULT VALUES
      */
     // Defaults as used if no default is provided
     const VERSION = "2.0.0"
@@ -42,7 +42,7 @@ Oscars.Util = (function() {
     // new defaults
     var _options = {};
     /**
-     *	PRIVATE VARIABLES
+     *  PRIVATE VARIABLES
      */
     // small graphs
     var _sparklines = {};
@@ -52,11 +52,15 @@ Oscars.Util = (function() {
     var _showInfo = false;
     // Markers that have a physical size and need adjustments on zoom changes
     var _phyMarkers = {};
+    var _flightboard = {
+        arrival: {},
+        departure: {}
+    }
 
 
 
     /**
-     *	PRIVATE FUNCTIONS
+     *  PRIVATE FUNCTIONS
      */
     // Check property existance
     function isSet(property) {
@@ -334,7 +338,7 @@ Oscars.Util = (function() {
     }
 
     /**
-     *	PUBLIC INTERFACE
+     *  PUBLIC INTERFACE
      */
     return {
         updateSparklines: function() {
@@ -344,6 +348,46 @@ Oscars.Util = (function() {
                         $('.' + name).peity(_sparklines[name]);
                 }
             });
+        },
+
+        //
+        flightboard: function(move, flight, airport, timetype, time, note) {
+            var lnote = note != "" ? note : ((move == "arrival" && timetype == "actual") ? "Landed" : "")
+            _flightboard[move] = _flightboard.hasOwnProperty(move) ? _flightboard[move] : {}
+            _flightboard[move][flight] = _flightboard[move].hasOwnProperty(flight) ? _flightboard[move][flight] : {}
+            _flightboard[move][flight].airport = airport
+            _flightboard[move][flight][timetype] = time
+            _flightboard[move][flight].note = lnote
+            console.log(_flightboard)
+        },
+
+        //
+        getFlightboard: function(move, count = 6, datetime = false) {
+            const S = "scheduled"
+            const P = "planned"
+            const A = "actual"
+            var ts = datetime ? datetime : moment() // default to now
+
+            var tb = $('<tbody>')
+            for (var flight in _flightboard[move]) {
+                if(_flightboard[move].hasOwnProperty(flight)) {
+                    var t = false
+                    if(_flightboard[move][flight][A]) {
+                        t = _flightboard[move][flight][A]
+                    } else if (_flightboard[move][flight][P]) {
+                        t = _flightboard[move][flight][P]
+                    }
+                    tb.append(
+                        $('<tr>')
+                            .append($('<td>').html(flight))
+                            .append($('<td>').html(_flightboard[move][flight].airport))
+                            .append($('<td>').html(_flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH:mm") : '&nbsp;'))
+                            .append($('<td>').html( t ? t.format("HH:mm") : '&nbsp;'))
+                            .append($('<td>').html(_flightboard[move][flight].note ? _flightboard[move][flight].note : '&nbsp;'))
+                    )
+                }
+            }
+            $('#flightboard-'+move+' tbody').replaceWith(tb)
         },
 
         // Get or generate a feature id
@@ -362,9 +406,31 @@ Oscars.Util = (function() {
                     return feature.id
                 }
             }
-            console.log(errmsg, feature);
-            feature.id = Oscars.Util.uuidv4()
-            return feature.id
+            console.log(errmsg, feature)
+            return null
+        },
+
+        featureIds: function(geojson) {
+            var ids = []
+            if (geojson.type == "FeatureCollection") {
+                geojson.features.forEach(function(f, idx) {
+                    var fid = Oscars.Util.getFeatureId(feature, "collectFeatureIds:FeatureCollection")
+                    if (fid) {
+                        ids.push(fid)
+                    }
+                })
+            } else if (geojson.type == "Feature") {
+                var fid = Oscars.Util.getFeatureId(geojson, "collectFeatureIds:Feature")
+                if (fid) {
+                    ids.push(fid)
+                }
+            }
+            return ids
+        },
+
+        // Get or generate a feature id
+        getLayerFeatureId: function(layer) {
+            return layer.hasOwnProperty("feature") ? Oscars.Util.getFeatureId(layer.feature) : false
         },
 
         // Generates random UUID (https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript)
@@ -388,21 +454,21 @@ Oscars.Util = (function() {
 
         // Set default values.
         setDefaults: function(d) {
-             _options = $.extend(true, _options, d);
+            _options = $.extend(true, _options, d);
             return _options;
         },
 
-        // Set feature.properties._timestamp to now().	
+        // Set feature.properties._timestamp to now().  
         touch: function(feature) {
             feature.properties._timestamp = Date.now();
         },
 
-        // Bind text to feature/layer.	
+        // Bind text to feature/layer.  
         bindTexts: function(feature, layer) {
             bindTexts(feature, layer);
         },
 
-        // Return icon for (Point) feature.	
+        // Return icon for (Point) feature. 
         getIcon: function(feature) {
             return getIcon(feature);
         },
@@ -416,8 +482,8 @@ Oscars.Util = (function() {
         // Check for GIP-valid feature.
         // 1. It must be a geojson feature and its geometry must either by a point or a polygon.
         // 2. It must have the following properties set:
-        //		2.1. properties.name
-        //		2.2. properties.type
+        //      2.1. properties.name
+        //      2.2. properties.type
         isValidGIPGeoJSONFeature: function(feature) {
             /*
             var errs = geojsonhint.hint(feature, {
