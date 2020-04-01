@@ -273,16 +273,24 @@ Oscars.Util = (function() {
         var style = feature.properties._style;
         var rotation = 0.0;
         var notdone = true;
-        if (isSet(style.markerRotationOffset)) { // has rotation offset = need to rotate icon
-            rotation = parseFloat(style.markerRotationOffset);
-            ['heading', 'bearing', 'orientation', 'orient'].forEach(function(prop) {
-                if (feature.properties.hasOwnProperty(prop) && notdone) { // has rotation
-                    rotation += parseFloat(feature.properties[prop]);
+        const ROATION_PROPERTIES = ['heading', 'bearing', 'orientation', 'orient']
+        ROATION_PROPERTIES.forEach(function(prop) {
+            if (feature.properties.hasOwnProperty(prop) && notdone) { // has rotation
+                var r = parseFloat(feature.properties[prop])
+                if (!isNaN(r)) {
+                    rotation = r
                     notdone = false;
                 }
-            });
+            }
+        });
+
+        if (style.hasOwnProperty("markerRotationOffset")) { // has rotation offset = need to rotate icon
+            var r = parseFloat(style.markerRotationOffset)
+            if (!isNaN(r)) {
+                rotation += r
+            }
         }
-        return rotation;
+        return rotation
     }
 
     // Returns oriented marker with icon for Point feature. Always returns a marker (defaults if needed).
@@ -358,7 +366,6 @@ Oscars.Util = (function() {
             _flightboard[move][flight].airport = airport
             _flightboard[move][flight][timetype] = time
             _flightboard[move][flight].note = lnote
-            console.log(_flightboard)
         },
 
         //
@@ -370,24 +377,24 @@ Oscars.Util = (function() {
 
             var tb = $('<tbody>')
             for (var flight in _flightboard[move]) {
-                if(_flightboard[move].hasOwnProperty(flight)) {
+                if (_flightboard[move].hasOwnProperty(flight)) {
                     var t = false
-                    if(_flightboard[move][flight][A]) {
+                    if (_flightboard[move][flight][A]) {
                         t = _flightboard[move][flight][A]
                     } else if (_flightboard[move][flight][P]) {
                         t = _flightboard[move][flight][P]
                     }
                     tb.append(
                         $('<tr>')
-                            .append($('<td>').html(flight))
-                            .append($('<td>').html(_flightboard[move][flight].airport))
-                            .append($('<td>').html(_flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH:mm") : '&nbsp;'))
-                            .append($('<td>').html( t ? t.format("HH:mm") : '&nbsp;'))
-                            .append($('<td>').html(_flightboard[move][flight].note ? _flightboard[move][flight].note : '&nbsp;'))
+                        .append($('<td>').html(flight))
+                        .append($('<td>').html(_flightboard[move][flight].airport))
+                        .append($('<td>').html(_flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH:mm") : '&nbsp;'))
+                        .append($('<td>').html(t ? t.format("HH:mm") : '&nbsp;'))
+                        .append($('<td>').html(_flightboard[move][flight].note ? _flightboard[move][flight].note : '&nbsp;'))
                     )
                 }
             }
-            $('#flightboard-'+move+' tbody').replaceWith(tb)
+            $('#flightboard-' + move + ' tbody').replaceWith(tb)
         },
 
         // Get or generate a feature id

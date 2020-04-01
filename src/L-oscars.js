@@ -85,6 +85,7 @@ var r3 = L.polyline.antPath([
 
 
 var night = L.layerGroup([airportNightOverlay, r1, r2, r3])
+var day = airportOverlay
 
 /* GIP OPTIONS
  */
@@ -288,13 +289,50 @@ $("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.
     }
     Oscars.Util.flightboard(move, flight, airport, timetype, day, time, note)
     */
-    Oscars.Util.flightboard(msg.move, msg.flight, msg.airport, msg.info, moment(msg.date+" "+msg.time, msg.info == "scheduled" ? "YYYY-MM-DD HH:mi" : "DD/MM HH:mi"), "")
+    Oscars.Util.flightboard(msg.move, msg.flight, msg.airport, msg.info, moment(msg.date + " " + msg.time, msg.info == "scheduled" ? "YYYY-MM-DD HH:mi" : "DD/MM HH:mi"), "")
     Oscars.Util.getFlightboard(msg.move)
 })
 
 if (map_options.debug) // ping at tower if debugging
     L.marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: 'red' }) }).addTo(radar);
 
+
+// function to set a given theme/color-scheme
+function setTheme(themeName) {
+    localStorage.setItem('theme', themeName);
+    document.documentElement.className = themeName;
+    if (themeName == 'theme-dark') {
+        CartoDB_DarkMatterNoLabels.addTo(map)
+        night.addTo(map)
+        map.removeLayer(day)
+        map.removeLayer(OpenStreetMap_France)
+    } else {
+        OpenStreetMap_France.addTo(map)
+        day.addTo(map)
+        map.removeLayer(night)
+        map.removeLayer(CartoDB_DarkMatterNoLabels)
+    }
+}
+
+// function to toggle between light and dark theme
+function toggleTheme() {
+    if (localStorage.getItem('theme') === 'theme-dark') {
+        setTheme('theme-light');
+    } else {
+        setTheme('theme-dark');
+    }
+}
+
+// Immediately invoked function to set the theme on initial load
+(function() {
+    if (localStorage.getItem('theme') === 'theme-dark') {
+        setTheme('theme-dark');
+        document.getElementById('slider').checked = false;
+    } else {
+        setTheme('theme-light');
+        document.getElementById('slider').checked = true;
+    }
+})();
 
 /*
 {

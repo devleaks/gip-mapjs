@@ -29,7 +29,7 @@ Oscars.Wire = (function($) {
         // General presentation
         "icon-color": 'default',
         icon: 'la-info',
-        "icon-set": "la-"
+        "icon-set": "la-",
         size: 'medium',
         speed: 500,
         // More

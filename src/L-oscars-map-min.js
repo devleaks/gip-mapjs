@@ -325,7 +325,8 @@ Oscars.Map = (function($) {
                 icon_extra: null,
                 tab_content: $('<div>')
                     .append($('<div>')
-                        .attr("id", LAYERCONTROLID))
+                        .attr("id", LAYERCONTROLID)
+                        .append('<div id="themeswitch"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>'))
             })
             // relocate layer control to sidebar
             var newloc = document.getElementById(LAYERCONTROLID)
