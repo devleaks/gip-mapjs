@@ -1,22 +1,43 @@
 /*L-Oscars.css v. 2.3.0*/
+:root {
+    --primary-color: #302AE6;
+    --secondary-color: #536390;
+    --font-color: #424242;
+    --bg-color: #fff;
+    --heading-color: #222222;
+    --sidebar-background: rgba(220, 220, 220, 0.6);
+    --sidebar-contour: "#fff";
+}
+
+[data-theme="dark"] {
+    --primary-color: #9A97F3;
+    --secondary-color: #818cab;
+    --font-color: #dddddd;
+    --bg-color: #111;
+    --heading-color: #dddddd;
+    --sidebar-background: rgba(40, 40, 40, 0.6);
+    --sidebar-contour: "#000";
+}
 
 body {
     padding: 0;
     margin: 0;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-html, body, #map {
+html,
+body,
+#map {
     height: 100%;
     width: 100%;
 }
 
 .oscars-label {
-	background: transparent;
-	border: none;
-	box-shadow: none;
-	font-size: 10px;
-	font-weight: bolder;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: 10px;
+    font-weight: bolder;
 }
 
 /* removes the little caret from tooltip text to marker */
@@ -24,248 +45,298 @@ html, body, #map {
 .oscars-label.leaflet-tooltip-bottom:before,
 .oscars-label.leaflet-tooltip-left:before,
 .oscars-label.leaflet-tooltip-right:before {
-	content: none;
+    content: none;
 }
 
 .leaflet-control-layers-group label input.leaflet-control-layers-selector {
-	margin-left: 10px;
+    margin-left: 10px;
 }
+
 .leaflet-control-layers {
-	box-shadow: none;
-	width: 100%;
+    box-shadow: none;
+    width: 100%;
+    color: var(--heading-color);
+    background-color: var(--bg-color);
 }
 
 /* Sidebar Adjustments */
 .leaflet-sidebar {
-	box-shadow: none;
+    box-shadow: none;
 }
-.leaflet-sidebar-tabs > li.active,
-.leaflet-sidebar-tabs > ul > li.active,
-.leaflet-sidebar-tabs > li:hover,
-.leaflet-sidebar-tabs > ul > li:hover,
+
+.leaflet-sidebar-tabs>li.active,
+.leaflet-sidebar-tabs>ul>li.active,
+.leaflet-sidebar-tabs>li:hover,
+.leaflet-sidebar-tabs>ul>li:hover,
 h1.leaflet-sidebar-header {
-	background-color: transparent;
+    background-color: transparent;
+    color: var(--heading-color);
 }
-.leaflet-sidebar-tabs, .leaflet-sidebar-tabs > ul {
+
+.leaflet-sidebar-tabs,
+.leaflet-sidebar-tabs>ul {
     position: absolute;
     width: 60px;
 }
 
 h2.leaflet-sidebar-header {
-	margin-top: 20px;
-	font-size: 10px;
-	text-align: right;
-	background-color: transparent;
-	color: black;
+    margin-top: 20px;
+    font-size: 10px;
+    text-align: right;
+    background-color: transparent;
+    color: black;
 }
+
 .leaflet-sidebar-tabs {
-	background-color: transparent;
+    background-color: transparent;
 }
+
 .leaflet-sidebar-content {
-	background-color: rgba(220, 220, 220, 0.6);
-	border: 1px solid white;
-	box-shadow: none;
+    background-color: var(--sidebar-background);
+    border: 1px solid var(--sidebar-contour);
+    box-shadow: none;
 }
+
 .leaflet-sidebar-close {
-	right: 0;
+    right: 0;
 }
+
 .timeline-hairline.timeline {
-	margin-left: 1px;
+    margin-left: 1px;
 }
+
 div.sidebar-pane-content {
     overflow: auto;
-    overflow-x:hidden;
+    overflow-x: hidden;
 }
+
 .leaflet-sidebar {
-  position: absolute;
-  height: 97%;
-  z-index: 2000; }
+    position: absolute;
+    height: 97%;
+    z-index: 2000;
+}
 
 #gip-gip-wire {
-	font-size: 10px;
+    font-size: 10px;
 }
+
 /**/
 .timeline-circ.circ-xl .fa {
-	font-size: 24px;
-	line-height: 38px;
+    font-size: 24px;
+    line-height: 38px;
 }
+
 .oscars-credits tr td {
-	padding: 6px;
-	font-style: italic;
-	font-size: smaller;
+    padding: 6px;
+    font-style: italic;
+    font-size: smaller;
 }
+
 /**/
 a .badge {
-   position:relative;
+    position: relative;
 }
+
 .badge {
-  display: block;
-  position: absolute;
-  top: -50px;
-  right: -40px;
-  line-height: 16px;
-  font-size: 12px;
-  font-weight: bolder;
-  height: 16px;
-  width: 16px;
-  color: white;
-  background: #db2004;
-  border: 1px solid;
-  border-radius: 10px;
-  border-color: #f00;
+    display: block;
+    position: absolute;
+    top: -50px;
+    right: -40px;
+    line-height: 16px;
+    font-size: 12px;
+    font-weight: bolder;
+    height: 16px;
+    width: 16px;
+    color: white;
+    background: #db2004;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: #f00;
 }
+
 .clean-wire,
 .sound-onoff {
-	float: right;
+    float: right;
 }
+
 .o-search {
-	margin-top: 10px;
-	color: #aaa;
-	font-size: 2em;
+    margin-top: 10px;
+    color: #aaa;
+    font-size: 2em;
 }
+
 .leafletjs-peity {
-	border: none;
-	background: transparent;
+    border: none;
+    background: transparent;
 }
+
 /* About... logos */
 div.gip-logo {
-   content:url(i/gip.png);
-   width: 200px;
-   margin:auto;
+    content: url(i/gip.png);
+    width: 200px;
+    margin: auto;
 }
+
 div.leafletjs-logo {
-   content:url(i/leafletjs.png);
-   width: 100px;
+    content: url(i/leafletjs.png);
+    width: 100px;
 }
+
 div.mapbox-logo {
-   content:url(i/mapbox.png);
-   width: 100px;
+    content: url(i/mapbox.png);
+    width: 100px;
 }
+
 div.osm-logo {
-   content:url(i/osm.png);
-   width: 100px;
+    content: url(i/osm.png);
+    width: 100px;
 }
+
 div.stamen-logo {
-   content:url(i/stamen.png);
-   width: 100px;
+    content: url(i/stamen.png);
+    width: 100px;
 }
+
 div.stadia-logo {
-   content:url(i/stadia.png);
-   width: 100px;
+    content: url(i/stadia.png);
+    width: 100px;
 }
+
 .leaflet-control-search.search-exp {
-	box-shadow: none;
+    box-shadow: none;
 }
+
 .leaflet-control-search .search-input {
-	border: 1px solid #ddd;
-	padding: 8px;
-	font-size: 16px;
+    border: 1px solid #ddd;
+    padding: 8px;
+    font-size: 16px;
 }
+
 .leaflet-control-search .search-cancel {
-	margin-top: 12px;
-	padding-right: 8px;
+    margin-top: 12px;
+    padding-right: 8px;
 }
+
 .leaflet-control-search .search-button {
-	margin-top: 8px;
-	margin-left: 6px;
+    margin-top: 8px;
+    margin-left: 6px;
 }
+
 /**/
-.sidebar-tabs, .sidebar-tabs > ul {
-  width: 60px;
+.sidebar-tabs,
+.sidebar-tabs>ul {
+    width: 60px;
 }
-.sidebar-tabs > li, .sidebar-tabs > ul > li {
+
+.sidebar-tabs>li,
+.sidebar-tabs>ul>li {
     height: 60px;
 }
+
 .leaflet-bar,
 .leaflet-bar a {
-	background-color: transparent;
-	border: none;
-	color: rgba(100, 100, 100, 0.4);
-	text-shadow: 2px 2px 2px rgba(127, 127, 127, 0.05);
-	box-shadow: none;
+    background-color: transparent;
+    border: none;
+    color: rgba(100, 100, 100, 0.4);
+    text-shadow: 2px 2px 2px rgba(127, 127, 127, 0.05);
+    box-shadow: none;
 }
+
 .leaflet-control-zoom-in,
 .leaflet-control-zoom-out {
-	padding: 8px;
-	font-size: 40px;
-	font-weight: normal;
+    padding: 8px;
+    font-size: 40px;
+    font-weight: normal;
 }
+
 .liege {
-	padding-left: 18px;
-	font-size: 40px;
-	font-weight: normal;
-	color: rgba(100, 100, 100, 0.2);
-	text-shadow: 2px 2px 2px rgba(127, 127, 127, 0.05);
+    padding-left: 18px;
+    font-size: 40px;
+    font-weight: normal;
+    color: rgba(100, 100, 100, 0.2);
+    text-shadow: 2px 2px 2px rgba(127, 127, 127, 0.05);
 }
+
 .about {
-	display: inline-block;
-	width: 32px;
-	height: 32px;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
 }
+
 /* CLIENT SETUP */
 /* Oscars Defaults ¨*/
 h1.sidebar-header.oscars {
-	color: #db2004;
+    color: #db2004;
 }
+
 .oscars.badge {
-  background: #db2004;
-  border-color: #db2004;
+    background: #db2004;
+    border-color: #db2004;
 }
+
 .leaflet-bar a.oscars:hover {
-	color: #db2004;
+    color: #db2004;
 }
+
 .active .oscars.liege,
 .oscars.liege:hover {
-	color: #db2004;
+    color: #db2004;
 }
+
 .about.oscars {
-	background-image: url(i/red-32.png) ;
+    background-image: url(i/red-32.png);
 }
+
 /* Liege Airport Colors (.eblg)
 Orange: f18700
 Blue: 0e64ae
 <li><a href="#about" role="tab"><img src="oscars/i/liegeairport.png" alt="Liege Airport" title="Oscars GIP for Liege Airport" width="18" height="18"></a></li>
 */
 .about.eblg {
-	background-image: url(i/liegeairport-32.png) ;
+    background-image: url(i/liegeairport-32.png);
 }
+
 .eblg.badge {
-  background: #f18700;
-  border-color: #f18700;
+    background: #f18700;
+    border-color: #f18700;
 }
+
 .leaflet-bar a.oscars:hover {
-	color: #0e64ae;
+    color: #0e64ae;
 }
+
 h1.sidebar-header.eblg {
-	color: #f18700;
+    color: #f18700;
 }
+
 .active .eblg.liege,
 .eblg.liege:hover {
-	color: #0e64ae;
+    color: #0e64ae;
 }
 
 .message-tag-pills span {
-  display: inline-block;
-  border: 2px solid #CCC;
-  color: #AAA;
-  padding: 0px 4px;
-  margin: 1px;
-  cursor: pointer;
-  border-radius: 12px 12px 12px 12px;
-  -moz-border-radius: 12px 12px 12px 12px;
-  -webkit-border-radius: 12px 12px 12px 12px;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+    display: inline-block;
+    border: 2px solid #CCC;
+    color: #AAA;
+    padding: 0px 4px;
+    margin: 1px;
+    cursor: pointer;
+    border-radius: 12px 12px 12px 12px;
+    -moz-border-radius: 12px 12px 12px 12px;
+    -webkit-border-radius: 12px 12px 12px 12px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
 .o-search i.fa-remove {
-  padding: 8px;
-  float: right;
+    padding: 8px;
+    float: right;
 }
+
 .o-search i.fa-search {
-  padding: 8px;
+    padding: 8px;
 }
 
 
@@ -440,176 +511,162 @@ td.gip-reason {
 }
 
 .small-padding {
-  padding: 4px;
+    padding: 4px;
 }
 
 .message-footer p {
-  margin: 0px;
+    margin: 0px;
 }
 
 
 .leaflet-sidebar-tabs ul li a i {
-  padding-left: 18px;
-  font-size: 40px;
-  font-weight: normal;
-  color: rgba(100, 100, 100, 0.2);
-  text-shadow: 2px 2px 2px rgba(127, 127, 127, 0.05);
+    padding-left: 18px;
+    font-size: 40px;
+    font-weight: normal;
+    color: rgba(100, 100, 100, 0.2);
+    text-shadow: 2px 2px 2px rgba(127, 127, 127, 0.05);
 }
 
 .leaflet-sidebar-tabs ul li a:hover i {
-  color: #ffffff;
+    color: #ffffff;
 }
 
 .oscars.form-control {
-  height: 28px;
-  width: 80%;
-}
-
-path, circle {
-  stroke-width: 4px;
-  fill: transparent;
-}
-
-.bg {
-  stroke: white;
-  stroke-dasharray: 4 12;
-}
-
-.move {
-  stroke: red;
-  animation: link-anim 3s infinite steps(21);
-  stroke-dasharray: 4 12 4 12 4 300;
-}
-
-@keyframes link-anim {
-  0% {
-    stroke-dashoffset: 368;
-  }
-  100% {
-    stroke-dashoffset: 32;
-  }
+    height: 28px;
+    width: 80%;
 }
 
 #flightboard table {
-  width: 100%;
+    width: 100%;
 }
+
 #flightboard caption {
-  font-weight: bold;
-  font-size: 140%;
+    font-weight: bold;
+    font-size: 140%;
 }
+
 #flightboard th,
 #flightboard caption {
-  color: white;
+    color: var(--font-color);
 }
-/**/
+
+/*
+    --font-color: #dddddd;
+    --bg-color: #111;
+
+*/
 
 .theme-light {
-  --color-primary: #0060df;
-  --color-secondary: #fbfbfe;
-  --color-accent: #fd6f53;
-  --font-color: #000000;
+    --color-primary: #0060df;
+    --color-secondary: #fbfbfe;
+    --color-accent: #fd6f53;
+    --font-color: #000000;
 }
+
 .theme-dark {
-  --color-primary: #17ed90;
-  --color-secondary: #2a2c2d;
-  --color-accent: #12cdea;
-  --font-color: #ffffff;
+    --color-primary: #17ed90;
+    --color-secondary: #2a2c2d;
+    --color-accent: #12cdea;
+    --font-color: #ffffff;
 }
+
 .container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  background: var(--color-secondary);
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: var(--color-secondary);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
 .container h1 {
-  color: var(--font-color);
-  font-family: sans-serif;
+    color: var(--font-color);
+    font-family: sans-serif;
 }
+
 .container button {
-  color: var(--font-color);
-  background: var(--color-primary);
-  padding: 10px 20px;
-  border: 0;
-  border-radius: 5px;
+    color: var(--font-color);
+    background: var(--color-primary);
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 5px;
 }
 
 /* The switch - the box around the slider */
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
 }
 
 /* Hide default HTML checkbox */
 .switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 /* The slider */
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 40px;
-  width: 40px;
-  left: 0px;
-  bottom: 4px;
-  top: 0;
-  bottom: 0;
-  margin: auto 0;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-  box-shadow: 0 0px 15px #2020203d;
-  background: white url('i/night.png');
-  background-repeat: no-repeat;
-  background-position: center;
+    position: absolute;
+    content: "";
+    height: 40px;
+    width: 40px;
+    left: 0px;
+    bottom: 4px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    box-shadow: 0 0px 15px #2020203d;
+    background: white url('i/night.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
-input:checked + .slider {
-  background-color: #2196f3;
+input:checked+.slider {
+    background-color: #2196f3;
 }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196f3;
 }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(24px);
-  -ms-transform: translateX(24px);
-  transform: translateX(24px);
-  background: white url('i/sunny.png');
-  background-repeat: no-repeat;
-  background-position: center;
+input:checked+.slider:before {
+    -webkit-transform: translateX(24px);
+    -ms-transform: translateX(24px);
+    transform: translateX(24px);
+    background: white url('i/sunny.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 /* Rounded sliders */
 .slider.round {
-  border-radius: 34px;
+    border-radius: 34px;
 }
 
 .slider.round:before {
-  border-radius: 50%;
+    border-radius: 50%;
 }
 
 #themeswitch {
-  margin: auto;
-  padding: 10px;
-  text-align: center;
+    margin: auto;
+    padding: 10px;
+    text-align: center;
 }

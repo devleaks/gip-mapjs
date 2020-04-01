@@ -7,7 +7,7 @@
 
 L.Oscars = L.Oscars || {};
 
-L.Oscars.version = '3.1.0';
+L.Oscars.version = '3.2.0';
 
 L.Oscars.Util = (function() {
     /**

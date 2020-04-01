@@ -251,9 +251,20 @@ var parkings = Oscars.zoneGroup({
     },
     "features": eblgParkings.features
 }, {
-    //gipDefaults: {
-    //    STYLE: parkingStyle.available
-    //}
+    gipDefaults: {
+        STYLE: {
+            markerSymbol: "map-marker",
+            markerSize: 24, // px
+            markerColor: "rgb(0,128,256)", // lighter blue
+            color: "#E6E04F", // stroke color
+            opacity: 1, // stroke opacity 0 = transparent
+            weight: 1, // stroke width
+            fillColor: "white", // fill color
+            fillOpacity: 0, // fill opacity 1 = opaque
+            fillPattern: "solid", // fill pattern (currently unused)
+            inactiveMarkerColor: "darkgrey"
+        }
+    }
 }).addTo(map);
 
 function parking(name, avail) {
@@ -302,11 +313,13 @@ function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
     document.documentElement.className = themeName;
     if (themeName == 'theme-dark') {
+        document.documentElement.setAttribute('data-theme', 'dark')
         CartoDB_DarkMatterNoLabels.addTo(map)
         night.addTo(map)
         map.removeLayer(day)
         map.removeLayer(OpenStreetMap_France)
     } else {
+        document.documentElement.setAttribute('data-theme', 'light')
         OpenStreetMap_France.addTo(map)
         day.addTo(map)
         map.removeLayer(night)

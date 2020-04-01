@@ -22,8 +22,10 @@ Oscars.ZoneGroup = L.GeoJSON.extend({
         style: function(feature) {
             Oscars.Map.setStats('OZGSTY')
             if (feature && feature.properties && feature.properties._style) {
+                console.log("case 1", feature, feature.properties._style)
                 return feature.properties._style
             } else {
+                console.log("case 2", feature, Oscars.Util.getDefaults().STYLE)
                 ;//console.log("ZoneGroup::style: Warning - Feature has no style, using default", feature)
             }
             return Oscars.Util.getDefaults().STYLE
@@ -39,14 +41,13 @@ Oscars.ZoneGroup = L.GeoJSON.extend({
     /**
      *  Merge defaults with user-supplied defaults and install initial collection
      */
-    initialize: function(featureCollection, options) {
+    initialize: function(featureCollection, moreoptions) {
         Oscars.Map.setStats('OZGINI')
-        L.setOptions(this, options)
-        if (options && options.hasOwnProperty("gipDefaults")) {
-            Oscars.Util.setDefaults(options.gipDefaults)
+        L.setOptions(this, this.options)
+        if (moreoptions && moreoptions.hasOwnProperty("gipDefaults")) {
+            Oscars.Util.setDefaults(moreoptions.gipDefaults)
         }
         L.GeoJSON.prototype.initialize.call(this, featureCollection, this.options)
-        // this.update(featureCollection)
         Oscars.Map.addLayerToControlLayer(featureCollection, this)
     },
 
