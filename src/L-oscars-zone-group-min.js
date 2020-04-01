@@ -16,24 +16,18 @@ Oscars.ZoneGroup = L.GeoJSON.extend({
         start: false, // no auto-update of GeoJSON.
 
         getFeatureId: function(feature) {
+            Oscars.Map.setStats('OZGFID')
             return Oscars.Util.getFeatureId(feature, "ZoneGroup::getFeatureId: Warning - Feature has no name, will never be updated or removed")
         },
 
         style: function(feature) {
             Oscars.Map.setStats('OZGSTY')
-            if (feature && feature.properties && feature.properties._style) {
-                console.log("case 1", feature, feature.properties._style)
-                return feature.properties._style
-            } else {
-                console.log("case 2", feature, Oscars.Util.getDefaults().STYLE)
-                ;//console.log("ZoneGroup::style: Warning - Feature has no style, using default", feature)
-            }
-            return Oscars.Util.getDefaults().STYLE
+            return Oscars.Util.style(feature)
         },
 
         onEachFeature: function(feature, layer) {
             Oscars.Map.setStats('OZGOEF')
-            Oscars.Util.bindTexts(feature, layer)
+            Oscars.Util.onEachFeature(feature, layer)
         }
 
     },
@@ -51,7 +45,8 @@ Oscars.ZoneGroup = L.GeoJSON.extend({
         Oscars.Map.addLayerToControlLayer(featureCollection, this)
     },
 
-    update: function(geojson) {
+    update: function(geojson) { // this is not very efficient, but it does not consume any extra data structure. it's just processing.
+        Oscars.Map.setStats('OZGUPD')
         var fids = Oscars.Util.featureIds(geojson)
         console.log("to update", fids)
         var layers_to_delete = []
@@ -66,7 +61,7 @@ Oscars.ZoneGroup = L.GeoJSON.extend({
         this.addData(geojson)
         const _local_this = this
         layers_to_delete.forEach(function(layer, idx) {
-            console.log("deleting layer..", getLayerFeatureId(layer))
+            console.log("deleting layer..", Oscars.Util.getLayerFeatureId(layer))
             _local_this.removeLayer(layer)
             console.log("..delete")
         })

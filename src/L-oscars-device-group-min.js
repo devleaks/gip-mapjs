@@ -9,39 +9,30 @@ Oscars = Oscars || {}
 
 Oscars.DeviceGroup = L.Realtime.extend({
 
-    VERSION: "2.0.0",
+    VERSION: "2.1.0",
     
     options: {
 
         start: false,
 
         getFeatureId: function(feature) {
-            return Oscars.Util.getFeatureId(feature, "Oscars.DeviceGroup::getFeatureId: Warning - Feature has no id")
+            Oscars.Map.setStats('ODGFID')
+            return Oscars.Util.getFeatureId(feature, "DeviceGroup::getFeatureId: Warning - Feature has no name, will never be updated or removed")
         },
 
         style: function(feature) {
             Oscars.Map.setStats('ODGSTY')
-            if (feature && feature.properties && feature.properties._style) {
-                return feature.properties._style
-            } else {
-                console.log("Oscars.DeviceGroup::style: Warning - Feature has no style, using default", feature)
-            }
-            return Oscars.Util.getDefaults().STYLE
+            return Oscars.Util.style(feature)
         },
 
         pointToLayer: function(feature, latlng) {
             Oscars.Map.setStats('ODGP2L')
-            Oscars.Util.touch(feature)
-            feature.properties = feature.properties || {}
-            feature.properties._marker = Oscars.Util.getMarker(feature)
-            return feature.properties._marker
+            return Oscars.Util.pointToLayer(feature, latlng)
         },
 
         updateFeature: function(feature, oldLayer) {
             Oscars.Map.setStats('ODGUPF')
-            Oscars.Util.touch(feature)
-            feature.properties = feature.properties || {}
-            feature.properties._icon = Oscars.Util.getIcon(feature)
+            Oscars.Util.updateFeature(feature, oldLayer)
         }
 
     },
@@ -52,11 +43,11 @@ Oscars.DeviceGroup = L.Realtime.extend({
     initialize: function(featureCollection, options) {
         Oscars.Map.setStats('ODGINI')
         L.setOptions(this, options)
-        if (options && typeof options.gipDefaults != "undefined") { Oscars.Util.setDefaults(options.gipDefaults) }
+        if (options && options.hasOwnProperty("gipDefaults")) { Oscars.Util.setDefaults(options.gipDefaults) }
         L.Realtime.prototype.initialize.call(this, {}, this.options)
         this.update(featureCollection)
         Oscars.Map.addLayerToControlLayer(featureCollection, this)
-        if (options && typeof options.search != "undefined" && options.search) { Oscars.Map.addToSearch(this) }
+        if (options && options.hasOwnProperty("search") && options.search) { Oscars.Map.addToSearch(this) }
         this.on("add", Oscars.Util.updateSparklines)
     },
 

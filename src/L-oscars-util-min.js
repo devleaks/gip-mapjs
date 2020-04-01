@@ -164,8 +164,18 @@ Oscars.Util = (function() {
         if (Array.isArray(data))
             data = data.join();
 
+        // build option array depending on char type
+        var optionList = peityTypeOptions[chartType]
+        var options = {}
+        optionList.forEach(function(o) {
+            if(feature.properties._data.hasOwnProperty(o)) {
+                options[o] = feature.properties._data[o]
+            }            
+        })
+        var html = (Object.keys(options).length > 0) ? '<span class="' + name + '" data-peity=\'' + JSON.stringify(options) + '\'>' + data + '</span>' : '<span class="' + name + '">' + data + '</span>'
+
         var icon = L.divIcon({
-            html: isSet(feature.properties._data._options) ? '<span class="' + name + '" data-peity=\'' + JSON.stringify(feature.properties._data._options) + '\'>' + data + '</span>' : '<span class="' + name + '">' + data + '</span>',
+            html: html,
             className: 'leafletjs-peity' // removes bg and border
         });
         _sparklines[name] = chartType;
@@ -345,6 +355,12 @@ Oscars.Util = (function() {
         }
     }
 
+    // Set feature.properties._timestamp to now().  
+    function touch(feature) {
+        feature.properties._timestamp = Date.now();
+    }
+
+
     /**
      *  PUBLIC INTERFACE
      */
@@ -354,9 +370,36 @@ Oscars.Util = (function() {
                 for (var name in _sparklines) {
                     if (_sparklines.hasOwnProperty(name))
                         $('.' + name).peity(_sparklines[name]);
+                        console.log("Util::updateSparklines", name)
                 }
             });
         },
+
+        style: function(feature) {
+            touch(feature)
+            return (feature && feature.properties && feature.properties._style) ? feature.properties._style : getDefaults().STYLE
+        },
+
+        // Spawn layer from feature
+        pointToLayer: function(feature, latlng) {
+            touch(feature)
+            feature.properties = feature.properties || {}
+            feature.properties._marker = Oscars.Util.getMarker(feature)
+            return feature.properties._marker
+        },
+
+        onEachFeature: function(feature, layer) {
+            Oscars.Util.bindTexts(feature, layer)
+        },
+
+
+        // specific to L.realtime
+        updateFeature: function(feature, oldLayer) {
+            touch(feature)
+            feature.properties = feature.properties || {}
+            feature.properties._icon = Oscars.Util.getIcon(feature)
+        },
+
 
         //
         flightboard: function(move, flight, airport, timetype, time, note) {
@@ -466,8 +509,8 @@ Oscars.Util = (function() {
         },
 
         // Set feature.properties._timestamp to now().  
-        touch: function(feature) {
-            feature.properties._timestamp = Date.now();
+        touch: function() {
+            touch(feature);
         },
 
         // Bind text to feature/layer.  

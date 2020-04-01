@@ -160,7 +160,7 @@ Oscars.Map = (function($) {
         })
 
         if (doneSomething) { // provoque layer redraw
-            Oscars.Map.updateSparklines()
+            Oscars.Util.updateSparklines()
             _map.invalidateSize()
         }
     }
@@ -318,15 +318,17 @@ Oscars.Map = (function($) {
             addSidebarTab({
                 zone: 1,
                 id: "layers",
-                title: "Layers",
                 info: "Layers",
+//              title: 'Layers<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>',
+                title: 'Layers<div class="toggle-btn" id="_1st-toggle-btn"><input id="i_1st-toggle-btn" type="checkbox" onchange="toggleTheme()"><span></span></div>',
                 subtitle: "&nbsp",
                 icon: "bars",
                 icon_extra: null,
                 tab_content: $('<div>')
                     .append($('<div>')
                         .attr("id", LAYERCONTROLID)
-                        .append('<div id="themeswitch"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>'))
+//                        .append('<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>')
+            )
             })
             // relocate layer control to sidebar
             var newloc = document.getElementById(LAYERCONTROLID)

@@ -265,8 +265,9 @@ L.Oscars.Util = (function() {
             console.log("L.Oscars.Util::getSparkline: Warning - Invalid chart type, forcing pie", feature);
             chartType = 'pie';
         }
-        if (Array.isArray(data))
+        if (Array.isArray(data)) {
             data = data.join();
+        }
 
         var icon = L.divIcon({
             html: isSet(feature.properties._data.options) ? '<span class="' + name + '" data-peity=\'' + JSON.stringify(feature.properties._data.options) + '\'>' + data + '</span>' : '<span class="' + name + '">' + data + '</span>',

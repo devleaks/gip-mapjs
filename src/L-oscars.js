@@ -158,8 +158,8 @@ var wire = Oscars.Wire.init(wire_options, dashboard)
  */
 const tower = [50.63725474594362, 5.453993082046508]
 var radar = L.layerGroup().addTo(map)
-L.circle(tower, { radius: 80000, color: "darkred", opacity: 0.5, weight: 1, fill: false }).addTo(radar)
-L.circle(tower, { radius: 160000, color: "darkblue", opacity: 0.4, weight: 1, fill: false }).addTo(radar)
+L.circle(tower, { radius: 80000, color: "red", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
+L.circle(tower, { radius: 160000, color: "blue", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
 
 
 var aircrafts = Oscars.deviceGroup({
@@ -218,10 +218,10 @@ var parkingStyle = {
         markerSymbol: "map-marker",
         markerSize: 24, // px
         markerColor: "rgb(0,128,256)", // lighter blue
-        color: "green", // stroke color
+        color: "#E6E04F", // stroke color
         opacity: 0.6, // stroke opacity 0 = transparent
         weight: 1, // stroke width
-        fillColor: "grey", // fill color
+        fillColor: "green", // fill color
         fillOpacity: 0.2, // fill opacity 1 = opaque
         fillPattern: "solid", // fill pattern (currently unused)
         inactiveMarkerColor: "darkgrey"
@@ -251,7 +251,10 @@ var parkings = Oscars.zoneGroup({
     },
     "features": eblgParkings.features
 }, {
-    gipDefaults: {
+    style: {
+        color: "yellow"
+    }
+    /*gipDefaults: {
         STYLE: {
             markerSymbol: "map-marker",
             markerSize: 24, // px
@@ -264,7 +267,7 @@ var parkings = Oscars.zoneGroup({
             fillPattern: "solid", // fill pattern (currently unused)
             inactiveMarkerColor: "darkgrey"
         }
-    }
+    }*/
 }).addTo(map);
 
 function parking(name, avail) {
@@ -340,10 +343,10 @@ function toggleTheme() {
 (function() {
     if (localStorage.getItem('theme') === 'theme-dark') {
         setTheme('theme-dark');
-        document.getElementById('slider').checked = false;
+        document.getElementById('i_1st-toggle-btn').checked = true;
     } else {
         setTheme('theme-light');
-        document.getElementById('slider').checked = true;
+        document.getElementById('i_1st-toggle-btn').checked = false;
     }
 })();
 
