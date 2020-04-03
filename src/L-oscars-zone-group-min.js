@@ -48,22 +48,22 @@ Oscars.ZoneGroup = L.GeoJSON.extend({
     update: function(geojson) { // this is not very efficient, but it does not consume any extra data structure. it's just processing.
         Oscars.Map.setStats('OZGUPD')
         var fids = Oscars.Util.featureIds(geojson)
-        console.log("to update", fids)
+        //console.log("to update", fids)
         var layers_to_delete = []
         var ls = this.getLayers()
         ls.forEach(function(layer, idx) {
             var fid = Oscars.Util.getLayerFeatureId(layer)
             if (fid && fids.indexOf(fid) > -1) {
-                console.log("to delete", fid)
+                //console.log("to delete", fid)
                 layers_to_delete.push(layer)
             }
         })
         this.addData(geojson)
         const _local_this = this
         layers_to_delete.forEach(function(layer, idx) {
-            console.log("deleting layer..", Oscars.Util.getLayerFeatureId(layer))
+            //console.log("deleting layer..", Oscars.Util.getLayerFeatureId(layer))
             _local_this.removeLayer(layer)
-            console.log("..delete")
+            //console.log("..deleted")
         })
     }
 

@@ -123,7 +123,7 @@ var dashboard_options = {
         betterScale: true,
         track: false,
         speedVector: false,
-        info: false,
+        info: true,
         info_id: "info",
         info_content_id: "device-info",
         voice: false,

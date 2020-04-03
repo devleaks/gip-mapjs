@@ -10,7 +10,7 @@ Oscars = Oscars || {}
 Oscars.DeviceGroup = L.Realtime.extend({
 
     VERSION: "2.1.0",
-    
+
     options: {
 
         start: false,
@@ -43,11 +43,15 @@ Oscars.DeviceGroup = L.Realtime.extend({
     initialize: function(featureCollection, options) {
         Oscars.Map.setStats('ODGINI')
         L.setOptions(this, options)
-        if (options && options.hasOwnProperty("gipDefaults")) { Oscars.Util.setDefaults(options.gipDefaults) }
+        if (options && options.hasOwnProperty("gipDefaults")) {
+            Oscars.Util.setDefaults(options.gipDefaults)
+        }
         L.Realtime.prototype.initialize.call(this, {}, this.options)
         this.update(featureCollection)
         Oscars.Map.addLayerToControlLayer(featureCollection, this)
-        if (options && options.hasOwnProperty("search") && options.search) { Oscars.Map.addToSearch(this) }
+        if (options && options.hasOwnProperty("search") && options.search) {
+            Oscars.Map.addToSearch(this)
+        }
         this.on("add", Oscars.Util.updateSparklines)
     },
 
@@ -57,27 +61,37 @@ Oscars.DeviceGroup = L.Realtime.extend({
      */
     update: function(geojson_in) {
         Oscars.Map.setStats('ODGUPD')
+
+        function addLayer(f, l) {
+            f.properties = f.hasOwnProperty("properties") ? f.properties : {}
+            f.properties._layer = l
+        }
         var geojson = (typeof geojson_in === 'string' || geojson_in instanceof String) ? JSON.parse(geojson_in) : geojson_in
         var that = this
-        if (geojson.type == "FeatureCollection") {
+
+        if (geojson.hasOwnProperty("type") && geojson.type == "FeatureCollection") {
             geojson.features.forEach(function(feature) {
-                feature.properties = feature.properties || {}
-                feature.properties._layer = that
+                addLayer(feature, that)
                 Oscars.Map.track(feature)
             })
             L.Realtime.prototype.update.call(this, geojson.features)
         } else if (Array.isArray(geojson)) {
             geojson.forEach(function(feature) {
-                feature.properties = feature.properties || {}
-                feature.properties._layer = that
+                addLayer(feature, that)
                 Oscars.Map.track(feature)
             })
             L.Realtime.prototype.update.call(this, geojson)
-        } else {
-            geojson.properties = geojson.properties || {}
-            geojson.properties._layer = that
+        } else if (geojson.hasOwnProperty("type") && geojson.type == "Feature") {
+            addLayer(geojson, that)
             Oscars.Map.track(geojson)
             L.Realtime.prototype.update.call(this, geojson)
+        } else if (geojson.hasOwnProperty("type") && geojson.type == "Point") {
+            var f = L.GeoJSON.asFeature(geojson)
+            addLayer(f, that)
+            Oscars.Map.track(f)
+            L.Realtime.prototype.update.call(this, f)
+        } else {
+            console.log("DeviceGroup::update: Invalid GeoJSON", geojson_in)
         }
     },
 

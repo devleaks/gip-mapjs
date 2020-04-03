@@ -389,6 +389,8 @@ Oscars.Util = (function() {
         },
 
         onEachFeature: function(feature, layer) {
+            feature.properties = feature.hasOwnProperty("properties") ? feature.properties : {}
+            feature.properties._featureLayer = layer // feature.properties._layer = layer where feature is added
             Oscars.Util.bindTexts(feature, layer)
         },
 
