@@ -405,22 +405,27 @@ Oscars.Util = (function() {
 
         //
         flightboard: function(move, flight, airport, timetype, time, note) {
-            var lnote = note != "" ? note : ((move == "arrival" && timetype == "actual") ? "Landed" : "")
+            var lnote = note != "" ? note : (timetype == "actual" ? (move == "departure" ? "" : "Landed") : "")
             _flightboard[move] = _flightboard.hasOwnProperty(move) ? _flightboard[move] : {}
             _flightboard[move][flight] = _flightboard[move].hasOwnProperty(flight) ? _flightboard[move][flight] : {}
             _flightboard[move][flight].airport = airport
             _flightboard[move][flight][timetype] = time
             _flightboard[move][flight].note = lnote
             if (timetype == "actual") { // if move completed, schedule removal from flightboard
-                _flightboard[move][flight].removeAt = time.add(move == "arrival" ? 30 : 10, "minutes")
+                _flightboard[move][flight].removeAt = moment(time).add(move == "arrival" ? 30 : 10, "minutes")
             }
         },
 
         //
-        getFlightboard: function(move, maxcount = 20, datetime = false) {
-            const S = "scheduled"
-            const P = "planned"
-            const A = "actual"
+        getFlightboard: function(move, maxcount = 40, datetime = false) {
+            const S = "scheduled",
+                  P = "planned",
+                  A = "actual"
+
+            const Mdefault = '<i class="la la-dot-circle text-default-light"></i><i class="la la-dot-circle text-default-light"></i>',
+                  Msuccess = '<i class="la la-dot-circle text-success"></i><i class="la la-dot-circle text-default-light"></i>',
+                  Mdanger  = '<i class="la la-dot-circle text-default-light"></i><i class="la la-dot-circle text-danger"></i>'
+
             var count = 0
 
             function getTime(f) { // returns the most recent known time for flight
@@ -438,18 +443,28 @@ Oscars.Util = (function() {
             var tb = $('<tbody>')
             for (var flight in _flightboard[move]) {
                 if (_flightboard[move].hasOwnProperty(flight)) {
-                    var addFlight = true
-                    console.log("getFlightboard-removeAt", _flightboard[move][flight].removeAt, ts.toISOString(true))
-                    if ((count++ < maxcount)
+                    var t = _flightboard[move][flight].hasOwnProperty('removeAt') ? _flightboard[move][flight].removeAt.toISOString(true) : 'none'
+                    console.log("getFlightboard-removeAt", t, ts.toISOString(true))
+                    if ( true
+                        /*(count++ < maxcount)
                         &&
                         ((!_flightboard[move][flight].hasOwnProperty('removeAt')) ||
-                            (_flightboard[move][flight].hasOwnProperty('removeAt') && _flightboard[move][flight].removeAt.isBefore(ts)))
+                            (_flightboard[move][flight].hasOwnProperty('removeAt') && _flightboard[move][flight].removeAt.isBefore(ts)))*/
                     ) {
                         var t = false
                         var s = true
-                        if (_flightboard[move][flight][A]) {
+                        var status = Mdefault
+                        if (_flightboard[move][flight].hasOwnProperty(A)) {
                             t = _flightboard[move][flight][A]
-                        } else if (_flightboard[move][flight][P]) {
+                            if(_flightboard[move][flight].hasOwnProperty(S)) {
+                                var diff = moment.duration(_flightboard[move][flight][A].diff(_flightboard[move][flight][S])).asMinutes()
+                                if (diff > 15) { // minutes
+                                    _flightboard[move][flight].note = (move == "departure" ? "Delayed +" : "Landed +")+diff+" min"
+                                    s = false
+                                }
+                            }
+                            status = Mdefault
+                        } else if (_flightboard[move][flight].hasOwnProperty(P)) {
                             t = _flightboard[move][flight][P]
                             if(_flightboard[move][flight].hasOwnProperty(S)) {
                                 var diff = moment.duration(_flightboard[move][flight][P].diff(_flightboard[move][flight][S])).asMinutes()
@@ -458,19 +473,17 @@ Oscars.Util = (function() {
                                     s = false
                                 }
                             }
+                            status = s ? Msuccess : Mdanger
                         }
-                        const status = s ? // ●
-                            '<i class="la la-dot-circle text-success"></i><i class="la la-dot-circle text-default-light"></i>'
-                        :
-                            '<i class="la la-dot-circle text-default-light"></i><i class="la la-dot-circle text-danger"></i>'
+ 
                         tb.append(
                             $('<tr>')
-                            .append($('<td>').html(flight))
-                            .append($('<td>').html(_flightboard[move][flight].airport))
-                            .append($('<td>').html(_flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH:mm") : '&nbsp;'))
-                            .append($('<td>').html(t ? t.format("HH:mm") : '&nbsp;'))
-                            .append($('<td>').html(_flightboard[move][flight].note ? _flightboard[move][flight].note : '&nbsp;'))
-                            .append($('<td>').html(status))
+                            .append($('<td>').html( flight ))
+                            .append($('<td>').html( _flightboard[move][flight].airport ))
+                            .append($('<td>').html( _flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH:mm") : '&nbsp;' ))
+                            .append($('<td>').html( t ? t.format("HH:mm") : '&nbsp;' ))
+                            .append($('<td>').html( _flightboard[move][flight].note ? _flightboard[move][flight].note : '&nbsp;' ))
+                            .append($('<td>').html( status ))
                         )
                     }
                 }
