@@ -299,12 +299,14 @@ $("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.
           airport: flight.airport,
           date: dept.format("DD/MM"),
           time: dept.format("HH:mm"),
-          parking: flight.parking
+          parking: flight.parking,
+          timestamp: iso8601 of emission of message
     }
     Oscars.Util.flightboard(move, flight, airport, timetype, day, time, note)
     */
-    Oscars.Util.flightboard(msg.move, msg.flight, msg.airport, msg.info, moment(msg.date + " " + msg.time, msg.info == "scheduled" ? "YYYY-MM-DD HH:mi" : "DD/MM HH:mi"), "")
-    Oscars.Util.getFlightboard(msg.move)
+    Oscars.Util.flightboard(msg.move, msg.flight, msg.airport, msg.info, moment(msg.date + " " + msg.time, msg.info == "scheduled" ? "YYYY-MM-DD HH:mm" : "DD/MM HH:mm"), "")
+    Oscars.Util.getFlightboard(msg.move, 20, moment(msg.timestamp, moment.ISO_8601))
+    $('#flightboard-time').html("Last updated at "+moment(msg.timestamp, moment.ISO_8601).format("HH:mm"))
 })
 
 if (map_options.debug) // ping at tower if debugging

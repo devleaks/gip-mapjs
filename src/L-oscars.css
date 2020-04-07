@@ -550,6 +550,11 @@ td.gip-reason {
     color: var(--font-color);
 }
 
+#flightboard-time {
+    text-align: center;
+    font-weight: bold;
+}
+
 /*
     --font-color: #dddddd;
     --bg-color: #111;

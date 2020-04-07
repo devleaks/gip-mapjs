@@ -34,7 +34,7 @@
     "leaflet-timedimension": "^1.1.1",
     "leaflet.label": "^0.2.4",
     "line-awesome": "^1.3.0",
-    "mapbox-gl": "^1.9.0",
+    "mapbox-gl": "^1.9.1",
     "modernizr": "^3.9.1",
     "moment": "^2.24.0",
     "mustache": "^4.0.1",
@@ -45,7 +45,7 @@
     "sieve": "0.0.4",
     "slideout": "^1.0.1",
     "tagsort": "^1.4.0",
-    "underscore": "^1.9.2",
+    "underscore": "^1.10.2",
     "ws": "^7.2.3"
   },
   "devDependencies": {

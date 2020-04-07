@@ -5,27 +5,19 @@
  */
 "use strict";
 
-L.Oscars = L.Oscars || {};
+var Oscars = Oscars || {};
 
-L.Oscars.version = '3.2.0';
-
-L.Oscars.Util = (function() {
+Oscars.Util = (function() {
     /**
-     *	DEFAULT VALUES
+     *  DEFAULT VALUES
      */
     // Defaults as used if no default is provided
+    const VERSION = "2.0.0"
     var DEFAULT = {
         MARKER_MIN_SIZE: 15, // px
         BACKGROUND_COLOR: "transparent",
         ICON_STYLE: "border: none;",
         TOOLTIP_CLASSNAME: "oscars-label",
-        CLEANUP_STATUS: "GIP::INACTIVE",
-        TRACK: {
-            duration: 10,
-            color: '#666', //@todo: Adjust track's color from feature's
-            weight: 1, //@set weight from speed or
-            dashArray: "2 4" //@build dash array from speed
-        },
         SPEED_VECTOR: {
             weight: 2,
             color: '#f30',
@@ -44,159 +36,62 @@ L.Oscars.Util = (function() {
             fillPattern: "solid", // fill pattern (currently unused)
             inactiveMarkerColor: "darkgrey"
         },
-        MAP: {
-            id: "map",
-            center: [50.487729, 5.100128], // Oscars sa
-            //center: [50.8449933,4.3477891],	// Mannekenpis
-            zoom: 15,
-            name: "GIP_MAP",
-            display_name: "GIP Map",
-            layers: null,
-            layerControl: null,
-            layerControlOptions: { useGrouped: false, groupCheckboxes: true, collapsed: false },
-            betterScale: true,
-            track: false,
-            speedVector: false,
-            sidebar: true,
-            reset: true,
-            info: true,
-            search: false,
-            wire: false,
-            voice: false,
-            stylesets: false,
-            about: true,
-            client: "oscars"
-        },
         INFO_ID: "info",
         INFO_CONTENT_ID: "device-info"
     };
     // new defaults
-    var options = {};
+    var _options = {};
     /**
-     *	PRIVATE VARIABLES
+     *  PRIVATE VARIABLES
      */
-    var _map = null;
-    var _mapCenter = null;
-    // L.Control for layers
-    var _layerControl = null;
-    var _layerControlGrouped = false;
-    // Hidden layer (container) for features that need searching
-    var _searchLayer = null;
     // small graphs
     var _sparklines = {};
     // Track keeping
-    var _speedVectorLayer = null;
-    var _trackLayer = null;
-    var _tracks = {};
     // L.Control for sidebar information
     var _sidebar = null;
     var _showInfo = false;
-    // layers temporary hidden through zoom level
-    var _hiddenLayers = [];
     // Markers that have a physical size and need adjustments on zoom changes
     var _phyMarkers = {};
-    // A few statistics
-    var _stats = {};
-    //
-    var _gipLayers = {};
-    // @todo: Replace ids with random strings.
-    var _sidebar_id = "sidebar";
+    var _flightboard = {
+        arrival: {},
+        departure: {}
+    }
+
+
 
     /**
-     *	PRIVATE FUNCTIONS
+     *  PRIVATE FUNCTIONS
      */
     // Check property existance
     function isSet(property) {
         return typeof property != "undefined" && (property || property === false);
     }
 
-    // Check is object is {} or more
-    function isEmpty(obj) {
-        for (var prop in obj) {
-            if (obj.hasOwnProperty(prop))
-                return false;
-        }
-
-        return JSON.stringify(obj) === JSON.stringify({});
+    function nvl(val, dft) {
+        return isSet(val) ? val : dft
     }
-
-    // Generate random ID for HMTL elements
-    function guidGenerator() {
-        var S4 = function() {
-            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-        };
-        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
-    }
-
-    // Recursively extend/merge js objects properties
-    function extend() {
-        // Variables
-        var extended = {};
-        var deep = false;
-        var i = 0;
-        var length = arguments.length;
-
-        // Check if a deep merge
-        if (Object.prototype.toString.call(arguments[0]) === '[object Boolean]') {
-            deep = arguments[0];
-            i++;
-        }
-
-        // Merge the object into the extended object
-        var merge = function(obj) {
-            for (var prop in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-                    // If deep merge and property is an object, merge properties
-                    if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]') {
-                        extended[prop] = extend(true, extended[prop], obj[prop]);
-                    } else {
-                        extended[prop] = obj[prop];
-                    }
-                }
-            }
-        };
-
-        // Loop through each object and conduct a merge
-        for (; i < length; i++) {
-            var obj = arguments[i];
-            merge(obj);
-        }
-
-        return extended;
-    };
 
     //
     function getDefaults() {
-        if (typeof options.STYLE == "undefined") {
-            options = extend(true, {}, DEFAULT);
+        if (typeof _options.STYLE == "undefined") {
+            _options = $.extend(true, {}, DEFAULT);
             // Build default icon
-            options.ICON = L.BeautifyIcon.icon({
-                icon: options.STYLE.markerSymbol,
-                textColor: options.STYLE.markerColor,
-                innerIconStyle: "font-size: " + options.STYLE.markerSize + 'px;',
-                backgroundColor: options.BACKGROUND_COLOR,
-                iconStyle: options.ICON_STYLE
+            _options.ICON = L.BeautifyIcon.icon({
+                icon: _options.STYLE.markerSymbol,
+                textColor: _options.STYLE.markerColor,
+                innerIconStyle: "font-size: " + _options.STYLE.markerSize + 'px;',
+                backgroundColor: _options.BACKGROUND_COLOR,
+                iconStyle: _options.ICON_STYLE
             });
             // Build default marker
-            options.MARKER = { icon: options.ICON }; // use: var marker = L.marker(latLng(lat,lon), options.MARKER);
+            _options.MARKER = { icon: _options.ICON }; // use: var marker = L.marker(latLng(lat,lon), _options.MARKER);
         }
-        return options;
+        return _options;
     }
 
     // Returns single LeafletJS LatLng object from feature's geometry.
     function getLatLng(feature) {
         return L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
-    }
-
-    // Calculate how many meters each pixel represents
-    // Used to convert physical size to pixels
-    function getMetersPerPixel() {
-        if (!_map) return 0;
-        var y = _map.getSize().y,
-            x = _map.getSize().x;
-        // calculate the distance the one side of the map to the other using the haversine formula
-        var maxMeters = _map.containerPointToLatLng([0, y]).distanceTo(_map.containerPointToLatLng([x, y]));
-        return maxMeters / x;
     }
 
     // Calculate a feature's pixel dimension from its physical size
@@ -211,7 +106,7 @@ L.Oscars.Util = (function() {
             }
         } else if (isSet(style.markerSize)) {
             var numMarkerSize = String(style.markerSize).replace(/[^0-9$.,]/g, '');
-            pixels = parseInt(style.markerSize) ? parseInt(style.markerSize) : options.STYLE.markerSize;
+            pixels = parseInt(style.markerSize) ? parseInt(style.markerSize) : _options.STYLE.markerSize;
         }
         return pixels;
     }
@@ -219,8 +114,8 @@ L.Oscars.Util = (function() {
     // Returns properly sized & styled icon from Point feature type, status, and display_status.
     function getIcon(feature) {
         if (!isSet(feature.properties._style)) {
-            console.log("L.Oscars.Util::getIcon: Warning - Feature has no style, using default", feature);
-            feature.properties._style = options.STYLE;
+            console.log("Oscars.Util::getIcon: Warning - Feature has no style, using default", feature);
+            feature.properties._style = _options.STYLE;
         }
         if (isSet(feature.properties._data)) {
             return getSparkline(feature);
@@ -228,11 +123,12 @@ L.Oscars.Util = (function() {
         var style = feature.properties._style;
         var size = getFontSizePx(feature);
         return L.BeautifyIcon.icon({
-            icon: (isSet(style.markerSymbol)) ? style.markerSymbol : options.STYLE.markerSymbol,
-            textColor: (isSet(style.markerColor)) ? style.markerColor : options.STYLE.markerColor,
-            innerIconStyle: "font-size: " + (size < options.MARKER_MIN_SIZE ? options.MARKER_MIN_SIZE : size) + 'px;',
-            backgroundColor: (isSet(style.backgroundColor)) ? style.backgroundColor : options.BACKGROUND_COLOR,
-            iconStyle: (isSet(style.iconStyle)) ? style.iconStyle : options.ICON_STYLE
+            icon: (isSet(style.markerSymbol)) ? style.markerSymbol : _options.STYLE.markerSymbol,
+            prefix: "la",
+            textColor: (isSet(style.markerColor)) ? style.markerColor : _options.STYLE.markerColor,
+            innerIconStyle: "font-size: " + (size < _options.MARKER_MIN_SIZE ? _options.MARKER_MIN_SIZE : size) + 'px;',
+            backgroundColor: (isSet(style.backgroundColor)) ? style.backgroundColor : _options.BACKGROUND_COLOR,
+            iconStyle: (isSet(style.iconStyle)) ? style.iconStyle : _options.ICON_STYLE
         });
     };
 
@@ -255,22 +151,31 @@ L.Oscars.Util = (function() {
             line: ['delimiter', 'fill', 'height', 'max', 'min', 'stroke', 'strokeWidth', 'width']
         };
         if (!isSet(feature.properties._data)) {
-            console.log("L.Oscars.Util::getSparkline: Warning - Feature has no data", feature);
+            console.log("Oscars.Util::getSparkline: Warning - Feature has no data", feature);
             return null;
         }
         var name = sanitizeClassname(feature.properties.name);
         var chartType = isSet(feature.properties._data.type) ? feature.properties._data.type : 'pie',
             data = feature.properties._data.values;
         if (['pie', 'donut', 'bar', 'line'].indexOf(chartType) == -1) {
-            console.log("L.Oscars.Util::getSparkline: Warning - Invalid chart type, forcing pie", feature);
+            console.log("Oscars.Util::getSparkline: Warning - Invalid chart type, forcing pie", feature);
             chartType = 'pie';
         }
-        if (Array.isArray(data)) {
+        if (Array.isArray(data))
             data = data.join();
-        }
+
+        // build option array depending on char type
+        var optionList = peityTypeOptions[chartType]
+        var options = {}
+        optionList.forEach(function(o) {
+            if (feature.properties._data.hasOwnProperty(o)) {
+                options[o] = feature.properties._data[o]
+            }
+        })
+        var html = (Object.keys(options).length > 0) ? '<span class="' + name + '" data-peity=\'' + JSON.stringify(options) + '\'>' + data + '</span>' : '<span class="' + name + '">' + data + '</span>'
 
         var icon = L.divIcon({
-            html: isSet(feature.properties._data.options) ? '<span class="' + name + '" data-peity=\'' + JSON.stringify(feature.properties._data.options) + '\'>' + data + '</span>' : '<span class="' + name + '">' + data + '</span>',
+            html: html,
             className: 'leafletjs-peity' // removes bg and border
         });
         _sparklines[name] = chartType;
@@ -322,10 +227,9 @@ L.Oscars.Util = (function() {
                                 layer.on("contextmenu", function onClick(e) {
                                     var defs = getDefaults();
                                     if (isSet(feature.properties._texts.sidebar)) {
-                                        _sidebar.setContent(feature.properties._texts.sidebar);
-                                        _sidebar.open(defs.INFO_ID);
+                                        Oscars.Map.setSidebarContent(feature.properties._texts.sidebar)
                                     } else {
-                                        console.log("L.Oscars.Util::bindTexts: Warning - No sidebar text.", feature);
+                                        console.log("Oscars.Util::bindTexts: Warning - No sidebar text.", feature);
                                     }
                                 });
                                 bound.push(s);
@@ -379,16 +283,24 @@ L.Oscars.Util = (function() {
         var style = feature.properties._style;
         var rotation = 0.0;
         var notdone = true;
-        if (isSet(style.markerRotationOffset)) { // has rotation offset = need to rotate icon
-            rotation = parseFloat(style.markerRotationOffset);
-            ['heading', 'bearing', 'orientation', 'orient'].forEach(function(prop) {
-                if (feature.properties.hasOwnProperty(prop) && notdone) { // has rotation
-                    rotation += parseFloat(feature.properties[prop]);
+        const ROATION_PROPERTIES = ['heading', 'bearing', 'orientation', 'orient']
+        ROATION_PROPERTIES.forEach(function(prop) {
+            if (feature.properties.hasOwnProperty(prop) && notdone) { // has rotation
+                var r = parseFloat(feature.properties[prop])
+                if (!isNaN(r)) {
+                    rotation = r
                     notdone = false;
                 }
-            });
+            }
+        });
+
+        if (style.hasOwnProperty("markerRotationOffset")) { // has rotation offset = need to rotate icon
+            var r = parseFloat(style.markerRotationOffset)
+            if (!isNaN(r)) {
+                rotation += r
+            }
         }
-        return rotation;
+        return rotation
     }
 
     // Returns oriented marker with icon for Point feature. Always returns a marker (defaults if needed).
@@ -421,19 +333,9 @@ L.Oscars.Util = (function() {
         bindTexts(feature, layer);
 
         // Add vector
-        if (vector && _speedVectorLayer) {
-            layer.on("add", function(e) {
-                    if (this.options.vector) this.options.vector.addTo(_speedVectorLayer);
-                })
-                .on("remove", function(e) {
-                    if (this.options.vector) {
-                        _speedVectorLayer.removeLayer(this.options.vector);
-                        delete this.options.vector;
-                    }
-                });
-        }
+        Oscars.Map.vector(vector, layer)
 
-        return layer ? layer : L.marker(latlng, options.MARKER);
+        return layer ? layer : L.marker(latlng, _options.MARKER);
     }
 
     // Keep track of marker to resize on zoom in/out
@@ -453,542 +355,127 @@ L.Oscars.Util = (function() {
         }
     }
 
-    /**
-	 *  0 ... ... MIN ... ... ... MAX ... ... 18
-	 *                  ZOOM
-	 *	!! No check on zoom_min and zoom_max values !!
-		L.polyline([
-		        [-41.28313, 174.77736],
-		        [-41.2895, 174.77803],
-		        [-41.29042, 174.78219],
-		        [-41.29437, 174.78405]
-	        ],
-			{
-				zoom_min: 12,
-				zoom_max: 14
-			}
-        ).addTo(_map);
-	 */
-    function showHideLayers() {
-        if (!_map) return;
-        var doneSomething = false;
-        var mapZoom = _map.getZoom();
-        resizeMarkers();
-
-        // Do hidden layers need showing?
-        _hiddenLayers.forEach(function(layer) {
-            var indexOfHiddenLayer = _hiddenLayers.indexOf(layer);
-            if (isSet(layer.options.zoom_min)) {
-                if (layer.options.zoom_min <= mapZoom) {
-                    if (_map.hasLayer(layer) == false) { // not necessary
-                        _map.addLayer(layer);
-                        if (indexOfHiddenLayer > -1) {
-                            _hiddenLayers.splice(indexOfHiddenLayer, 1);
-                        }
-                        doneSomething = true;
-                    }
-                }
-            }
-            if (isSet(layer.options.zoom_max)) {
-                if (layer.options.zoom_max >= mapZoom) {
-                    if (_map.hasLayer(layer) == false) { // not necessary
-                        _map.addLayer(layer);
-                        if (indexOfHiddenLayer > -1) {
-                            _hiddenLayers.splice(indexOfHiddenLayer, 1);
-                        }
-                        doneSomething = true;
-                    }
-                }
-            }
-        });
-
-        // Do visible layers need hiding?
-        _map.eachLayer(function(layer) {
-            if (isSet(layer.options.zoom_min)) {
-                if (layer.options.zoom_min > mapZoom) {
-                    if (_map.hasLayer(layer)) {
-                        _hiddenLayers.push(layer);
-                        _map.removeLayer(layer);
-                        doneSomething = true;
-                    }
-                }
-            }
-            if (isSet(layer.options.zoom_max)) {
-                if (layer.options.zoom_max < mapZoom) {
-                    if (_map.hasLayer(layer)) {
-                        _hiddenLayers.push(layer);
-                        _map.removeLayer(layer);
-                        doneSomething = true;
-                    }
-                }
-            }
-        });
-
-        if (doneSomething) { // provoque layer redraw
-            L.Oscars.Util.updateSparklines();
-            _map.invalidateSize();
-        }
+    // Set feature.properties._timestamp to now().  
+    function touch(feature) {
+        feature.properties._timestamp = Date.now();
     }
 
-    // Add sidebar tab and content
-    function addSidebarTab(options) {
-        var content = $('<p>');
-        if (!!isSet(options.nocontent) || !options.nocontent) {
-            content = (isSet(options.wrap) && !options.wrap) ? options.tab_content :
-                $('<div>')
-                .addClass("card")
-                .append($('<div>')
-                    .addClass("card-body")
-                    .html(options.tab_content));
-        }
-
-        var tab = document.createElement('i')
-        $(tab).addClass(options.client)
-            .addClass('la')
-            .addClass('la-' + options.icon)
-            .append(options.icon_extra)
-
-/*
-		// 2. Add tab content
-		if(isSet(options.nocontent) && options.nocontent) return;
-		var content = (isSet(options.wrap) && !options.wrap) ? options.tab_content :
-			$('<div>')
-				.addClass("card")
-				.append( $('<div>')
-					.addClass("card-body")
-					.html( options.tab_content ) )
-		;
-		$('#'+_sidebar_id+" div.sidebar-content")
-			.append($('<div>')
-				.addClass('sidebar-pane')
-				.attr('id', options.id)
-				.append( $('<h1>')
-					.addClass("sidebar-header")
-					.addClass(options.client)
-					.html(options.title)
-					.append( $('<span>')
-						.addClass('sidebar-close')
-						.append( $('<i>')
-							.addClass('fa')
-							.addClass('fa-remove') ) ) )
-				.append( $('<h2>')
-					.addClass("sidebar-header")
-					.html(options.subtitle) )
-				.append( $('<div>')
-					.addClass("sidebar-pane-content")
-					.append( content )
-				)
-			)
-*/
-        _sidebar.addPanel({
-            id: options.id,
-            title: options.title ? options.title : "",
-            tab: tab.outerHTML,
-            pane: $(options.tab_content).html(),
-            position: (options.hasOwnProperty("zone") && options.zone == 2) ? 'bottom' : 'top'
-        })
-    }
 
     /**
-     *	PUBLIC INTERFACE
+     *  PUBLIC INTERFACE
      */
     return {
-        // 	Create leaflet map and pass it to prepareMap.
-        map: function(args) {
-            var defs = getDefaults(); // init
-            var opts = extend(true, defs.MAP, args)
-            var map = L.map(opts.id, {
-                center: opts.center,
-                zoom: opts.zoom,
-                layers: opts.layers,
-                attributionControl: false
-            });
-            return L.Oscars.Util.prepareMap(map, args);
-        },
-
-        // 	Build leaflet map. Hides numerous installation call.
-        prepareMap: function(map, args) {
-            var defs = getDefaults(); // init
-            var opts = extend(false, defs.MAP, args);
-            var client = opts.client;
-
-            L.Oscars.Util.versions();
-
-            if (!map) return L.Oscars.Util.map(args);
-
-            _map = map;
-
-            var mapLoc = $('#' + opts.id);
-
-            // Checks map params and install map items
-            if (!mapLoc.length) {
-                console.log("L.Oscars.Util::prepareMap: Error - cannot find map at #" + opts.id);
-                //throw "L.Oscars.Util::prepareMap: Error - cannot find map at #" + opts.id;
-                return _map;
-            }
-            if (opts.sidebar) {
-                const SIDEBARCONTENTID = "leafletsidebarcontentidcannotscroll"
-                mapLoc.prepend($('<div>')
-                    .attr("id", _sidebar_id)
-                    .addClass("client")
-                    .addClass("leaflet-sidebar")
-                    .addClass("collapsed")
-                    .append($('<div>')
-                        .addClass("leaflet-sidebar-tabs")
-                        .append($('<ul>')
-                            .attr("role", "tablist")))
-                    .append($('<div id="' + SIDEBARCONTENTID + '">')
-                        .addClass("leaflet-sidebar-content")));
-
-                // see https://gis.stackexchange.com/questions/151310/leaflet-scroll-wheel-controlling-map-zoom-and-not-drop-down-menu
-                var elem = L.DomUtil.get(SIDEBARCONTENTID);
-                L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation);
-
-                // Wrap elements in side bar if requested
-                _sidebar = L.control.sidebar({
-                    container: _sidebar_id,
-                    position: 'right',
-                    closeButton: true
-                }).addTo(map);
-
-                if (typeof _sidebar.setContent == "undefined") {
-                    _sidebar.setContent = function(content) {
-                        var container = L.DomUtil.get(defs.INFO_CONTENT_ID);
-                        container.innerHTML = content;
-                    };
-                    _sidebar.resetContent = function() {
-                        _sidebar.setContent('');
-                    };
-                }
-
-            }
-
-            if (!isSet(_map.options.center) && !isSet(_map.options.zoom) && isSet(opts.center) && isSet(opts.zoom)) {
-                _mapCenter = {
-                    center: opts.center,
-                    zoom: opts.zoom
-                }
-                _map.setView(opts.center, opts.zoom);
-            }
-
-            _map.on('zoomend', showHideLayers);
-
-            // Layer Control always present, may be moved to sidebar if present.
-            var lclfun = L.control.layers;
-            if (isSet(opts.layerControlOptions) && opts.layerControlOptions.useGrouped) {
-                _layerControlGrouped = true;
-                lclfun = L.control.groupedLayers;
-            }
-
-            if (isSet(args) && isSet(args.layerControl)) {
-                _layerControl = lclfun(args.layerControl.baseLayers,
-                    args.layerControl.overlays,
-                    isSet(args.layerControl.options) ? args.layerControl.options : opts.layerControlOptions);
-            } else {
-                _layerControl = lclfun(null, null, opts.layerControlOptions);
-            }
-
-            _layerControl.addTo(_map)
-
-            _layerControl.addGipOverlay = function(layer, layerName, groupName) {
-                if (_layerControlGrouped) {
-                    _layerControl.addOverlay(layer, layerName, groupName);
-                } else {
-                    _layerControl.addOverlay(layer, layerName);
-                }
-            }
-
-
-            if (opts.track) {
-                _trackLayer = L.layerGroup().addTo(_map);
-                _layerControl.addGipOverlay(_trackLayer, "Trails", "Trackers");
-            }
-
-            if (opts.speedVector) {
-                _speedVectorLayer = L.layerGroup().addTo(_map);
-                _layerControl.addGipOverlay(_speedVectorLayer, "Speed Vectors", "Trackers");
-            }
-
-            if (opts.betterScale) {
-                L.control.betterscale({ metric: true, imperial: false, position: "bottomleft" }).addTo(_map); // either one or the other but not both
-            } else {
-                L.control.scale().addTo(_map);
-            }
-            _map.zoomControl.setPosition('bottomleft');
-
-            // Add top sidebar elements
-            if (opts.sidebar) {
-                const LAYERCONTROLID = 'layer-control'
-                addSidebarTab({
-                    client: client,
-                    zone: 1,
-                    id: "layers",
-                    title: "Layers",
-                    info: "Layers",
-                    subtitle: "&nbsp;",
-                    icon: "bars",
-                    icon_extra: null,
-                    tab_content: $('<div>')
-                    		.append($('<div>')
-                    			.attr("id", LAYERCONTROLID))
-                });
-                // relocate layer control to sidebar
-                var newloc = document.getElementById(LAYERCONTROLID);
-                newloc.appendChild(_layerControl._container);
-            }
-
-            if (opts.sidebar && opts.reset) {
-                addSidebarTab({
-                    client: client,
-                    zone: 1,
-                    id: "location",
-                    title: "Reset Map",
-                    info: "Center Map",
-                    subtitle: "&nbsp;",
-                    icon: "location-arrow",
-                    icon_extra: null,
-                    tab_content: null,
-                    nocontent: true
-                });
-                addSidebarTab({
-                    client: client,
-                    zone: 1,
-                    id: "overview",
-                    title: "Area Map",
-                    info: "Area Map",
-                    subtitle: "&nbsp;",
-                    icon: "globe",
-                    icon_extra: null,
-                    tab_content: null,
-                    nocontent: true
-                });
-            }
-
-            if (opts.sidebar && opts.info) {
-                addSidebarTab({
-                    client: client,
-                    zone: 1,
-                    id: defs.INFO_ID,
-                    title: "Info",
-                    info: "Info",
-                    subtitle: "&nbsp;",
-                    icon: "info-circle",
-                    icon_extra: null,
-                    tab_content: $('<div>')
-                    		.append($('<div>')
-                    			.attr("id", defs.INFO_CONTENT_ID)
-                    			.append("Right-click/Control-click on device icon to read more information here."))
-
-                });
-                _showInfo = true;
-            }
-
-            if (opts.search) {
-                const SEARCHCONTROLID = 'search-control'
-                addSidebarTab({
-                    client: client,
-                    zone: 1,
-                    id: "search",
-                    title: "Search",
-                    info: "Search",
-                    subtitle: "&nbsp;",
-                    icon: "search",
-                    icon_extra: null,
-                    tab_content: $('<div>')
-                    		.append($('<div>')
-                    			.attr("id", SEARCHCONTROLID))
-                });
-                _searchLayer = L.layerGroup();
-                var searchControlOptions = opts.sidebar ? {
-                    layer: _searchLayer,
-                    propertyName: "name",
-                    container: SEARCHCONTROLID,
-                    collapsed: false,
-                    textPlaceholder: 'Search...                ',
-                    marker: { icon: L.icon.pulse({ iconSize: [12, 12], color: 'red' }), animate: false, circle: false },
-                } : {
-                    layer: _searchLayer,
-                    propertyName: "name",
-                    textPlaceholder: 'Search...                ',
-                    marker: { icon: L.icon.pulse({ iconSize: [12, 12], color: 'red' }), animate: false, circle: false },
-                };
-                _map.addControl(new L.Control.Search(searchControlOptions));
-            }
-
-            if (opts.sidebar && opts.wire) {
-                addSidebarTab({ //id, title, subtitle, icon, zone, icon_extra, tab_content
-                    client: client,
-                    id: "messages",
-                    zone: 1,
-                    title: 'Messages<span class="clean-wire"><i class="fa fa-trash-o"></i>&nbsp;</span>' +
-                        '				<span class="sound-onoff"><i class="fa"></i>&nbsp;</span>',
-                    info: 'Wire Messages',
-                    subtitle: "Last Updated:&nbsp;<span id='last-updated-time'>just now</span>",
-                    icon: "envelope",
-                    icon_extra: "<span id='alert-counter' class='badge " + client + "'>0</span></a>",
-                    tab_content: $('<div>')
-                    		.append($('<div>')
-    	                        .attr("id", "gip-gip-wire")
-                                .append($('<div>')
-                                    .attr("id", "gip-clock"))
-    	                        .append($('<header>')
-    	                            .addClass("wire-top")
-    	                            .append($('<div>')
-    	                                .addClass("wire-seave"))
-    	                            .append($('<div>')
-    	                                .addClass("wire-tagsort")
-    	                                .append($('<div>')
-    	                                    .addClass("tagsort-tags-container"))))
-    	                        .append($('<div>')
-    	                            .addClass("wire-tagsort")
-    	                            .append($('<ul>')
-    	                                .attr("id", "the-wire")
-    	                                .addClass("timeline")
-    	                                .addClass("collapse-lg")
-    	                                .addClass("timeline-hairline")
-    	                                .addClass("cd-timeline")))),
-                    wrap: false
-                });
-                L.Oscars.Dashboard.init({
-                    map_id: opts.id,
-                    wire_id: "gip-gip-wire",
-                    websocket: 'ws://localhost:8051'
-                });
-                L.Oscars.Dashboard.Wire.init({ // @todo: set wire elem id from sidebarHTML.
-                    map_id: opts.id,
-                    wire_id: "gip-gip-wire",
-                    map_id: opts.id,
-                    debug: false,
-                    voice: false
-                });
-            }
-
-            // Add bottom of sidebar elements
-            if (opts.sidebar && opts.stylesets) {
-                addSidebarTab({
-                    client: client,
-                    zone: 2,
-                    id: "settings",
-                    title: "Preferences",
-                    info: "Preferences",
-                    subtitle: "&nbsp;",
-                    icon: "gear",
-                    icon_extra: null,
-                    tab_content: $('<div>')
-                    	.append($('<form>')
-                        .addClass("form")
-                        .append($('<label>')
-                            .attr("for", "styleselect")
-                            .addClass("form-control")
-                            .html("Style set&nbsp;:&nbsp;&nbsp;"))
-                        .append($('<select>')
-                            .attr("id", "styleselect")
-                            .attr("name", "styleset")
-                            .addClass("form-control")))
-                });
-                for (var opt in opts.stylesets) {
-                    if (opts.stylesets.hasOwnProperty(opt)) {
-                        $('#styleselect').append( //<option value="DEFAULT" selected>Default</option>
-                            $('<option>').attr('value', opt).html(opts.stylesets[opt])
-                        );
-                    }
-                }
-            }
-
-            if (opts.sidebar && opts.about) {
-                var aboutOptions = {
-                    client: client,
-                    zone: 2,
-                    id: "about",
-                    title: "About Oscars GIP Viewer",
-                    info: "About Oscars GIP Viewer",
-                    subtitle: "&nbsp;",
-                    icon: null,
-                    icon_extra: '<span class="about ' + client + '" title="About GIP..."></span>',
-                    tab_content: '<div class="card" style="text-align: center;">' +
-                        '	<div class="card-body">' +
-                        '		<div class="la-logo"></div>' +
-                        '	</div>' +
-                        '	<div class="card-body">' +
-                        '		<div class="gip-logo"></div>' +
-                        '	</div>' +
-                        '	<div>' +
-                        '		<header>Our map is using these libraries:</header>' +
-                        '	</div>' +
-                        '	<div class="card-body">' +
-                        '		<table class="oscars-credits">' +
-                        '<tr>' +
-                        '	<td><div class="leafletjs-logo"></div></td>' +
-                        '	<td>A JavaScript library for interactive maps.</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '	<td><div class="mapbox-logo"></div></td>' +
-                        '	<td>The location platform for developers and designers.</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '	<td><div class="osm-logo"></div></td>' +
-                        '	<td>A map of the world, created by people, and free to use under an open license.</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '	<td><div class="stamen-logo"></div></td>' +
-                        '	<td>A library of awesome styles for OpenStreetMap data.</td>' +
-                        '</tr>' +
-                        '		</table>' +
-                        '	</div>' +
-                        '</div>' +
-                        '<div style="font-size: smaller;margin-top:20px;text-align:center;">' +
-                        '	&copy; ' + (new Date()).getFullYear() + ' — Oscars s.a. and respective lisensees.' +
-                        '</div>',
-                    wrap: false
-                };
-                addSidebarTab(aboutOptions);
-            }
-
-            // must be done last
-            var resetloc = $('.leaflet-sidebar-tabs a[href="#location"]');
-            if (resetloc.length > 0) {
-                resetloc.click(function(event) {
-                    event.preventDefault();
-                    L.Oscars.Util.resetLocation(false);
-                });
-            }
-
-            var overviewloc = $('.leaflet-sidebar-tabs a[href="#overview"]');
-            if (overviewloc.length > 0) {
-                overviewloc.click(function(event) {
-                    event.preventDefault();
-                    L.Oscars.Util.resetLocation(true);
-                });
-            }
-
-            return _map;
-        },
-
-        resetLocation: function(mode) {
-            if (isSet(_mapCenter)) {
-                if(mode) {
-                _map.setView(_mapCenter.center, 8);
-                }  else {
-                _map.setView(_mapCenter.center, _mapCenter.zoom);
-                }             
-            } else if (isSet(_map.options.center) && isSet(_map.options.zoom)) {
-                if(mode) {
-                _map.setView(_map.options.center, 8);
-                }  else {
-                _map.setView(_map.options.center, _map.options.zoom);
-                }             
-            }
-            if (_sidebar)
-                _sidebar.close();
-        },
-
         updateSparklines: function() {
             jQuery(document).ready(function($) {
                 for (var name in _sparklines) {
                     if (_sparklines.hasOwnProperty(name))
                         $('.' + name).peity(_sparklines[name]);
+                    console.log("Util::updateSparklines", name)
                 }
             });
+        },
+
+        style: function(feature) {
+            touch(feature)
+            return (feature && feature.properties && feature.properties._style) ? feature.properties._style : getDefaults().STYLE
+        },
+
+        // Spawn layer from feature
+        pointToLayer: function(feature, latlng) {
+            touch(feature)
+            feature.properties = feature.properties || {}
+            feature.properties._marker = Oscars.Util.getMarker(feature)
+            return feature.properties._marker
+        },
+
+        onEachFeature: function(feature, layer) {
+            feature.properties = feature.hasOwnProperty("properties") ? feature.properties : {}
+            feature.properties._featureLayer = layer // feature.properties._layer = layer where feature is added
+            Oscars.Util.bindTexts(feature, layer)
+        },
+
+
+        // specific to L.realtime
+        updateFeature: function(feature, oldLayer) {
+            touch(feature)
+            feature.properties = feature.properties || {}
+            feature.properties._icon = Oscars.Util.getIcon(feature)
+        },
+
+
+        //
+        flightboard: function(move, flight, airport, timetype, time, note) {
+            var lnote = note != "" ? note : ((move == "arrival" && timetype == "actual") ? "Landed" : "")
+            _flightboard[move] = _flightboard.hasOwnProperty(move) ? _flightboard[move] : {}
+            _flightboard[move][flight] = _flightboard[move].hasOwnProperty(flight) ? _flightboard[move][flight] : {}
+            _flightboard[move][flight].airport = airport
+            _flightboard[move][flight][timetype] = time
+            _flightboard[move][flight].note = lnote
+            if (timetype == "actual") { // if move completed, schedule removal from flightboard
+                _flightboard[move][flight].removeAt = time.add(move == "arrival" ? 30 : 10, "minutes")
+            }
+        },
+
+        //
+        getFlightboard: function(move, maxcount = 20, datetime = false) {
+            const S = "scheduled"
+            const P = "planned"
+            const A = "actual"
+            var count = 0
+
+            function getTime(f) { // returns the most recent known time for flight
+                var t = f.hasOwnProperty(S) ? f[S] : false
+                if (f[A]) {
+                    t = f[A]
+                } else if (f[P]) {
+                    t = f[P]
+                }
+                return t
+            }
+
+            var ts = datetime ? datetime : moment() // default to now
+
+            var tb = $('<tbody>')
+            for (var flight in _flightboard[move]) {
+                if (_flightboard[move].hasOwnProperty(flight)) {
+                    var addFlight = true
+                    console.log("getFlightboard-removeAt", _flightboard[move][flight].removeAt, ts.toISOString(true))
+                    if ((count++ < maxcount)
+                        &&
+                        ((!_flightboard[move][flight].hasOwnProperty('removeAt')) ||
+                            (_flightboard[move][flight].hasOwnProperty('removeAt') && _flightboard[move][flight].removeAt.isBefore(ts)))
+                    ) {
+                        var t = false
+                        var s = true
+                        if (_flightboard[move][flight][A]) {
+                            t = _flightboard[move][flight][A]
+                        } else if (_flightboard[move][flight][P]) {
+                            t = _flightboard[move][flight][P]
+                            if(_flightboard[move][flight].hasOwnProperty(S)) {
+                                var diff = moment.duration(_flightboard[move][flight][P].diff(_flightboard[move][flight][S])).asMinutes()
+                                if (diff > 15) { // minutes
+                                    _flightboard[move][flight].note = "Delayed" // "Delayed "+diff+" min"
+                                    s = false
+                                }
+                            }
+                        }
+                        const status = s ? // ●
+                            '<i class="la la-dot-circle text-success"></i><i class="la la-dot-circle text-default-light"></i>'
+                        :
+                            '<i class="la la-dot-circle text-default-light"></i><i class="la la-dot-circle text-danger"></i>'
+                        tb.append(
+                            $('<tr>')
+                            .append($('<td>').html(flight))
+                            .append($('<td>').html(_flightboard[move][flight].airport))
+                            .append($('<td>').html(_flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH:mm") : '&nbsp;'))
+                            .append($('<td>').html(t ? t.format("HH:mm") : '&nbsp;'))
+                            .append($('<td>').html(_flightboard[move][flight].note ? _flightboard[move][flight].note : '&nbsp;'))
+                            .append($('<td>').html(status))
+                        )
+                    }
+                }
+            }
+            $('#flightboard-' + move + ' tbody').replaceWith(tb)
         },
 
         // Get or generate a feature id
@@ -1007,9 +494,31 @@ L.Oscars.Util = (function() {
                     return feature.id
                 }
             }
-            console.log(errmsg, feature);
-            feature.id = L.Oscars.Util.uuidv4()
-            return feature.id
+            console.log(errmsg, feature)
+            return null
+        },
+
+        featureIds: function(geojson) {
+            var ids = []
+            if (geojson.type == "FeatureCollection") {
+                geojson.features.forEach(function(f, idx) {
+                    var fid = Oscars.Util.getFeatureId(feature, "collectFeatureIds:FeatureCollection")
+                    if (fid) {
+                        ids.push(fid)
+                    }
+                })
+            } else if (geojson.type == "Feature") {
+                var fid = Oscars.Util.getFeatureId(geojson, "collectFeatureIds:Feature")
+                if (fid) {
+                    ids.push(fid)
+                }
+            }
+            return ids
+        },
+
+        // Get or generate a feature id
+        getLayerFeatureId: function(layer) {
+            return layer.hasOwnProperty("feature") ? Oscars.Util.getFeatureId(layer.feature) : false
         },
 
         // Generates random UUID (https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript)
@@ -1021,11 +530,6 @@ L.Oscars.Util = (function() {
             });
         },
 
-        // Returns serach layer to add/remove layers.
-        searchLayer: function() {
-            return _searchLayer;
-        },
-
         // returns default values for styles, icons, markers
         getDefaults: function() {
             return getDefaults();
@@ -1033,26 +537,26 @@ L.Oscars.Util = (function() {
 
         // Merge supplied values with defaults but does not change defaults.
         mergeOptions: function(d) {
-            return extend(true, options, d);
+            return $.extend(true, _options, d);
         },
 
         // Set default values.
         setDefaults: function(d) {
-            options = extend(true, options, d);
-            return options;
+            _options = $.extend(true, _options, d);
+            return _options;
         },
 
-        // Set feature.properties._timestamp to now().	
-        touch: function(feature) {
-            feature.properties._timestamp = Date.now();
+        // Set feature.properties._timestamp to now().  
+        touch: function() {
+            touch(feature);
         },
 
-        // Return icon for (Point) feature.	
+        // Bind text to feature/layer.  
         bindTexts: function(feature, layer) {
             bindTexts(feature, layer);
         },
 
-        // Return icon for (Point) feature.	
+        // Return icon for (Point) feature. 
         getIcon: function(feature) {
             return getIcon(feature);
         },
@@ -1066,8 +570,8 @@ L.Oscars.Util = (function() {
         // Check for GIP-valid feature.
         // 1. It must be a geojson feature and its geometry must either by a point or a polygon.
         // 2. It must have the following properties set:
-        //		2.1. properties.name
-        //		2.2. properties.type
+        //      2.1. properties.name
+        //      2.2. properties.type
         isValidGIPGeoJSONFeature: function(feature) {
             /*
             var errs = geojsonhint.hint(feature, {
@@ -1078,123 +582,14 @@ L.Oscars.Util = (function() {
             if (isSet(feature.properties) ? (isSet(feature.properties.name) && isSet(feature.properties.type)) : false) {
                 return (["Point", "Polygon"].indexOf(feature.geometry.type) > -1);
             }
-            console.log('L.Oscars.Util::isValidGIPGeoJSON: Invalid GIP feature', feature);
+            console.log('Oscars.Util::isValidGIPGeoJSON: Invalid GIP feature', feature);
             return false;
-        },
-
-        // Adds a layer to the supplied control layer. If the device/zone groups has a "grouping category", places it in,
-        // otherwise, uses generic Devices/Zones groups.
-        addLayerToControlLayer: function(featureCollection, layer) {
-            var layer_group_display_name, display_name, name;
-            if (featureCollection.type == "FeatureCollection") {
-                var type = "Devices";
-                if (featureCollection.features.length > 0) {
-                    type = (featureCollection.features[0].geometry.type == "Point") ? "Devices" : "Zones";
-                }
-                layer_group_display_name = isSet(featureCollection.properties) && isSet(featureCollection.properties.layer_group_display_name) ? featureCollection.properties.layer_group_display_name : type;
-                display_name = featureCollection.properties.display_name;
-                name = featureCollection.properties.name;
-            } else if (Array.isArray(featureCollection) && featureCollection.length > 0) { // collections of features gets the name of the type of the first element
-                layer_group_display_name = (featureCollection[0].geometry.type == "Point") ? "Devices" : "Zones";
-                display_name = isSet(featureCollection[0].properties.display_type) ? featureCollection[0].properties.display_type : featureCollection[0].properties.type;
-                name = isSet(featureCollection[0].properties.group_name) ? featureCollection[0].properties.group_name : null;
-            } else { // layers from one element gets the name from that element
-                layer_group_display_name = (featureCollection.geometry.type == "Point") ? "Devices" : "Zones";
-                display_name = featureCollection.properties.display_name;
-                name = featureCollection.properties.name;
-            }
-            if (_layerControl) {
-                _layerControl.addGipOverlay(layer, display_name, layer_group_display_name);
-                if (name) {
-                    //console.log('L.Oscars.Util::addLayerToControlLayer: Info - Adding', name);
-                    _gipLayers[name] = layer;
-                } else {
-                    console.log('L.Oscars.Util::addLayerToControlLayer: featureCollection has no group name', featureCollection);
-                }
-            } else {
-                console.log('L.Oscars.Util::addLayerToControlLayer: _layerControl not set', featureCollection);
-            }
-        },
-
-        addToSearch: function(layer) {
-            if (_searchLayer) {
-                _searchLayer.addLayer(layer);
-            }
-        },
-
-        findGIPLayer: function(name) {
-            return _gipLayers[name];
-        },
-
-        track: function(feature) { //@todo: When removing feature, remove its track by calling untrack
-            if (_trackLayer) {
-                if (feature.geometry.type != "Point") return;
-                var defs = getDefaults();
-                if (!isSet(_tracks[feature.properties.name])) {
-                    _tracks[feature.properties.name] = L.polyline([getLatLng(feature)], defs.TRACK);
-                    _trackLayer.addLayer(_tracks[feature.properties.name]);
-                } else {
-                    var ll = _tracks[feature.properties.name].getLatLngs();
-                    if (ll.length > defs.TRACK.duration) {
-                        ll.splice(0, 1);
-                        _tracks[feature.properties.name].setLatLngs(ll);
-                    }
-                    _tracks[feature.properties.name].addLatLng(getLatLng(feature));
-                }
-            }
-        },
-
-        untrack: function(feature) {
-            if (_trackLayer && isSet(_tracks[feature.properties.name])) {
-                _trackLayer.removeLayer(_tracks[feature.properties.name]);
-                delete _tracks[feature.properties.name];
-            }
-        },
-
-        setStats: function(statname) {
-            if (typeof _stats[statname] == "undefined") {
-                _stats[statname] = 0;
-            }
-            _stats[statname]++;
-        },
-
-        getStats: function() {
-            var features = {};
-            _map.eachLayer(function(layer) {
-                if (layer instanceof L.GeoJSON) {
-                    var fc = layer.toGeoJSON();
-                    features[L.Util.stamp(layer)] = fc.features.length;
-                }
-            });
-
-            return {
-                features: features,
-                updates: _stats,
-                timestamp: (new Date().getTime())
-            };
-        },
-
-        addDeviceGroup: function(featureCollection, options) {
-            var l = L.Oscars.deviceGroup(featureCollection, options);
-            // l.addTo(this._map);
-            L.Oscars.Util.addLayerToControlLayer(featureCollection, l);
-            return l;
-        },
-
-        addZoneGroup: function(featureCollection, options) {
-            var l = L.Oscars.zoneGroup(featureCollection, options);
-            // l.addTo(this._map);
-            L.Oscars.Util.addLayerToControlLayer(featureCollection, l);
-            return l;
         },
 
         versions: function() {
             console.log('L version ', L.version);
-            console.log('L.Oscars version ', L.Oscars.version);
+            console.log('Oscars version ', Oscars.version);
         }
     };
 
 })();
-
-// install prepareMap into L.Map object for Vaadin/GWT
-L.Map.prototype.prepareMap = function(options) { return L.Oscars.Util.prepareMap(this, options); }

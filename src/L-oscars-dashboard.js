@@ -1,39 +1,36 @@
 /*
  * jQuery Dashboard Widget Helper
- * 2016 Pierre M
+ * 2020 Pierre M
  * License: MIT
  */
 
 /*  Dashboard helper connects external sources (websocket)
  *  and broadcast events inside a web page to destination giplet.
+ *  A giplet is an HTML element with id and receives messages through jquery trigger(msg, payload)/on(msg, payload => {}).
  */
 
-"use strict";
+"use strict"
 
-L.Oscars = L.Oscars || {};
+Oscars = Oscars || {}
 
-L.Oscars.Dashboard = (function($) {
-    "use strict";
+Oscars.Dashboard = (function($) {
+    "use strict"
 
     /*
      * Default Values
      */
-    var _inited = false;
-    var opts;
-    var defaults = {
+    var _listeners = {}
+    var _options = false
+
+    const DEFAULTS = {
         debug: false,
-        wire_id: "gip-gip-wire",
-        map_id: "gip-gip-map",
-        // Defaults
-        message_source: 'gip',
-        message_type: 'news',
+        elemprefix: "",
+        msgprefix: "GIP-",
         // Websocket feeds
-        websocket: null, // 'ws://localhost:8051', 'ws://hostname.local:8051'
-        initSeed: null, //gipadmin/wire/seed
-        markRead: null, //gipadmin/wire/read
-        moreOlder: null, //gipadmin/wire/older
+        websocket: null, // 'ws://localhost:8051', 'ws://hostname.local:8051', null means no conncetion
+        reconnect_retry: 10, // seconds
         // Self messages
-        intro_messages: {
+        dashboard_messages: {
             opening: {
                 subject: 'Opening connection...',
                 body: '... connected.',
@@ -71,227 +68,132 @@ L.Oscars.Dashboard = (function($) {
                 "icon-color": '#f00'
             }
         }
-    };
-    var _replay_time = new Date();
-    var _replay_speed = 1;
-
-    /*
-     * Only gets called when we're using $('$el').dashboard format
-     */
-    var Dashboard = function() {
-
     }
 
-    Dashboard.prototype.defaults = function() {
-        return _inited ? opts : null;
-    }
+    var Dashboard = function() {}
 
     Dashboard.prototype.init = function(options) {
-        if (_inited) return;
+        if (_options) _options
 
-        opts = $.extend({}, defaults, options);
+        _options = $.extend({}, DEFAULTS, options)
 
-        // install();
-        if (opts.websocket !== null) {
-            wsStart();
+        // install()
+        if (_options.websocket !== null) {
+            wsStart()
         }
-        if (opts.initSeed !== null) {
-            initSeed();
-        }
-        if (opts.debug) {
-            opts.intro_messages.starting.created_at = new Date();
-            send_to_wire(opts.intro_messages.starting);
-        }
-        _inited = true;
-    };
 
-    Dashboard.prototype.get_payload = function(msg) {
-        if (opts.debug) {
-            console.log({ code: 'Dashboard.prototype.get_payload', message: msg });
+        if (_options.debug) {
+            _options.dashboard_messages.starting.created_at = new Date()
+            Dashboard.prototype.broadcast({
+                type: "wire",
+                payload: _options.dashboard_messages.starting
+            })
         }
-        var ret = null;
-        var fnd = 'nothing';
-        try {
-            ret = JSON.parse(msg.body);
-            fnd = 'body';
-        } catch (e) {
-            if (opts.debug) {
-                console.log('Dashboard.prototype.get_payload: cannot decode body');
-                console.log(e);
+
+        return _options
+    }
+
+    Dashboard.prototype.register = function(elemid, msgtype) {
+        if (!_listeners.hasOwnProperty(msgtype)) {
+            _listeners[msgtype] = []
+        }
+        if (_listeners[msgtype].indexOf(elemid) < 0) {
+            _listeners[msgtype].push(elemid)
+        }
+        if (_options.debug)
+            console.log("Dashboard::register", "#" + elemid, msgtype)
+    }
+
+    Dashboard.prototype.unregister = function(elemid, msgtype) {
+        if (_listeners.hasOwnProperty(msgtype)) {
+            const i = _listeners[msgtype].indexOf(elemid)
+            if (i >= 0) {
+                _listeners[msgtype].splice(i, 1)
             }
+        }
+    }
+
+    /*
+        data = {type: "string", payload: "string"}
+    */
+    Dashboard.prototype.broadcast = function(data) {
+        const TYPE = "type"
+        const PAYLOAD = "payload"
+        var msg = null
+        if (typeof data == "string") {
             try {
-                ret = JSON.parse(msg.payload);
-                fnd = 'payload';
+                msg = JSON.parse(data)
             } catch (e) {
-                if (opts.debug) {
-                    console.log('Dashboard.prototype.get_payload: cannot decode payload');
-                    console.log(e);
-                }
-                return false;
+                console.log('Dashboard::broadcast: cannot decode message', data, e)
             }
+        } else {
+            msg = data
         }
-        if (opts.debug) {
-            console.log('Dashboard.prototype.get_payload: found payload in ' + fnd);
-        }
-        return ret;
-    }
 
+        if (msg.hasOwnProperty(TYPE) && msg.hasOwnProperty(PAYLOAD)) {
+            const msgtype = msg[TYPE]
 
-    Dashboard.prototype.last_updated = function(msg, elem) {
-        var now = new Date();
-        if (opts.debug) {
-            console.log('Dashboard.prototype.last_updated: updated at ' + now);
-        }
-        elem.find('.gip-footer').html('LAST UPDATED ' + now.getHours() + ':' + now.getMinutes() + ' L');
-    }
-
-
-
-    function get_giplet_id(msg) {
-        var id = '#gip-';
-        id += msg.source ? msg.source.toLowerCase() : opts.message_source;
-        id += msg.type ? msg.type.toLowerCase() : opts.message_type;
-        if (msg.hasOwnProperty("channel")) {
-            if (msg.channel !== null) {
-                id += ('-' + msg.channel);
+            if (_listeners.hasOwnProperty(msgtype) && (_listeners[msgtype].length > 0)) {
+                _listeners[msgtype].forEach(function(dst, idx) {
+                    if (_options.debug)
+                        console.log("Dashboard::broadcast: trigger", "#" + _options.elemprefix + dst, _options.msgprefix + msgtype)
+                    try {
+                        $("#" + _options.elemprefix + dst).trigger(_options.msgprefix + msgtype, msg[PAYLOAD])
+                    } catch (e) {
+                        console.log('Dashboard::broadcast: problem during update', msg[PAYLOAD], e)
+                    }
+                })
+            } else {
+                console.log("Dashboard::broadcast: no listener for message type", msgtype, msg[PAYLOAD], _listeners)
             }
-        }
-        return id;
-    }
 
-    function send_to_wire(msg) {
-        if (msg.priority > 0) {
-            $('#' + opts.wire_id).trigger('gip:message', msg);
-            $('#' + opts.wire_id + ' ul').scrollTop($('#' + opts.wire_id + ' ul')[0].scrollHeight);
+        } else {
+            console.log("Dashboard::broadcast: message has no type or no payload", data)
         }
     }
 
-    function send_to_map(msg) {
-        $('#' + opts.map_id).trigger('gip:update', msg);
-    }
-
-    function isGeoJSON(feature) {
-        var errs = geojsonhint.hint(feature, {
-            precisionWarning: false
-        });
-        return errs.length == 0;
-    }
-
-    Dashboard.prototype.priority = function(msg, max_priority) {
-        var priority = parseInt(msg.priority);
-        if (isNaN(priority)) priority = 0;
-        if (priority > max_priority) priority = max_priority;
-        msg.priority = priority;
-        return priority;
-    }
-
-    Dashboard.prototype.print = {
-        info: function(subject, body) {
-            Dashboard.prototype.broadcast({
-                source: 'gip',
-                type: 'internal',
-                subject: subject,
-                body: body,
-                priority: 3,
-                icon: 'fa-info',
-                "icon-color": 'info'
-            })
-        },
-        warning: function(subject, body) {
-            Dashboard.prototype.broadcast({
-                source: 'gip',
-                type: 'internal',
-                subject: subject,
-                body: body,
-                priority: 2,
-                icon: 'fa-exclamation-triangle',
-                "icon-color": 'warning'
-            })
-        },
-        error: function(subject, body) {
-            Dashboard.prototype.broadcast({
-                source: 'gip',
-                type: 'internal',
-                subject: subject,
-                body: body,
-                priority: 1,
-                icon: 'fa-exclamation-circle',
-                "icon-color": 'danger'
-            })
-        }
-    }
-
-    Dashboard.prototype.broadcast = function(msg) {
-        //console.log('Dashboard::broadcast', msg);
-        Dashboard.prototype.init();
-        if (isGeoJSON(msg)) {
-            return send_to_map(msg);
-        }
-        //make sure there is a source and type
-        if (!msg.source)
-            msg.source = opts.message_source;
-        if (!msg.type)
-            msg.type = opts.message_type;
-        //fix priority value, ensure 0<=p<=5.
-        Dashboard.prototype.priority(msg);
-        //build giplet id
-        var gid = get_giplet_id(msg);
-        //send message to giplet
-        $(gid).trigger('gip:message', msg);
-
-        //display message on wire if priority>0.
-        //messages with priority < 1 are not displayed on the wire (but the recipient giplet gets the message)
-        send_to_wire(msg);
-    }
 
 
     // Init & start ws connection
     function wsStart() {
-        var ws = new WebSocket(opts.websocket);
+        var ws = new WebSocket(_options.websocket)
+
         ws.onopen = function() {
-            opts.intro_messages.opening.created_at = new Date();
-            send_to_wire(opts.intro_messages.opening);
-        };
+            _options.dashboard_messages.opening.created_at = new Date()
+            Dashboard.prototype.broadcast({
+                type: "wire",
+                payload: _options.dashboard_messages.opening
+            })
+        }
         ws.onclose = function(e) {
-            const RECONNECT_TRY = 10 // seconds
-            if (opts.debug) {
-                opts.intro_messages.closing.created_at = new Date();
-                send_to_wire(opts.intro_messages.closing);
+            if (_options.debug || true) {
+                _options.dashboard_messages.closing.created_at = new Date()
+                Dashboard.prototype.broadcast({
+                    type: "wire",
+                    payload: _options.dashboard_messages.closing
+                })
             }
-        
-            console.log('Socket is closed. Reconnect will be attempted in 10 second.', e.reason);
+            console.log('Dashboard::wsStart::onclose: Socket is closed. Reconnect will be attempted in ' + _options.reconnect_retry + ' second.', e.reason, new Date())
             setTimeout(function() {
-                wsStart();
-            }, RECONNECT_TRY * 1000)
-        
-        };
+                wsStart()
+            }, _options.reconnect_retry * 1000)
+
+        }
         ws.onmessage = function(evt) {
             try {
-                //console.log('wsStart::onMessage', evt.data);
-                var msg = JSON.parse(evt.data);
-                Dashboard.prototype.broadcast(msg);
+                Dashboard.prototype.broadcast(evt.data)
             } catch (e) {
-                console.log('Dashboard::wsStart: cannot decode message');
-                console.log(e);
-                opts.intro_messages.error.body = 'Dashboard::wsStart: cannot decode message';
-                Dashboard.prototype.broadcast(opts.intro_messages.error);
+                console.log('Dashboard::wsStart::onmessage: cannot send message', e)
+                _options.dashboard_messages.error.body = 'Dashboard::wsStart::onmessage: cannot decode message'
+                Dashboard.prototype.broadcast({
+                    type: "wire",
+                    payload: _options.dashboard_messages.error
+                })
             }
-        };
+        }
     }
 
-    // Fetches last messages (if url provided). Displays them all.
-    function initSeed() {
-        $.post(
-            opts.initSeed, {},
-            function(r) {
-                msgs = $.parseJSON(r);
-                for (var idx = msgs.length - 1; idx >= 0; idx--) { // oldest first
-                    send_to_wire(msgs[idx]);
-                }
-            }
-        );
-    }
 
-    return Dashboard.prototype;
+    return Dashboard.prototype
 
-})(jQuery);
+})(jQuery)

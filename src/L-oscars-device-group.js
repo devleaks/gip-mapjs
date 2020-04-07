@@ -3,43 +3,36 @@
  * 2017 Pierre M
  * License: MIT
  */
-"use strict";
+"use strict"
 
-L.Oscars = L.Oscars || {};
+Oscars = Oscars || {}
 
-L.Oscars.DeviceGroup = L.Realtime.extend({
+Oscars.DeviceGroup = L.Realtime.extend({
+
+    VERSION: "2.1.0",
 
     options: {
 
         start: false,
 
         getFeatureId: function(feature) {
-            return L.Oscars.Util.getFeatureId(feature, "L.Oscars.DeviceGroup::getFeatureId: Warning - Feature has no id")
+            Oscars.Map.setStats('ODGFID')
+            return Oscars.Util.getFeatureId(feature, "DeviceGroup::getFeatureId: Warning - Feature has no name, will never be updated or removed")
         },
 
         style: function(feature) {
-            L.Oscars.Util.setStats('ODGSTY');
-            if (feature && feature.properties && feature.properties._style) {
-                return feature.properties._style;
-            } else {
-                console.log("L.Oscars.DeviceGroup::style: Warning - Feature has no style, using default", feature);
-            }
-            return L.Oscars.Util.getDefaults().STYLE;
+            Oscars.Map.setStats('ODGSTY')
+            return Oscars.Util.style(feature)
         },
 
         pointToLayer: function(feature, latlng) {
-            L.Oscars.Util.setStats('ODGP2L');
-            L.Oscars.Util.touch(feature);
-            feature.properties = feature.properties || {};
-            feature.properties._marker = L.Oscars.Util.getMarker(feature);
-            return feature.properties._marker;
+            Oscars.Map.setStats('ODGP2L')
+            return Oscars.Util.pointToLayer(feature, latlng)
         },
 
         updateFeature: function(feature, oldLayer) {
-            L.Oscars.Util.setStats('ODGUPF');
-            L.Oscars.Util.touch(feature);
-            feature.properties = feature.properties || {};
-            feature.properties._icon = L.Oscars.Util.getIcon(feature);
+            Oscars.Map.setStats('ODGUPF')
+            Oscars.Util.updateFeature(feature, oldLayer)
         }
 
     },
@@ -48,14 +41,18 @@ L.Oscars.DeviceGroup = L.Realtime.extend({
      *  Merge defaults with user-supplied defaults and install initial collection
      */
     initialize: function(featureCollection, options) {
-        L.Oscars.Util.setStats('ODGINI');
-        L.setOptions(this, options);
-        if (options && typeof options.gipDefaults != "undefined") { L.Oscars.Util.setDefaults(options.gipDefaults); }
-        L.Realtime.prototype.initialize.call(this, {}, this.options);
-        this.update(featureCollection);
-        L.Oscars.Util.addLayerToControlLayer(featureCollection, this);
-        if (options && typeof options.search != "undefined" && options.search) { L.Oscars.Util.addToSearch(this); }
-        this.on("add", L.Oscars.Util.updateSparklines);
+        Oscars.Map.setStats('ODGINI')
+        L.setOptions(this, options)
+        if (options && options.hasOwnProperty("gipDefaults")) {
+            Oscars.Util.setDefaults(options.gipDefaults)
+        }
+        L.Realtime.prototype.initialize.call(this, {}, this.options)
+        this.update(featureCollection)
+        Oscars.Map.addLayerToControlLayer(featureCollection, this)
+        if (options && options.hasOwnProperty("search") && options.search) {
+            Oscars.Map.addToSearch(this)
+        }
+        this.on("add", Oscars.Util.updateSparklines)
     },
 
     /**
@@ -63,63 +60,73 @@ L.Oscars.DeviceGroup = L.Realtime.extend({
      *  Set a pointer to this layer into each feature.
      */
     update: function(geojson_in) {
-        L.Oscars.Util.setStats('ODGUPD');
-        var geojson = (typeof geojson_in === 'string' || geojson_in instanceof String) ? JSON.parse(geojson_in) : geojson_in;
-        var that = this;
-        if (geojson.type == "FeatureCollection") {
+        Oscars.Map.setStats('ODGUPD')
+
+        function addLayer(f, l) {
+            f.properties = f.hasOwnProperty("properties") ? f.properties : {}
+            f.properties._layer = l
+        }
+        var geojson = (typeof geojson_in === 'string' || geojson_in instanceof String) ? JSON.parse(geojson_in) : geojson_in
+        var that = this
+
+        if (geojson.hasOwnProperty("type") && geojson.type == "FeatureCollection") {
             geojson.features.forEach(function(feature) {
-                feature.properties = feature.properties || {};
-                feature.properties._layer = that;
-                L.Oscars.Util.track(feature);
-            });
-            L.Realtime.prototype.update.call(this, geojson.features);
+                addLayer(feature, that)
+                Oscars.Map.track(feature)
+            })
+            L.Realtime.prototype.update.call(this, geojson.features)
         } else if (Array.isArray(geojson)) {
             geojson.forEach(function(feature) {
-                feature.properties = feature.properties || {};
-                feature.properties._layer = that;
-                L.Oscars.Util.track(feature);
-            });
-            L.Realtime.prototype.update.call(this, geojson);
+                addLayer(feature, that)
+                Oscars.Map.track(feature)
+            })
+            L.Realtime.prototype.update.call(this, geojson)
+        } else if (geojson.hasOwnProperty("type") && geojson.type == "Feature") {
+            addLayer(geojson, that)
+            Oscars.Map.track(geojson)
+            L.Realtime.prototype.update.call(this, geojson)
+        } else if (geojson.hasOwnProperty("type") && geojson.type == "Point") {
+            var f = L.GeoJSON.asFeature(geojson)
+            addLayer(f, that)
+            Oscars.Map.track(f)
+            L.Realtime.prototype.update.call(this, f)
         } else {
-            geojson.properties = geojson.properties || {};
-            geojson.properties._layer = that;
-            L.Oscars.Util.track(geojson);
-            L.Realtime.prototype.update.call(this, geojson);
+            console.log("DeviceGroup::update: Invalid GeoJSON", geojson_in)
         }
     },
 
     // Experimental, but should be performed in the app server, not here.
     cleanUp: function() {
-        var now = Date.now();
+        var now = Date.now()
         for (var fid in this._features) {
-            L.Oscars.Util.setStats('ODGCLU');
+            Oscars.Map.setStats('ODGCLU')
             if (this._features.hasOwnProperty(fid)) {
-                var feature = this._features[fid];
-                var ts = feature.properties._timestamp;
+                var feature = this._features[fid]
+                var ts = feature.properties._timestamp
                 if (this.options.greyOut) {
-                    var cleanUpStatus = L.Oscars.Util.getDefaults().CLEANUP_STATUS;
+                    var cleanUpStatus = Oscars.Util.getDefaults().CLEANUP_STATUS
                     if (((ts + this.options.greyOut) < now) && (feature.properties.status != cleanUpStatus)) {
-                        L.Oscars.Util.setStats('ODGCLG');
-                        console.log('L.Oscars.DeviceGroup::cleanUp: Info - Inactive ', feature.properties.name);
-                        feature.properties.status = cleanUpStatus;
-                        feature.properties._style.markerColor = L.Oscars.Util.getDefaults().STYLE.inactiveMarkerColor;
-                        delete feature.properties._icon;
-                        L.Realtime.prototype.update.call(this, feature);
+                        Oscars.Map.setStats('ODGCLG')
+                        console.log('Oscars.DeviceGroup::cleanUp: Info - Inactive ', feature.properties.name)
+                        feature.properties.status = cleanUpStatus
+                        feature.properties._style.markerColor = Oscars.Util.getDefaults().STYLE.inactiveMarkerColor
+                        delete feature.properties._icon
+                        L.Realtime.prototype.update.call(this, feature)
                     }
                 }
                 if (this.options.takeOut) {
                     if ((ts + this.options.takeOut) < now) {
-                        L.Oscars.Util.setStats('ODGCLR');
-                        console.log('L.Oscars.DeviceGroup::cleanUp: Info - Remove ', feature.properties.name);
-                        this.remove(feature);
+                        Oscars.Map.setStats('ODGCLR')
+                        console.log('Oscars.DeviceGroup::cleanUp: Info - Remove ', feature.properties.name)
+                        this.remove(feature)
                     }
                 }
             }
-        };
+        }
     }
 
-});
+})
 
-L.Oscars.deviceGroup = function(src, options) {
-    return new L.Oscars.DeviceGroup(src, options);
-};
+Oscars.deviceGroup = function(src, options) {
+    return new Oscars.DeviceGroup(src, options)
+}
