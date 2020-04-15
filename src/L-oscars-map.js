@@ -218,6 +218,7 @@ Oscars.Map = (function($) {
             center: _options.center,
             zoom: _options.zoom,
             layers: _options.layers,
+            zoomSnap: 0.5,
             attributionControl: false // will be displayed in sidebar
         })
 
@@ -319,7 +320,7 @@ Oscars.Map = (function($) {
                 zone: 1,
                 id: "layers",
                 info: "Layers",
-//              title: 'Layers<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>',
+                //              title: 'Layers<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>',
                 title: 'Layers<div class="toggle-btn" id="_1st-toggle-btn"><input id="i_1st-toggle-btn" type="checkbox" onchange="toggleTheme()"><span></span></div>',
                 subtitle: "&nbsp",
                 icon: "bars",
@@ -327,8 +328,8 @@ Oscars.Map = (function($) {
                 tab_content: $('<div>')
                     .append($('<div>')
                         .attr("id", LAYERCONTROLID)
-//                        .append('<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>')
-            )
+                        //                        .append('<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>')
+                    )
             })
             // relocate layer control to sidebar
             var newloc = document.getElementById(LAYERCONTROLID)
@@ -481,7 +482,7 @@ Oscars.Map = (function($) {
                             .append($('<div>')
                                 .attr("id", "gip-clock-table")))
                         .append($('<div>')
-                            .append($('<div>').attr('id','flightboard-time'))
+                            .append($('<div>').attr('id', 'flightboard-time'))
                             .append($("<table id='flightboard-arrival'>")
                                 .addClass("flightboard")
                                 .append($('<caption>').html('Arrival'))

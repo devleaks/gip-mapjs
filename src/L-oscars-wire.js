@@ -57,15 +57,16 @@ Oscars.Wire = (function($) {
     var lastDateReminder = null
 
     const bootstrapColors = [
-        'default',
-        'info',
-        'success',
         'primary',
-        'warning',
+        'secondary',
+        'success',
         'danger',
-        'accent'
+        'warning',
+        'info',
+        'accent',
+        'default'
     ]
-    const bootstrapColorsVarient = [
+    const bootstrapColorVarients = [
         'normal',
         'bright',
         'light',

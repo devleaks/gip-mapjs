@@ -418,6 +418,8 @@ Oscars.Util = (function() {
 
         //
         getFlightboard: function(move, maxcount = 40, datetime = false) {
+            const SOLARI = true
+            
             const S = "scheduled",
                   P = "planned",
                   A = "actual"
@@ -480,15 +482,21 @@ Oscars.Util = (function() {
                             $('<tr>')
                             .append($('<td>').html( flight ))
                             .append($('<td>').html( _flightboard[move][flight].airport ))
-                            .append($('<td>').html( _flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH:mm") : '&nbsp;' ))
-                            .append($('<td>').html( t ? t.format("HH:mm") : '&nbsp;' ))
-                            .append($('<td>').html( _flightboard[move][flight].note ? _flightboard[move][flight].note : '&nbsp;' ))
+                            .append($('<td>').html( _flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH:mm") : '' ))
+                            .append($('<td>').html( t ? t.format("HH:mm") : '' ))
+                            .append($('<td>').html( _flightboard[move][flight].note ? _flightboard[move][flight].note : '' ))
                             .append($('<td>').html( status ))
                         )
                     }
                 }
             }
             $('#flightboard-' + move + ' tbody').replaceWith(tb)
+            if(SOLARI) {
+                $('#flightboard-' + move + ' tbody tr:last td:lt(4)').each(function(td) {
+                    var s = new flipper(this);
+                    s.start();
+                })
+            }
         },
 
         // Get or generate a feature id

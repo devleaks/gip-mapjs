@@ -1261,6 +1261,10 @@
   resolved "https://registry.yarnpkg.com/JSV/-/JSV-4.0.2.tgz#d077f6825571f82132f9dffaed587b4029feff57"
   integrity sha1-0Hf2glVx+CEy+d/67Vh7QCn+/1c=
 
+"Leaflet.zoomdisplay@https://github.com/azavea/Leaflet.zoomdisplay.git":
+  version "0.0.0"
+  resolved "https://github.com/azavea/Leaflet.zoomdisplay.git#f863085c7b15cb32504d74fb2cc11ace208d1c16"
+
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
@@ -3355,6 +3359,10 @@ leaflet-ant-path@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/leaflet-ant-path/-/leaflet-ant-path-1.3.0.tgz#eac54e936e911666e61e9c2af682cba768b46a5a"
   integrity sha512-wgWWcAD4w8QVguRsHh89NGj5eqwLOP6e/HazunW0fQaytqZqEh3WePWYIrmbUeMcOf2cX/+GecHkFfI5tirS1Q==
+
+"leaflet-betterscale@https://github.com/daniellsu/leaflet-betterscale.git":
+  version "0.0.0"
+  resolved "https://github.com/daniellsu/leaflet-betterscale.git#0cbdda2263819526434e599b9461b3183c619244"
 
 leaflet-canvasicon@^0.1.6:
   version "0.1.6"

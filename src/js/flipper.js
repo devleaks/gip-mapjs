@@ -1,5 +1,8 @@
+// var chars = "$_!@#%()-12357890abcdefghijklmnopqrstuvwxyz ";
+const chars = " ABCDEFGHIJKLMNOPQRSTUVWXYZ_*12357890:";
+const timing = 70
+
 function flipper (obj) {
- var chars = "_!@#$%,.*()-12357890abcdefghijklmnopqrstuvwxyz ";
  this.obj = obj;
  this.textArray = this.obj.innerHTML.split("");
  this.html = this.obj.innerHTML;
@@ -41,13 +44,12 @@ function flipper (obj) {
 	}
 	
 	this.timeInt = function () {
-		this.interval=setInterval(function () {_this.roll()},70);
+		this.interval=setInterval(function () {_this.roll()},timing);
 	}
 
 }
 
 function flipper2 (obj) {
- var chars = "$_!@#%()-12357890abcdefghijklmnopqrstuvwxyz ";
  this.obj = obj;
  this.textArray = this.obj.innerHTML.split("");
  this.html = this.obj.innerHTML;
