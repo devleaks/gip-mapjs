@@ -1,0 +1,20 @@
+airlines = {
+  "   ": "",
+  "---": "----------",
+  "QTR": "Qatar Airways",
+  "AVI": "Aviapartner",
+  "ETH": "Ethiopian Airlines",
+  "ICL": "CAL Cargo Air Lines",
+  "TUB": "TUI Airlines Belgium",
+  "ANA": "All Nippon Airways",
+  "ICE": "Icelandair",
+  "ELY": "El Al Israel Airlines",
+  "ABW": "AirBridge Cargo",
+  "ABD": "Air Atlanta Icelandic",
+  "XXX": "ASL Belgium",
+  "FDX": "Federal Express",
+  "WST": "West Atlantic",
+  "CKS": "Kalitta Air",
+  "AIR": "Air Sprint",
+  "MOV": "Vim Airlines"
+}

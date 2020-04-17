@@ -411,22 +411,23 @@ Oscars.Util = (function() {
             _flightboard[move][flight].airport = airport
             _flightboard[move][flight][timetype] = time
             _flightboard[move][flight].note = lnote
+            _flightboard[move][flight].isnew = true
             if (timetype == "actual") { // if move completed, schedule removal from flightboard
                 _flightboard[move][flight].removeAt = moment(time).add(move == "arrival" ? 30 : 10, "minutes")
             }
         },
 
         //
-        getFlightboard: function(move, maxcount = 40, datetime = false) {
-            const SOLARI = true
-            
+        getFlightboard: function(move, maxcount = 40, datetime = false, solari = false) {
+            const SOLARI = 'solari' // name of css class
+
             const S = "scheduled",
                   P = "planned",
                   A = "actual"
 
             const Mdefault = '<i class="la la-dot-circle text-default-light"></i><i class="la la-dot-circle text-default-light"></i>',
                   Msuccess = '<i class="la la-dot-circle text-success"></i><i class="la la-dot-circle text-default-light"></i>',
-                  Mdanger  = '<i class="la la-dot-circle text-default-light"></i><i class="la la-dot-circle text-danger"></i>'
+                  Mdanger = '<i class="la la-dot-circle text-default-light"></i><i class="la la-dot-circle text-danger"></i>'
 
             var count = 0
 
@@ -447,7 +448,7 @@ Oscars.Util = (function() {
                 if (_flightboard[move].hasOwnProperty(flight)) {
                     var t = _flightboard[move][flight].hasOwnProperty('removeAt') ? _flightboard[move][flight].removeAt.toISOString(true) : 'none'
                     console.log("getFlightboard-removeAt", t, ts.toISOString(true))
-                    if ( true
+                    if (true
                         /*(count++ < maxcount)
                         &&
                         ((!_flightboard[move][flight].hasOwnProperty('removeAt')) ||
@@ -455,46 +456,69 @@ Oscars.Util = (function() {
                     ) {
                         var t = false
                         var s = true
+                        var cnew = ''
+                        var cupd = ''
                         var status = Mdefault
                         if (_flightboard[move][flight].hasOwnProperty(A)) {
                             t = _flightboard[move][flight][A]
-                            if(_flightboard[move][flight].hasOwnProperty(S)) {
+                            if (_flightboard[move][flight].hasOwnProperty(S)) {
                                 var diff = moment.duration(_flightboard[move][flight][A].diff(_flightboard[move][flight][S])).asMinutes()
                                 if (diff > 15) { // minutes
-                                    _flightboard[move][flight].note = (move == "departure" ? "Delayed +" : "Landed +")+diff+" min"
+                                    _flightboard[move][flight].note = (move == "departure" ? "Delayed +" : "Landed +") + diff + " min"
                                     s = false
                                 }
                             }
                             status = Mdefault
+                            if(_flightboard[move][flight].isnew) {
+                                console.log('isnew:update',flight)
+                                _flightboard[move][flight].isnew = false
+                                cupd = SOLARI
+                            }
                         } else if (_flightboard[move][flight].hasOwnProperty(P)) {
                             t = _flightboard[move][flight][P]
-                            if(_flightboard[move][flight].hasOwnProperty(S)) {
+                            if (_flightboard[move][flight].hasOwnProperty(S)) {
                                 var diff = moment.duration(_flightboard[move][flight][P].diff(_flightboard[move][flight][S])).asMinutes()
                                 if (diff > 15) { // minutes
                                     _flightboard[move][flight].note = "Delayed" // "Delayed "+diff+" min"
                                     s = false
                                 }
                             }
+                            if(_flightboard[move][flight].isnew) {
+                                console.log('isnew:update2',flight)
+                                _flightboard[move][flight].isnew = false
+                                cupd = SOLARI
+                            }
                             status = s ? Msuccess : Mdanger
+                        } else {
+                            if(_flightboard[move][flight].isnew) {
+                                console.log('isnew',flight)
+                                _flightboard[move][flight].isnew = false
+                                cnew = SOLARI
+                            }
                         }
- 
+
+                        console.log(flight,cnew, cupd)
+
                         tb.append(
                             $('<tr>')
-                            .append($('<td>').html( flight ))
-                            .append($('<td>').html( _flightboard[move][flight].airport ))
-                            .append($('<td>').html( _flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH:mm") : '' ))
-                            .append($('<td>').html( t ? t.format("HH:mm") : '' ))
-                            .append($('<td>').html( _flightboard[move][flight].note ? _flightboard[move][flight].note : '' ))
-                            .append($('<td>').html( status ))
+                            .append($('<td>').addClass(cnew).html(flight))
+                            .append($('<td>').addClass(cnew).html(_flightboard[move][flight].airport))
+                            .append($('<td>').addClass(cnew).html(_flightboard[move][flight].hasOwnProperty(S) ? _flightboard[move][flight][S].format("HH.mm") : ''))
+                            .append($('<td>').addClass(cupd).html(t ? t.format("HH.mm") : ''))
+                            .append($('<td>').html(_flightboard[move][flight].note ? _flightboard[move][flight].note : ''))
+                            .append($('<td>').html(status))
                         )
                     }
                 }
             }
             $('#flightboard-' + move + ' tbody').replaceWith(tb)
-            if(SOLARI) {
-                $('#flightboard-' + move + ' tbody tr:last td:lt(4)').each(function(td) {
-                    var s = new flipper(this);
-                    s.start();
+            if (solari) {
+                $('#flightboard-' + move + ' tbody tr td').each(function(td) {
+                    if ($(this).hasClass(SOLARI)) {
+                        $(this).removeClass(SOLARI)
+                        var s = new flipper(this);
+                        s.start();
+                    }
                 })
             }
         },

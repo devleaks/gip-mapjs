@@ -762,3 +762,44 @@ input:checked+.slider:before {
     background-color: #fff;
     transform: translate(17px,0px);
 }
+
+@font-face {
+ font-family: "Solari";
+ src: url("css/Solari.woff") format("woff")
+}
+
+#flightboard div {
+    background-color: #222;
+}
+
+#flightboard table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+    background-color: #333;
+}
+
+#flightboard th,
+#flightboard caption {
+    color: #FFD200;
+}
+
+#flightboard caption {
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+#flightboard th,
+#flightboard-time {
+    color: #FFD200; 
+    padding: 2px;
+}
+#flightboard td {
+    font-family: Solari, Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    text-align: center;
+    padding: 0px;
+    color: #CECACB;
+}
+#flightboard td:nth-last-child(2) {
+    text-align: left;
+}
