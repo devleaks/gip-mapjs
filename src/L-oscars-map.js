@@ -485,7 +485,7 @@ Oscars.Map = (function($) {
                             .append($('<div>')
                                 .attr("id", "gip-clock-table")))
                         .append($('<div>')
-                            .append($('<div>').attr('id', 'flightboard-time'))
+                            .append($('<div>').attr('class', 'flightboard-time yellow'))
                             .append($("<table id='flightboard-arrival'>")
                                 .addClass("flightboard")
                                 .append($('<caption>').html('Arrival'))
@@ -535,10 +535,18 @@ Oscars.Map = (function($) {
                             .addClass("wire-top")
                             .append($('<div>')
                                 .attr("id", "gip-clock-table")))
+                        .append($('<div>').attr('class', 'flightboard-time'))
                         .append($('<h2>').html('Apron Occupancy'))
                         .append($('<div>')
-                            .append($('<div>').attr('id', 'chart-time'))
                             .append($("<div>").attr('id', 'chart-parking'))
+                        )
+                        .append($('<h2>').html('Arrival'))
+                        .append($('<div>')
+                            .append($("<div>").attr('id', 'chart-arrival'))
+                        )
+                        .append($('<h2>').html('Departure'))
+                        .append($('<div>')
+                            .append($("<div>").attr('id', 'chart-departure'))
                         )
                     )
             })
@@ -674,12 +682,13 @@ Oscars.Map = (function($) {
 
 
     function install_charts() {
-        const chartname = "parking"
+        // Parkings
+        var chartname = "parking"
         var data = [0, 0, 0, 0, 0]
         _charts[chartname] = new ApexCharts(document.querySelector("#chart-" + chartname), {
             series: data,
             chart: {
-                height: 350,
+                height: 300,
                 type: 'radialBar',
             },
             plotOptions: {
@@ -704,6 +713,74 @@ Oscars.Map = (function($) {
             },
             labels: ['APRON 2', 'APRON 3', 'APRON 4', 'APRON 5', 'APRON 6'],
         })
+        _charts[chartname].render()
+        // Arrivals
+        chartname = "arrival"
+        _charts[chartname] = new ApexCharts(document.querySelector("#chart-" + chartname), {
+            series: [{
+                name: 'Arrival',
+                data: [0, 0, 0, 0, 0, 0]
+            }],
+            chart: {
+                type: 'bar',
+                height: 200
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: [0, 1, 2, 3, 4, 5],
+            },
+            fill: {
+                opacity: 1
+            }
+        });
+        _charts[chartname].render()
+        // Departures
+        chartname = "departure"
+        _charts[chartname] = new ApexCharts(document.querySelector("#chart-" + chartname), {
+            series: [{
+                name: 'Departure',
+                data: [0, 0, 0, 0, 0, 0]
+            }],
+            chart: {
+                type: 'bar',
+                height: 200
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: [0, 1, 2, 3, 4, 5],
+            },
+            fill: {
+                opacity: 1
+            }
+        });
         _charts[chartname].render()
     }
 
@@ -768,22 +845,24 @@ Oscars.Map = (function($) {
             return _gipLayers[name]
         },
 
-        updateChart: function(chartname, data, total) {
+        updateChart: function(chartname, data, total = 0) {
             if (_charts.hasOwnProperty(chartname)) {
                 _charts[chartname].updateSeries(data)
-                _charts[chartname].updateOptions({
-                    plotOptions: {
-                        radialBar: {
-                            dataLabels: {
-                                total: {
-                                    formatter: function(w) {
-                                        return total
+                if (chartname == "parking") {
+                    _charts[chartname].updateOptions({
+                        plotOptions: {
+                            radialBar: {
+                                dataLabels: {
+                                    total: {
+                                        formatter: function(w) {
+                                            return total
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                })
+                    })
+                }
             }
         },
 

@@ -550,9 +550,14 @@ td.gip-reason {
     color: var(--font-color);
 }
 
-#flightboard-time {
+.flightboard-time {
     text-align: center;
     font-weight: bold;
+    padding: 2px;
+}
+
+.flightboard-time.yellow {
+    color: #FFD200;
 }
 
 /*
@@ -785,8 +790,7 @@ input:checked+.slider:before {
     margin-bottom: 10px;
 }
 
-#flightboard th,
-#flightboard-time {
+#flightboard th {
     color: #FFD200;
     padding: 2px;
 }
@@ -899,3 +903,5 @@ div.status span.off {
         background-color: #d00;
     }
 }
+
+/**/

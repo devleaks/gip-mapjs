@@ -3299,6 +3299,11 @@ istextorbinary@2.2.1:
     editions "^1.3.3"
     textextensions "2"
 
+jquery-text-marquee@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/jquery-text-marquee/-/jquery-text-marquee-0.1.1.tgz#e233a312ebf9c55730c8ab7c17718ec2f63ddfd3"
+  integrity sha512-yX2inlSODJYOGoJwPcB1df6IBzMc/t+mQHmFshwkLIzTCYGGRg17veGc2VnDcEr0ZStVYI+EnGDxMcWzSSXo2w==
+
 jquery@>=1.7, jquery@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"

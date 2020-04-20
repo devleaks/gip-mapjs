@@ -428,10 +428,10 @@ Oscars.Util = (function() {
                 P = "planned",
                 A = "actual"
 
-            const Mdefault  = '<span class="left off"></span><span class="right off"></span>',
-                  Msuccess  = '<span class="left green"></span><span class="right off"></span>',
-                  Mdanger   = '<span class="left off"></span><span class="right red"></span>',
-                  Mboarding = '<span class="left off boarding-left"></span><span class="right off boarding-right"></span>'
+            const Mdefault = '<span class="left off"></span><span class="right off"></span>',
+                Msuccess = '<span class="left green"></span><span class="right off"></span>',
+                Mdanger = '<span class="left off"></span><span class="right red"></span>',
+                Mboarding = '<span class="left off boarding-left"></span><span class="right off boarding-right"></span>'
 
             function getTime(f) { // returns the most recent known time for flight
                 var t = f.hasOwnProperty(S) ? f[S] : false
@@ -452,9 +452,14 @@ Oscars.Util = (function() {
             // Remove landed more than 30min earlier
             var scroll = true // will flip true if first line is removed (and all subsequent lines move up)
             var farr = []
+            var hours = Array(24).fill(0)
             for (var flightname in _flightboard[move]) {
                 if (_flightboard[move].hasOwnProperty(flightname)) {
                     var flight = _flightboard[move][flightname]
+                    if (!flight.hasOwnProperty(A)) { // if not arrived/departed
+                        var t = getTime(flight)
+                        hours[t.hours()]++
+                    }
                     var showflight = true
                     if (flight.hasOwnProperty('removeAt')) {
                         if (flight.removeAt.isBefore(ts)) {
@@ -464,12 +469,23 @@ Oscars.Util = (function() {
                     if (showflight) {
                         farr.push(flight)
                     }
+
                 }
             }
             //farr = farr.sort((a, b) => (moment(getTime(a)).isAfter(moment(getTime(b)))))
             farr = farr.sort((a, b) => (moment(a[S]).isAfter(moment(b[S]))))
             farr = farr.splice(0, maxcount)
 
+            //update simple graph
+            var hourNow = ts.hours()
+            hours = hours.concat(hours)
+            var forecast = hours.slice(hourNow, hourNow + 6)
+            Oscars.Map.updateChart(move, [{
+                name: 'Arrival',
+                data: forecast
+            }])
+
+            // build table
             var tb = $('<tbody>')
             for (var i = 0; i < farr.length; i++) {
                 var flight = farr[i]
@@ -540,7 +556,7 @@ Oscars.Util = (function() {
                         .append($('<td>').addClass(cnew).html(flight.airport))
                         .append($('<td>').addClass(cnew).html(flight.hasOwnProperty(S) ? flight[S].format("HH.mm") : ".".repeat(5)))
                         .append($('<td>').addClass(cupd).html(t ? t.format("HH.mm") : ".".repeat(5)))
-                        .append($('<td>').addClass(scolor).html(flight.note ? flight.note : ''))
+                        .append($('<td>').addClass(scolor).addClass('scrolling').html(flight.note ? flight.note : ''))
                         .append($('<td>').append($('<div>').addClass('status').html(status)))
                     )
 
@@ -549,8 +565,8 @@ Oscars.Util = (function() {
             }
 
             // add at least 12 lines to the board
-            if($(tb).find("tr").length < MINROWS) {
-                for(var i= $(tb).find("tr").length; i<MINROWS; i++) {
+            if ($(tb).find("tr").length < MINROWS) {
+                for (var i = $(tb).find("tr").length; i < MINROWS; i++) {
                     tb.append(
                         $('<tr>')
                         .append($('<td>').html(".".repeat(7)))
@@ -574,6 +590,9 @@ Oscars.Util = (function() {
                 }
             }
 
+            $('.scrolling').textMarquee({
+                mode: 'loop'
+            })
             $('#flightboard-' + move + ' tbody').replaceWith(tb)
             if (solari) {
                 $('#flightboard-' + move + ' tbody tr td').each(function(td) {
