@@ -760,6 +760,11 @@ input:checked+.slider:before {
     src: url("fonts/Solari.woff") format("woff")
 }
 
+@font-face {
+    font-family: "LED";
+    src: url("fonts/advanced_led_board-7.woff") format("woff")
+}
+
 #flightboard div {
     background-color: #222;
 }
@@ -795,7 +800,17 @@ input:checked+.slider:before {
 }
 
 #flightboard td:nth-last-child(2) {
+    font-family: LED, Helvetica, Arial, sans-serif;
+    color: #FFD200;
     text-align: left;
+}
+
+#flightboard td:nth-last-child(2).green {
+    color: rgb(0, 226, 0);
+}
+
+#flightboard td:nth-last-child(2).red {
+    color: rgb(226, 0, 0);
 }
 
 #flightboard div.status {

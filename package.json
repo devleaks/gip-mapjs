@@ -12,6 +12,7 @@
     "@mapbox/geojsonhint": "^3.0.0",
     "@turf/turf": "^5.1.6",
     "Leaflet.zoomdisplay": "https://github.com/azavea/Leaflet.zoomdisplay.git",
+    "apexcharts": "^3.18.1",
     "beautifymarker": "^1.0.7",
     "chroma-js": "^2.1.0",
     "font-awesome": "^4.7.0",

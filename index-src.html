@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GIP Viewer 2020</title>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="src/images/favicons/favicon-32x32.png" />
+    <!-- MAP & LEAFLET PLUGINS -->
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-pulse-icon/src/L.Icon.Pulse.css" />
+    <link rel="stylesheet" href="node_modules/line-awesome/dist/font-awesome-line-awesome/css/all.css" />
+    <link rel="stylesheet" href="node_modules/line-awesome/dist/line-awesome/css/line-awesome.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css" />
+    <link rel="stylesheet" href="node_modules/beautifymarker/leaflet-beautify-marker-icon.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-sidebar-v2/css/leaflet-sidebar.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-betterscale/L.Control.BetterScale.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-search/dist/leaflet-search.src.css" />
+    <link rel="stylesheet" href="node_modules/leaflet-easybutton/src/easy-button.css" />
+    <!-- DEBUG -->
+    <link rel="stylesheet" href="node_modules/Leaflet.zoomdisplay/dist/leaflet.zoomdisplay.css" />
+    <!-- DASHBOARD FRAMEWORK -->
+    <link rel="stylesheet" href="node_modules/apexcharts/dist/apexcharts.css" />
+    <link rel="stylesheet" href="src/css/materialadmin.css" />
+    <link rel="stylesheet" href="src/css/tagsort.css" />
+    <!-- OSCARS GIP OVERRIDES -->
+    <link rel="stylesheet" href="src/L-oscars.css" />
+</head>
+
+<body>
+    <div id="map" class="sidebar-map eblg"></div>
+
+    <!-- MAP & LEAFLET PLUGINS -->
+    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="node_modules/leaflet-realtime/dist/leaflet-realtime.js"></script>
+    <script src="node_modules/leaflet-pulse-icon/src/L.Icon.Pulse.js"></script>
+    <script src="node_modules/beautifymarker/leaflet-beautify-marker-icon.js"></script>
+    <script src="node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js"></script>
+    <script src="node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.js"></script>
+    <script src="node_modules/leaflet-sidebar-v2/js/leaflet-sidebar.js"></script>
+    <script src="node_modules/leaflet-canvasicon/leaflet-canvasicon.js"></script>
+    <script src="node_modules/leaflet-piechart/leaflet-piechart.js"></script>
+    <script src="node_modules/leaflet-search/dist/leaflet-search.src.js"></script>
+    <script src="node_modules/leaflet-easybutton/src/easy-button.js"></script>
+    <script src="node_modules/leaflet-ant-path/dist/leaflet-ant-path.js"></script>
+    <script src="node_modules/leaflet-betterscale/L.Control.BetterScale.js"></script>
+    <script src="node_modules/Leaflet.zoomdisplay/dist/leaflet.zoomdisplay.js"></script>
+
+    <!-- OSCARS LAYER CLASSES & UTILITIES -->
+    <script src="node_modules/jsonpath-plus/dist/index-umd.js"></script>
+    <script src="node_modules/mustache/mustache.js"></script>
+    <script src="node_modules/moment/moment.js"></script>
+    <script src="node_modules/@turf/turf/turf.min.js"></script>
+    <script src="node_modules/@mapbox/geojsonhint/geojsonhint.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/peity/jquery.peity.js"></script>
+    <script src="node_modules/renderjson/renderjson.js"></script>
+    <script src="node_modules/apexcharts/dist/apexcharts.js"></script>
+    <script src="node_modules/jsonpath-plus/dist/index-umd.js"></script>
+    <script src="src/js/jquery.sieve.js"></script>
+    <script src="src/js/tagsort.min.js"></script>
+    <script src="src/js/sortElements.js"></script>
+    <script src="src/js/jquery.growl.js"></script>
+    <script src="src/js/parse_metar.js"></script>
+    <script src="src/js/flipper.js"></script>
+    <!-- OSCARS -->
+    <script src="src/L-oscars-util.js"></script>
+    <script src="src/L-oscars-dashboard.js"></script>
+    <script src="src/L-oscars-map.js"></script>
+    <script src="src/L-oscars-zone-group.js"></script>
+    <script src="src/L-oscars-device-group.js"></script>
+    <script src="src/L-oscars-wire.js"></script>
+    <!-- ZONES -->
+    <script src="test/data/eblg-parkings.js"></script>
+    <!-- MAIN -->
+    <script src="src/L-oscars.js"></script>
+
+</body>
+
+</html>

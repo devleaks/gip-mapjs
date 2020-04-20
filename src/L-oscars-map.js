@@ -37,6 +37,7 @@ Oscars.Map = (function($) {
         map_focus_id: "map_focus_id",
         map_overview_id: "map_overview_id",
         flightboard: false,
+        charts: true,
         info: true,
         info_id: "info",
         info_content_id: "device-info",
@@ -84,6 +85,8 @@ Oscars.Map = (function($) {
     var _gipLayers = {}
     // @todo: Replace ids with random strings.
     var _dashboard = false
+    //
+    var _charts = {}
 
 
     var Map = function() {}
@@ -464,7 +467,7 @@ Oscars.Map = (function($) {
 
         }
 
-        // Add bottom of sidebar elements
+        // Add sidebar elements for flight boards
         if (_options.sidebar && _options.flightboard) {
             addSidebarTab({
                 zone: 1,
@@ -503,7 +506,7 @@ Oscars.Map = (function($) {
                                 .append($('<thead>')
                                     .append($('<tr>')
                                         .append($('<th>').html('Flight'))
-                                        .append($('<th>').html('From'))
+                                        .append($('<th>').html('To'))
                                         .append($('<th>').html('Time'))
                                         .append($('<th>').html('Estimated'))
                                         .append($('<th>').html('Status'))
@@ -511,6 +514,32 @@ Oscars.Map = (function($) {
                                     ))
                                 .append($('<tbody>'))
                             ))
+                    )
+            })
+        }
+
+        // Add sidebar panel for charts
+        if (_options.sidebar && _options.charts) {
+            addSidebarTab({
+                zone: 1,
+                id: "charts",
+                title: "Status",
+                info: "Status charts",
+                subtitle: "&nbsp",
+                icon: "chart-pie",
+                icon_extra: null,
+                tab_content: $('<div>')
+                    .append($('<div>')
+                        .attr("id", "charts")
+                        .append($('<header>')
+                            .addClass("wire-top")
+                            .append($('<div>')
+                                .attr("id", "gip-clock-table")))
+                        .append($('<h2>').html('Apron Occupancy'))
+                        .append($('<div>')
+                            .append($('<div>').attr('id', 'chart-time'))
+                            .append($("<div>").attr('id', 'chart-parking'))
+                        )
                     )
             })
         }
@@ -600,6 +629,10 @@ Oscars.Map = (function($) {
 
         install_handlers(_options)
 
+        if (_options.sidebar && _options.charts) {
+            install_charts()
+        }
+
         // must be done last
         var resetloc = $('.leaflet-sidebar-tabs a[href="#' + _options.map_focus_id + '"]')
         if (resetloc.length > 0) {
@@ -638,6 +671,41 @@ Oscars.Map = (function($) {
 
         return _map
     } // install_map()
+
+
+    function install_charts() {
+        const chartname = "parking"
+        var data = [0, 0, 0, 0, 0]
+        _charts[chartname] = new ApexCharts(document.querySelector("#chart-" + chartname), {
+            series: data,
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            fontSize: '22px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                        },
+                        total: {
+                            show: true,
+                            label: 'Occupied',
+                            formatter: function(w) {
+                                // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                                return data.reduce((a, v) => a + v)
+                            }
+                        }
+                    }
+                }
+            },
+            labels: ['APRON 2', 'APRON 3', 'APRON 4', 'APRON 5', 'APRON 6'],
+        })
+        _charts[chartname].render()
+    }
 
 
     function install_handlers() {
@@ -698,6 +766,25 @@ Oscars.Map = (function($) {
 
         findGIPLayer: function(name) {
             return _gipLayers[name]
+        },
+
+        updateChart: function(chartname, data, total) {
+            if (_charts.hasOwnProperty(chartname)) {
+                _charts[chartname].updateSeries(data)
+                _charts[chartname].updateOptions({
+                    plotOptions: {
+                        radialBar: {
+                            dataLabels: {
+                                total: {
+                                    formatter: function(w) {
+                                        return total
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+            }
         },
 
         // Adds a layer to the supplied control layer. If the device/zone groups has a "grouping category", places it in,

@@ -118,6 +118,7 @@ var dashboard_options = {
         sidebar: true,
         reset: true, // includes overview as well
         flightboard: true,
+        charts: true,
         wire: true,
         search: false,
         betterScale: true,
@@ -270,14 +271,23 @@ var parkings = Oscars.zoneGroup({
     }*/
 }).addTo(map);
 
+const APRONS_MAX = [1,1,32,21,22,5,5] // no APRON 0 or 1.
+var   APRONS     = [0,0,0, 0, 0, 0,0]
+
 function parking(name, avail) {
     const parr = eblgParkings.features.filter(f => f.properties.name == name)
     if (parr.length > 0) {
         const park = parr[0]
         park.properties._style = parkingStyle[avail]
         parkings.update(park)
+        if(avail == "busy") {
+            APRONS[park.properties.ID_Apron_z]++
+        } else {
+            APRONS[park.properties.ID_Apron_z] = APRONS[park.properties.ID_Apron_z] == 0 ? 0 : APRONS[park.properties.ID_Apron_z]-1
+        }
+        var t = APRONS.map((x, i) => Math.round(100 * x/APRONS_MAX[i]))
+        Oscars.Map.updateChart("parking", t.slice(Math.max(t.length - 5, 1)), APRONS.reduce((a, v) => a + v))
     }
-
 }
 //parking(124, "busy") // test
 
