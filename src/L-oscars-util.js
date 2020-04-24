@@ -420,7 +420,7 @@ Oscars.Util = (function() {
         },
 
         //
-        getFlightboard: function(move, maxcount = 12, datetime = false, solari = false) {
+        updateFlightboard: function(move, maxcount = 12, datetime = false, solari = false) {
             const SOLARI = 'solari' // name of css class
             const MINROWS = 12
 
@@ -604,6 +604,46 @@ Oscars.Util = (function() {
                 })
             }
         },
+
+        //
+        updateFlightboardCharts: function(move, datetime) {
+            const S = "scheduled",
+                P = "planned",
+                A = "actual"
+
+             function getTime(f) { // returns the most recent known time for flight
+                var t = f.hasOwnProperty(S) ? f[S] : false
+                if (f[A]) {
+                    t = f[A]
+                } else if (f[P]) {
+                    t = f[P]
+                }
+                return t
+            }
+
+            var ts = datetime ? datetime : moment() // default to now
+
+            var hours = Array(24).fill(0)
+            for (var flightname in _flightboard[move]) {
+                if (_flightboard[move].hasOwnProperty(flightname)) {
+                    var flight = _flightboard[move][flightname]
+                    if (!flight.hasOwnProperty(A)) { // if not arrived/departed
+                        var t = getTime(flight)
+                        hours[t.hours()]++
+                    }
+                }
+            }
+            //update simple graph
+            var hourNow = ts.hours()
+            hours = hours.concat(hours)
+            var forecast = hours.slice(hourNow, hourNow + 6)
+            Oscars.Map.updateChart(move, [{
+                name: 'Arrival',
+                data: forecast
+            }])
+
+        },
+
 
         // Get or generate a feature id
         getFeatureId: function(feature, errmsg) {

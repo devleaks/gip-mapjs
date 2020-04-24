@@ -3304,10 +3304,15 @@ jquery-text-marquee@^0.1.1:
   resolved "https://registry.yarnpkg.com/jquery-text-marquee/-/jquery-text-marquee-0.1.1.tgz#e233a312ebf9c55730c8ab7c17718ec2f63ddfd3"
   integrity sha512-yX2inlSODJYOGoJwPcB1df6IBzMc/t+mQHmFshwkLIzTCYGGRg17veGc2VnDcEr0ZStVYI+EnGDxMcWzSSXo2w==
 
-jquery@>=1.7, jquery@^3.4.1:
+jquery@>=1.7:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
+
+jquery@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.0.tgz#9980b97d9e4194611c36530e7dc46a58d7340fc9"
+  integrity sha512-Xb7SVYMvygPxbFMpTFQiHh1J7HClEaThguL15N/Gg37Lri/qKyhRGZYzHRyLH8Stq3Aow0LsHO2O2ci86fCrNQ==
 
 js-base64@~2.1.7:
   version "2.1.9"
@@ -3327,10 +3332,10 @@ jsonlint-lines@1.7.1:
     JSV ">= 4.0.x"
     nomnom ">= 1.5.x"
 
-jsonpath-plus@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/jsonpath-plus/-/jsonpath-plus-3.0.0.tgz#194ab4792a5e9b4ed27bf442188c8eb7e697a04b"
-  integrity sha512-WQwgWEBgn+SJU1tlDa/GiY5/ngRpa9yrSj8n4BYPHcwoxTDaMEaYCHMOn42hIHHDd3CrUoRr3+HpsK0hCKoxzA==
+jsonpath-plus@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jsonpath-plus/-/jsonpath-plus-4.0.0.tgz#954b69faa3d8b07f30ae2f9e601176a4b0d2806e"
+  integrity sha512-e0Jtg4KAzDJKKwzbLaUtinCn0RZseWBVRTRGihSpvFlM3wTR7ExSp+PTdeTsDrLNJUe7L7JYJe8mblHX5SCT6A==
 
 just-debounce@^1.0.0:
   version "1.0.0"
@@ -3840,12 +3845,12 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
-mkdirp@0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
-  integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
+mkdirp@0.5.5:
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
+  integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
   dependencies:
-    minimist "0.0.8"
+    minimist "^1.2.5"
 
 mkdirp@0.x.x, mkdirp@^0.5.0, mkdirp@~0.5.0:
   version "0.5.4"
@@ -3854,18 +3859,18 @@ mkdirp@0.x.x, mkdirp@^0.5.0, mkdirp@~0.5.0:
   dependencies:
     minimist "^1.2.5"
 
-modernizr@^3.9.1:
-  version "3.9.1"
-  resolved "https://registry.yarnpkg.com/modernizr/-/modernizr-3.9.1.tgz#9d48cb5f8c47392e94c9e31564b8f1133b5f8863"
-  integrity sha512-FajsZDehpsu+UPe/oCYpeQah59uLret52+5XCNhiNsUxweRj8FbPqWb1EEEpoMIlS6P+7erAzraCNLyB2CdfUw==
+modernizr@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/modernizr/-/modernizr-3.10.0.tgz#aa0989469e5eebecda0b733f17a7eaff98552341"
+  integrity sha512-ckbj+oUvkQ1NfKH4fuejIidP2HIwHMMQm2czSOWSjlv9LbWPC7gDYk8phXvEO52GJjZre6iODvK84+KEStqpzw==
   dependencies:
     doctrine "^3.0.0"
     file "^0.2.2"
     lodash "^4.17.15"
     markdown-it "^10.0.0"
-    mkdirp "0.5.1"
+    mkdirp "0.5.5"
     requirejs "^2.3.6"
-    yargs "^15.1.0"
+    yargs "^15.3.1"
 
 moment@^2.24.0:
   version "2.24.0"
@@ -5145,6 +5150,11 @@ sver-compat@^1.5.0:
     es6-iterator "^2.0.1"
     es6-symbol "^3.1.1"
 
+svg-to-geojson@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/svg-to-geojson/-/svg-to-geojson-1.0.0.tgz#5df1b893302dd5b4c67ce98fd6920fcba0c3cbb3"
+  integrity sha1-XfG4kzAt1bTGfOmP1pIPy6DDy7M=
+
 svg.draggable.js@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/svg.draggable.js/-/svg.draggable.js-2.2.2.tgz#c514a2f1405efb6f0263e7958f5b68fce50603ba"
@@ -5749,7 +5759,7 @@ yargs-parser@^5.0.0:
   dependencies:
     camelcase "^3.0.0"
 
-yargs@^15.1.0:
+yargs@^15.3.1:
   version "15.3.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.3.1.tgz#9505b472763963e54afe60148ad27a330818e98b"
   integrity sha512-92O1HWEjw27sBfgmXiixJWT5hRBp2eobqXicLtPBIDBhYB+1HpwZlXmbW2luivBJHBzki+7VyCLRtAkScbTBQA==

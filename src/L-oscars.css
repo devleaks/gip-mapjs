@@ -550,13 +550,13 @@ td.gip-reason {
     color: var(--font-color);
 }
 
-.flightboard-time {
+.simulated-time {
     text-align: center;
     font-weight: bold;
     padding: 2px;
 }
 
-.flightboard-time.yellow {
+.simulated-time.yellow {
     color: #FFD200;
 }
 

@@ -50,6 +50,8 @@ var airportOverlay = new L.ImageOverlay("test/data/EBLG_GMC01_v13.svg", new L.La
     opacity: 0.8
 });
 
+// S W N E: 50.62250,5.41630,50.65655,5.47567
+
 var airportNightOverlay = new L.ImageOverlay("test/data/EBLG_GMC01_v13-night.svg", new L.LatLngBounds(
     new L.LatLng(50.62250, 5.41630), // en bas à gauche
     new L.LatLng(50.65655, 5.47567)), { // en haut à droite 
@@ -63,8 +65,8 @@ const rabbit = {
         1500
     ],
     "weight": 3,
-    "color": "#333333",
-    "pulseColor": "#ffffff",
+    "color": "rgba(30,30,30,1)",
+    "pulseColor": "rgba(255,255,255,1)",
     "paused": false,
     "reverse": false,
     "hardwareAccelerated": true
@@ -83,6 +85,46 @@ var r3 = L.polyline.antPath([
     [50.64411320922499, 5.450441837310791]
 ], rabbit)
 
+var taxi = L.layerGroup()
+const coords = [
+    [5.429949760437012, 50.63114388301683],
+    [5.429954058512539, 50.63114134949315],
+    [5.4300850801914065, 50.631230783397214],
+    [5.429564, 50.6308751],
+    [5.429318527068739, 50.631318244774675],
+    [5.429232925101118, 50.63147277938857],
+    [5.4290592, 50.6317864],
+    [5.428817709421531, 50.63231467747907],
+    [5.429129626316126, 50.632751316258556],
+    [5.429284237579302, 50.632967749784335],
+    [5.429492569545375, 50.633259384565804],
+    [5.429753883859989, 50.63362518701309],
+    [5.429857187508972, 50.63376979726021],
+    [5.429691777776567, 50.63439672769832],
+    [5.429169516235367, 50.63428802698654],
+    [5.428909278126775, 50.63423386242452],
+    [5.428735282689058, 50.63419764794876],
+    [5.428735282689058, 50.63419764794876],
+    [5.428615580164676, 50.63417273370833],
+    [5.4281532415751315, 50.63506637478467]
+]
+var latlngs = []
+coords.forEach(function(p) {
+    latlngs.push([p[1], p[0]])
+})
+L.polyline.antPath(latlngs, {
+    "delay": 500,
+    "dashArray": [
+        30,
+        100
+    ],
+    "weight": 1,
+    "color": "rgba(255,255,255,0.1)",
+    "pulseColor": "rgba(0,255,0,1)",
+    "paused": false,
+    "reverse": false,
+    "hardwareAccelerated": true
+}).addTo(taxi)
 
 var night = L.layerGroup([airportNightOverlay, r1, r2, r3])
 var day = airportOverlay
@@ -154,6 +196,15 @@ var map = Oscars.Map.map(map_options, dashboard)
 wire_options.dashboard_options = dashboard_options
 var wire = Oscars.Wire.init(wire_options, dashboard)
 
+taxi.addTo(map)
+
+var geoJson = svgtogeojson.svgToGeoJson(
+  [[50.62250, 5.41630], [50.65655, 5.47567]],
+  $('svg')[0],
+  3
+)
+console.log($('svg'), geoJson)
+
 
 /* POPULATE WITH BASIC DATA
  */
@@ -161,7 +212,6 @@ const tower = [50.63725474594362, 5.453993082046508]
 var radar = L.layerGroup().addTo(map)
 L.circle(tower, { radius: 80000, color: "red", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
 L.circle(tower, { radius: 160000, color: "blue", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
-
 
 var aircrafts = Oscars.deviceGroup({
     "type": "FeatureCollection",
@@ -214,6 +264,21 @@ var trucks = Oscars.deviceGroup({
 }).addTo(map);
 
 
+var taxiways = false
+var parkings = false
+$.ajaxSetup({
+    async: false
+})
+$.getJSON("test/data/eblg-taxiways.geojson", function(data) {
+    taxiways = data
+})
+$.getJSON("test/data/eblg-parkings.geojson", function(data) {
+    parkings = data
+})
+$.ajaxSetup({
+    async: true
+})
+
 var parkingStyle = {
     available: {
         markerSymbol: "map-marker",
@@ -250,7 +315,7 @@ var parkings = Oscars.zoneGroup({
         "display_type": "Parking",
         "status": "ACTIVE"
     },
-    "features": eblgParkings.features
+    "features": parkings.features
 }, {
     style: {
         color: "yellow"
@@ -271,21 +336,21 @@ var parkings = Oscars.zoneGroup({
     }*/
 }).addTo(map);
 
-const APRONS_MAX = [1,1,32,21,22,5,5] // no APRON 0 or 1.
-var   APRONS     = [0,0,0, 0, 0, 0,0]
+const APRONS_MAX = [1, 1, 32, 21, 22, 5, 5] // no APRON 0 or 1.
+var APRONS = [0, 0, 0, 0, 0, 0, 0]
 
 function parking(name, avail) {
-    const parr = eblgParkings.features.filter(f => f.properties.name == name)
+    const parr = parkings.features.filter(f => f.properties.name == name)
     if (parr.length > 0) {
         const park = parr[0]
         park.properties._style = parkingStyle[avail]
         parkings.update(park)
-        if(avail == "busy") {
+        if (avail == "busy") {
             APRONS[park.properties.ID_Apron_z]++
         } else {
-            APRONS[park.properties.ID_Apron_z] = APRONS[park.properties.ID_Apron_z] == 0 ? 0 : APRONS[park.properties.ID_Apron_z]-1
+            APRONS[park.properties.ID_Apron_z] = APRONS[park.properties.ID_Apron_z] == 0 ? 0 : APRONS[park.properties.ID_Apron_z] - 1
         }
-        var t = APRONS.map((x, i) => Math.round(100 * x/APRONS_MAX[i]))
+        var t = APRONS.map((x, i) => Math.round(100 * x / APRONS_MAX[i]))
         Oscars.Map.updateChart("parking", t.slice(Math.max(t.length - 5, 1)), APRONS.reduce((a, v) => a + v))
     }
 }
@@ -315,8 +380,9 @@ $("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.
     Oscars.Util.flightboard(move, flight, airport, timetype, day, time, note)
     */
     Oscars.Util.flightboard(msg.move, msg.flight, msg.airport, msg.info, moment(msg.date + " " + msg.time, msg.info == "scheduled" ? "YYYY-MM-DD HH:mm" : "DD/MM HH:mm"), "")
-    Oscars.Util.getFlightboard(msg.move, undefined, moment(msg.timestamp, moment.ISO_8601), true)
-    $('.flightboard-time').html("Last updated at "+moment(msg.timestamp, moment.ISO_8601).format("HH:mm"))
+    Oscars.Util.updateFlightboard(msg.move, undefined, moment(msg.timestamp, moment.ISO_8601), true)
+    Oscars.Util.updateFlightboardCharts(msg.move, moment(msg.timestamp, moment.ISO_8601))
+    $('.simulated-time').html("Last updated at " + moment(msg.timestamp, moment.ISO_8601).format("HH:mm"))
 })
 
 if (map_options.debug) // ping at tower if debugging
@@ -361,6 +427,12 @@ function toggleTheme() {
         document.getElementById('i_1st-toggle-btn').checked = false;
     }
 })();
+
+function f() {
+console.log($('#Calque_2'))
+}
+f()
+
 
 /*
 {
