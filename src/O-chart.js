@@ -29,6 +29,26 @@ var _charts = {}
 /**
  *  PRIVATE FUNCTIONS
  */
+function updateChart(chartname, data, total = 0) {
+    if (_charts.hasOwnProperty(chartname)) {
+        _charts[chartname].updateSeries(data)
+        if (chartname == "parking") {
+            _charts[chartname].updateOptions({
+                plotOptions: {
+                    radialBar: {
+                        dataLabels: {
+                            total: {
+                                formatter(w) {
+                                    return total
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }
+}
 
 
 /**
@@ -205,12 +225,13 @@ function update(move, datetime) {
     var hourNow = ts.hours()
     hours = hours.concat(hours)
     var forecast = hours.slice(hourNow, hourNow + 6)
-    Oscars.Map.updateChart(move, [{
+    updateChart(move, [{
         name: move == "arrival" ? 'Arrival' : 'Departure',
         data: forecast
     }])
 
 }
+
 
 /**
  *  MODULE EXPORTS

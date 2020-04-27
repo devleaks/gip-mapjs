@@ -132,12 +132,13 @@ Omap.init({
     speedVector: false,
 
     sidebar: {          // set it to false to disable siebar
+        elemid: "sidebar_id",
+        msgtype: "sidebar",
                         // SIDE BUTTONS
         reset: true,    // includes overview as well
         search: false,
         stylesets: false,
         about: true,
-        client: "oscars",   // css switch for styling @todo: replace by generic o-client
 
         wire: Wire,     // MODULES
         flightboard: Flightboard
@@ -155,8 +156,8 @@ Omap.init({
 /*  WIRE
  */
 Wire.init({
-    wire_id: "wire_id",
-    wire_message: "wire",
+    elemid: "wire_id",
+    msgtype: "wire",
     voice: false,
     debug: false
 }, Dashboard)
@@ -173,8 +174,8 @@ Chart.init({}, Dashboard)
 /* TESTING
  */
 Dashboard.version()
-Omap.version()
 Flightboard.version()
 Wire.version()
+Omap.version()
 Chart.version()
 

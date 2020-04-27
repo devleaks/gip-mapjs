@@ -17,41 +17,30 @@ import * as Util from './O-utils.js'
 const DEFAULTS = {
     elemid: "map",
     msgtype: "map",
+
     center: [50.487729, 5.100128], // Oscars sa, Mannekenpis[50.8449933,4.3477891]
+
     zoom: 15,
-    name: "GIP_MAP",
-    display_name: "GIP Map",
     layers: null,
-    layerControl: null,
-    layerControlOptions: { useGrouped: false, groupCheckboxes: true, collapsed: false },
-    betterScale: true,
-    track: false,
-    TRACK: {
-        duration: 10,
-        color: '#666', //@todo: Adjust track's color from feature's
-        weight: 1, //@set weight from speed or
-        dashArray: "2 4" //@build dash array from speed
+
+    layerControl: {
+        baseLayers: null,
+        overlays: null,
+        options: { groupCheckboxes: true, collapsed: false }
     },
+    layerControlOptions: { useGrouped: true, groupCheckboxes: true, collapsed: false },
+
+    betterScale: true,
+
+    track: false, // @todo: should move to layer
     speedVector: false,
-    sidebar: true,
-    reset: true,
-    map_focus_id: "map_focus_id",
-    map_overview_id: "map_overview_id",
-    flightboard: false,
-    charts: true,
-    info: true,
-    info_id: "info",
-    info_content_id: "device-info",
-    search: false,
-    wire: false,
-    voice: false,
-    stylesets: false,
-    about: true,
-    client: "oscars",
-    dashboard_options: {
-        elemprefix: "",
-        msgprefix: "GIP-"
-    }
+
+    sidebar: false,
+
+
+
+
+    debug: false
 }
 
 /**
@@ -75,8 +64,6 @@ var _trackLayer = null
 var _tracks = {}
 // L.Control for sidebar information
 var _sidebar = null
-var _sidebar_id = "sidebar"
-var _showInfo = false
 // layers temporary hidden through zoom level
 var _hiddenLayers = []
 // Markers that have a physical size and need adjustments on zoom changes
@@ -183,166 +170,96 @@ function getMetersPerPixel() {
     return maxMeters / x;
 }
 
-// Add sidebar tab and content
-function addSidebarTab(options) {
-    var content = $('<p>')
-    if (!!Util.isSet(options.nocontent) || !options.nocontent) {
-        content = (Util.isSet(options.wrap) && !options.wrap) ? options.tab_content :
-            $('<div>')
-            .addClass("card")
-            .append($('<div>')
-                .addClass("card-body")
-                .html(options.tab_content))
+function install_sidebar() {
+    // Add sidebar tab and content
+    function addSidebarTab(options) {
+        if (_options.sidebar) {
+            var content = $('<p>')
+            if (!!Util.isSet(options.nocontent) || !options.nocontent) {
+                content = (Util.isSet(options.wrap) && !options.wrap) ? options.tab_content :
+                    $('<div>')
+                    .addClass("card")
+                    .append($('<div>')
+                        .addClass("card-body")
+                        .html(options.tab_content))
+            }
+
+            var tab = document.createElement('i')
+            $(tab).addClass("client")
+                .addClass('la')
+                .addClass('la-' + options.icon)
+                .append(options.icon_extra)
+
+            _sidebar.addPanel({
+                id: options.id,
+                title: options.title ? options.title : "",
+                tab: tab.outerHTML,
+                pane: $(options.tab_content).html(),
+                position: (options.hasOwnProperty("zone") && options.zone == 2) ? 'bottom' : 'top'
+            })
+        }
     }
 
-    var tab = document.createElement('i')
-    $(tab).addClass(_options.client)
-        .addClass('la')
-        .addClass('la-' + options.icon)
-        .append(options.icon_extra)
-
-    _sidebar.addPanel({
-        id: options.id,
-        title: options.title ? options.title : "",
-        tab: tab.outerHTML,
-        pane: $(options.tab_content).html(),
-        position: (options.hasOwnProperty("zone") && options.zone == 2) ? 'bottom' : 'top'
-    })
-}
-
-function install_hmtl() {
     var mapLoc = $('#' + _options.elemid)
-    if (!mapLoc.length) {
-        console.log("Map::install_map: Error - cannot find map at #" + _options.id)
-        return _map
+
+    if (!_options.sidebar.elemid) {
+        console.log(MODULE_NAME + "::install_html: no sidebar id provided")
+        return
     }
 
-    _map = L.map(_options.elemid, {
-        center: _options.center,
-        zoom: _options.zoom,
-        layers: _options.layers,
-        zoomSnap: 0.5,
-        attributionControl: false // will be displayed in sidebar
-    })
+    const SIDEBARCONTENTID = _options.sidebar.elemid + "_ocontent"
 
+    mapLoc.prepend($('<div>')
+        .attr("id", _options.sidebar.elemid)
+        .addClass("client")
+        .addClass("leaflet-sidebar")
+        .addClass("collapsed")
+        .append($('<div>')
+            .addClass("leaflet-sidebar-tabs")
+            .append($('<ul>')
+                .attr("role", "tablist")))
+        .append($('<div id="' + SIDEBARCONTENTID + '">')
+            .addClass("leaflet-sidebar-content")))
 
-    if (_options.sidebar) {
-        const SIDEBARCONTENTID = "leafletsidebarcontentidcannotscroll"
-        mapLoc.prepend($('<div>')
-            .attr("id", _sidebar_id)
-            .addClass(_options.client)
-            .addClass("leaflet-sidebar")
-            .addClass("collapsed")
-            .append($('<div>')
-                .addClass("leaflet-sidebar-tabs")
-                .append($('<ul>')
-                    .attr("role", "tablist")))
-            .append($('<div id="' + SIDEBARCONTENTID + '">')
-                .addClass("leaflet-sidebar-content")))
+    // see https://gis.stackexchange.com/questions/151310/leaflet-scroll-wheel-controlling-map-zoom-and-not-drop-down-menu
+    var elem = L.DomUtil.get(SIDEBARCONTENTID)
+    L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation)
 
-        // see https://gis.stackexchange.com/questions/151310/leaflet-scroll-wheel-controlling-map-zoom-and-not-drop-down-menu
-        var elem = L.DomUtil.get(SIDEBARCONTENTID)
-        L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation)
-
-        // Wrap elements in side bar if requested
-        _sidebar = L.control.sidebar({
-            container: _sidebar_id,
-            position: 'right',
-            closeButton: true
-        }).addTo(_map)
-
-        if (typeof _sidebar.setContent == "undefined") {
-            _sidebar.setContent = function(content) {
-                var container = L.DomUtil.get(_options.info_content_id)
-                container.innerHTML = content
-            }
-            _sidebar.resetContent = function() {
-                _sidebar.setContent('')
-            }
-        }
-
-    }
-
-    if (!Util.isSet(_map.options.center) && !Util.isSet(_map.options.zoom) && Util.isSet(_options.center) && Util.isSet(_options.zoom)) {
-        _mapCenter = {
-            center: _options.center,
-            zoom: _options.zoom
-        }
-        _map.setView(_options.center, _options.zoom)
-    }
-
-    //        _map.on('zoomend', showHideLayers)
-
-    // Layer Control always present, may be moved to sidebar if present.
-    var lclfun = L.control.layers
-    if (Util.isSet(_options.layerControlOptions) && _options.layerControlOptions.useGrouped) {
-        _layerControlGrouped = true
-        lclfun = L.control.groupedLayers
-    }
-
-    if (Util.isSet(_options.layerControl)) {
-        _layerControl = lclfun(_options.layerControl.baseLayers,
-            _options.layerControl.overlays,
-            Util.isSet(_options.layerControl.options) ? _options.layerControl.options : _options.layerControlOptions)
-    } else {
-        _layerControl = lclfun(null, null, _options.layerControlOptions)
-    }
-
-    _layerControl.addTo(_map)
-
-    _layerControl.addGipOverlay = function(layer, layerName, groupName) {
-        if (_layerControlGrouped) {
-            _layerControl.addOverlay(layer, layerName, groupName)
-        } else {
-            _layerControl.addOverlay(layer, layerName)
-        }
-    }
-
-
-    if (_options.track) {
-        _trackLayer = L.layerGroup().addTo(_map)
-        _layerControl.addGipOverlay(_trackLayer, "Trails", "Trackers")
-    }
-
-    if (_options.speedVector) {
-        _speedVectorLayer = L.layerGroup().addTo(_map)
-        _layerControl.addGipOverlay(_speedVectorLayer, "Speed Vectors", "Trackers")
-    }
-
-    if (_options.betterScale) {
-        L.control.betterscale({ metric: true, imperial: false, position: "bottomleft" }).addTo(_map) // either one or the other but not both
-    } else {
-        L.control.scale().addTo(_map)
-    }
-    _map.zoomControl.setPosition('bottomleft')
+    // Wrap elements in side bar if requested
+    _sidebar = L.control.sidebar({
+        container: _options.sidebar.elemid,
+        position: 'right',
+        closeButton: true
+    }).addTo(_map)
 
     // Add top sidebar elements
-    if (_options.sidebar) {
-        const LAYERCONTROLID = 'random_layer_control_id'
-        addSidebarTab({
-            zone: 1,
-            id: "layers",
-            info: "Layers",
-            //              title: 'Layers<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>',
-            title: 'Layers<div class="toggle-btn" id="_1st-toggle-btn"><input id="i_1st-toggle-btn" type="checkbox" onchange="toggleTheme()"><span></span></div>',
-            subtitle: "&nbsp",
-            icon: "bars",
-            icon_extra: null,
-            tab_content: $('<div>')
-                .append($('<div>')
-                    .attr("id", LAYERCONTROLID)
-                    //                        .append('<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>')
-                )
-        })
-        // relocate layer control to sidebar
-        var newloc = document.getElementById(LAYERCONTROLID)
-        newloc.appendChild(_layerControl._container)
-    }
+    const LAYERCONTROLID = _options.sidebar.elemid + "_olayercontrol"
+    addSidebarTab({
+        zone: 1,
+        id: "layers",
+        info: "Layers",
+        //              title: 'Layers<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>',
+        title: 'Layers<div class="toggle-btn" id="_1st-toggle-btn"><input id="i_1st-toggle-btn" type="checkbox" onchange="toggleTheme()"><span></span></div>',
+        subtitle: "&nbsp",
+        icon: "bars",
+        icon_extra: null,
+        tab_content: $('<div>')
+            .append($('<div>')
+                .attr("id", LAYERCONTROLID)
+                //.append('<div id="themeswitch" style="float:right"><label class="switch"><input type="checkbox" onchange="toggleTheme()" id="slider"><span class="slider round"></span></label></div>')
+            )
+    })
+    // relocate layer control to sidebar
+    var newloc = document.getElementById(LAYERCONTROLID)
+    newloc.appendChild(_layerControl._container)
 
-    if (_options.sidebar && _options.reset) {
+
+    const MAPFOCUS = _options.sidebar.elemid + "_omapfocus"
+    const MAPOVERVIEW = _options.sidebar.elemid + "_omapoverview"
+    if (_options.sidebar.reset) {
         addSidebarTab({
             zone: 1,
-            id: _options.map_focus_id,
+            id: MAPFOCUS,
             title: "Local Map",
             info: "Center map and focus on airport",
             subtitle: "&nbsp",
@@ -353,7 +270,7 @@ function install_hmtl() {
         })
         addSidebarTab({
             zone: 1,
-            id: _options.map_overview_id,
+            id: MAPOVERVIEW,
             title: "Area Map",
             info: "Wide area map around airport",
             subtitle: "&nbsp",
@@ -364,10 +281,12 @@ function install_hmtl() {
         })
     }
 
-    if (_options.sidebar && _options.info) {
+    const MAPINFO = _options.sidebar.elemid + "_oinfo"
+    const MAPINFOCONTENT = _options.sidebar.elemid + "_oinfocontent"
+    if (_options.sidebar.info) {
         addSidebarTab({
             zone: 1,
-            id: _options.info_id,
+            id: MAPINFO,
             title: "Info",
             info: "Info",
             subtitle: "&nbsp",
@@ -375,18 +294,27 @@ function install_hmtl() {
             icon_extra: null,
             tab_content: $('<div>')
                 .append($('<div>')
-                    .attr("id", _options.info_content_id)
+                    .attr("id", MAPINFOCONTENT)
                     .append("Right-click/Control-click on device icon to read more information here."))
 
         })
-        _showInfo = true
+        if (typeof _sidebar.setContent == "undefined") {
+            _sidebar.setContent = function(content) {
+                var container = L.DomUtil.get(MAPINFOCONTENT)
+                container.innerHTML = content
+            }
+            _sidebar.resetContent = function() {
+                _sidebar.setContent('')
+            }
+        }
+
     }
 
-    if (_options.search) {
-        const SEARCHCONTROLID = 'search-control'
+    if (_options.sidebar.search) {
+        const SEARCHCONTROLID = _options.sidebar.elemid + "_osearchcontrol"
         addSidebarTab({
             zone: 1,
-            id: "search",
+            id: _options.sidebar.elemid + "_osearch",
             title: "Search",
             info: "Search",
             subtitle: "&nbsp",
@@ -397,7 +325,7 @@ function install_hmtl() {
                     .attr("id", SEARCHCONTROLID))
         })
         _searchLayer = L.layerGroup()
-        var searchControlOptions = _options.sidebar ? {
+        var searchControlOptions = _options.sidebar ? { // move it to sidebar
             layer: _searchLayer,
             propertyName: "name",
             container: SEARCHCONTROLID,
@@ -413,37 +341,18 @@ function install_hmtl() {
         _map.addControl(new L.Control.Search(searchControlOptions))
     }
 
-    if (_options.sidebar && _options.wire) {
+    if (_options.sidebar.wire) {
+        console.log("wire", _options.sidebar.wire.getElemId())
         addSidebarTab({ //id, title, subtitle, icon, zone, icon_extra, tab_content
-            id: "messages",
+            id: _options.sidebar.wire.getElemId(),
             zone: 1,
             title: 'Messages<span class="clean-wire"><i class="la la-trash-o"></i>&nbsp</span>' +
                 '               <span class="sound-onoff"><i class="la"></i>&nbsp</span>',
             info: 'Wire Messages',
             subtitle: "Last Updated:&nbsp<span id='last-updated-time'>just now</span>",
             icon: "envelope",
-            icon_extra: "<span id='alert-counter' class='badge " + _options.client + "'>0</span></a>",
-            tab_content: $('<div>')
-                .append($('<div>')
-                    .attr("id", _options.wire_options.wire_id)
-                    .append($('<div>')
-                        .attr("id", "gip-clock"))
-                    .append($('<header>')
-                        .addClass("wire-top")
-                        .append($('<div>')
-                            .addClass("wire-seave"))
-                        .append($('<div>')
-                            .addClass("wire-tagsort")
-                            .append($('<div>')
-                                .addClass("tagsort-tags-container"))))
-                    .append($('<div>')
-                        .addClass("wire-tagsort")
-                        .append($('<ul>')
-                            .attr("id", "the-wire")
-                            .addClass("timeline")
-                            .addClass("collapse-lg")
-                            .addClass("timeline-hairline")
-                            .addClass("cd-timeline")))),
+            icon_extra: "<span id='alert-counter' class='badge client'>0</span></a>",
+            tab_content: _options.sidebar.wire.getTemplate(),
             wrap: false
         })
 
@@ -468,7 +377,7 @@ function install_hmtl() {
     }
 
     // Add sidebar elements for flight boards
-    if (_options.sidebar && _options.flightboard) {
+    if (_options.sidebar.flightboard) {
         addSidebarTab({
             zone: 1,
             id: "flightboard",
@@ -519,7 +428,7 @@ function install_hmtl() {
     }
 
     // Add sidebar panel for charts
-    if (_options.sidebar && _options.charts) {
+    if (_options.sidebar.charts) {
         addSidebarTab({
             zone: 1,
             id: "charts",
@@ -553,7 +462,7 @@ function install_hmtl() {
     }
 
     // Add bottom of sidebar elements
-    if (_options.sidebar && _options.stylesets) {
+    if (_options.sidebar.stylesets) {
         addSidebarTab({
             zone: 2,
             id: "settings",
@@ -583,7 +492,7 @@ function install_hmtl() {
         }
     }
 
-    if (_options.sidebar && _options.about) {
+    if (_options.sidebar.about) {
         var aboutOptions = {
             zone: 2,
             id: "about",
@@ -591,7 +500,7 @@ function install_hmtl() {
             info: "About Oscars GIP Viewer",
             subtitle: "&nbsp",
             icon: null,
-            icon_extra: '<span class="about ' + _options.client + '" title="About GIP..."></span>',
+            icon_extra: '<span class="about client" title="About GIP..."></span>',
             tab_content: '<div class="card" style="text-align: center">' +
                 '   <div class="card-body">' +
                 '       <div class="la-logo"></div>' +
@@ -636,20 +545,98 @@ function install_hmtl() {
     }
 
     // must be done last
-    var resetloc = $('.leaflet-sidebar-tabs a[href="#' + _options.map_focus_id + '"]')
+    var resetloc = $('.leaflet-sidebar-tabs a[href="#' + MAPFOCUS + '"]')
     if (resetloc.length > 0) {
         resetloc.click(function(event) {
             event.preventDefault()
-            Oscars.Map.resetLocation(false)
+            resetLocation(false)
         })
     }
 
-    var overviewloc = $('.leaflet-sidebar-tabs a[href="#' + _options.map_overview_id + '"]')
+    var overviewloc = $('.leaflet-sidebar-tabs a[href="#' + MAPOVERVIEW + '"]')
     if (overviewloc.length > 0) {
         overviewloc.click(function(event) {
             event.preventDefault()
-            Oscars.Map.resetLocation(true)
+            resetLocation(true)
         })
+    }
+
+    console.log(MODULE_NAME + "::install_sidebar", "done")
+}
+
+
+function install_hmtl() {
+    var mapLoc = $('#' + _options.elemid)
+    if (!mapLoc.length) {
+        console.log(MODULE_NAME + "::install_map: Error - cannot find map at #" + _options.id)
+        return _map
+    }
+
+    _map = L.map(_options.elemid, {
+        center: _options.center,
+        zoom: _options.zoom,
+        layers: _options.layers,
+        zoomSnap: 0.5,
+        attributionControl: false // will be displayed in sidebar
+    })
+
+
+    if (!Util.isSet(_map.options.center) && !Util.isSet(_map.options.zoom) && Util.isSet(_options.center) && Util.isSet(_options.zoom)) {
+        _mapCenter = {
+            center: _options.center,
+            zoom: _options.zoom
+        }
+        _map.setView(_options.center, _options.zoom)
+    }
+
+    //        _map.on('zoomend', showHideLayers)
+
+    // Layer Control always present, may be moved to sidebar if present.
+    var lclfun = L.control.layers
+    if (Util.isSet(_options.layerControlOptions) && _options.layerControlOptions.useGrouped) {
+        _layerControlGrouped = true
+        lclfun = L.control.groupedLayers
+    }
+
+    if (Util.isSet(_options.layerControl)) {
+        _layerControl = lclfun(_options.layerControl.baseLayers,
+            _options.layerControl.overlays,
+            Util.isSet(_options.layerControl.options) ? _options.layerControl.options : _options.layerControlOptions)
+    } else {
+        _layerControl = lclfun(null, null, _options.layerControlOptions)
+    }
+
+    _layerControl.addTo(_map)
+
+    _layerControl.addGipOverlay = function(layer, layerName, groupName) {
+        if (_layerControlGrouped) {
+            _layerControl.addOverlay(layer, layerName, groupName)
+        } else {
+            _layerControl.addOverlay(layer, layerName)
+        }
+    }
+
+
+    if (_options.betterScale) {
+        L.control.betterscale({ metric: true, imperial: false, position: "bottomleft" }).addTo(_map) // either one or the other but not both
+    } else {
+        L.control.scale().addTo(_map)
+    }
+    _map.zoomControl.setPosition('bottomleft')
+
+
+    if (_options.track) {
+        _trackLayer = L.layerGroup().addTo(_map)
+        _layerControl.addGipOverlay(_trackLayer, "Trails", "Trackers")
+    }
+
+    if (_options.speedVector) {
+        _speedVectorLayer = L.layerGroup().addTo(_map)
+        _layerControl.addGipOverlay(_speedVectorLayer, "Speed Vectors", "Trackers")
+    }
+
+    if (_options.sidebar) {
+        install_sidebar()
     }
 
     if (_options.debug) {
@@ -682,16 +669,16 @@ function install_handlers() {
         // the layer is supplied through the *_group name property.
         //console.log('L.Oscars::gip:update: Info - ', feature)
         if (_options.debug)
-            console.log("Map::on", feature)
+            console.log(MODULE_NAME + "::on", feature)
         if (feature.properties && feature.properties.group_name) {
             var layer = Oscars.Map.findGIPLayer(feature.properties.group_name)
             if (layer) {
                 layer.update(feature)
             } else {
-                console.log("Map::gip:update: Warning - Cannot find GIP layer", feature)
+                console.log(MODULE_NAME + "::gip:update: Warning - Cannot find GIP layer", feature)
             }
         } else {
-            console.log("Map::gip:update: Warning - Feature has no group name", feature)
+            console.log(MODULE_NAME + "::gip:update: Warning - Feature has no group name", feature)
         }
     })
 } // install_handlers()
@@ -729,27 +716,6 @@ function findGIPLayer(name) {
     return _gipLayers[name]
 }
 
-function updateChart(chartname, data, total = 0) {
-    if (_charts.hasOwnProperty(chartname)) {
-        _charts[chartname].updateSeries(data)
-        if (chartname == "parking") {
-            _charts[chartname].updateOptions({
-                plotOptions: {
-                    radialBar: {
-                        dataLabels: {
-                            total: {
-                                formatter(w) {
-                                    return total
-                                }
-                            }
-                        }
-                    }
-                }
-            })
-        }
-    }
-}
-
 // Adds a layer to the supplied control layer. If the device/zone groups has a "grouping category", places it in,
 // otherwise, uses generic Devices/Zones groups.
 function addLayerToControlLayer(featureCollection, layer) {
@@ -785,8 +751,10 @@ function addLayerToControlLayer(featureCollection, layer) {
 }
 
 function setSidebarContent(content) {
-    _sidebar.setContent(content)
-    _sidebar.open(_options.info_id)
+    if (_sidebar && _sidebar.hasOwnProperty("setContent")) {
+        _sidebar.setContent(content)
+        _sidebar.open(_options.info_id)
+    }
 }
 
 function addToSearch(layer) {
@@ -876,17 +844,11 @@ function addZoneGroup(featureCollection, options) {
     return l
 }
 
-function versions() {
-    console.log('L version ', L.version)
-    console.log('L.Oscars version ', L.Oscars.version)
-}
-
-
-
 /**
  *  MODULE EXPORTS
  */
 function version() {
+    console.log('L version ', L.version)
     console.log(MODULE_NAME, VERSION);
 }
 

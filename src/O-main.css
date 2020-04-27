@@ -263,8 +263,7 @@ div.stadia-logo {
     height: 32px;
 }
 
-/* CLIENT SETUP */
-/* Oscars Defaults ¨*/
+/* BEGIN CLIENT SETUP */
 h1.sidebar-header.client {
     color: #db2004;
 }
@@ -286,6 +285,7 @@ h1.sidebar-header.client {
 .about.client {
     background-image: url(i/red-32.png);
 }
+/* END CLIENT SETUP */
 
 .message-tag-pills span {
     display: inline-block;

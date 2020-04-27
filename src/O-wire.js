@@ -97,6 +97,8 @@ function init(options, dashboard) { // note Oscars.Dashboard.init should have be
         _dashboard = dashboard
     }
 
+    console.log(MODULE_NAME, "::options", DEFAULTS, options,_options)
+
     //console.log(_options, _options.voice)
     install_handlers()
     install_wire()
@@ -127,6 +129,7 @@ function init(options, dashboard) { // note Oscars.Dashboard.init should have be
 
 
 function getElemId() {
+    console.log(MODULE_NAME, "::options", _options)
     return _options.elemid
 }
 

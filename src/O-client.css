@@ -1,26 +1,23 @@
-/* Liege Airport Colors (.eblg)
-Orange: f18700
-Blue: 0e64ae
-<li><a href="#about" role="tab"><img src="oscars/i/liegeairport.png" alt="Liege Airport" title="Oscars GIP for Liege Airport" width="18" height="18"></a></li>
-*/
-.about.eblg {
-    background-image: url(i/liegeairport-32.png);
+/* CLIENT SETUP */
+h1.sidebar-header.client {
+    color: #db2004;
 }
 
-.eblg.badge {
-    background: #f18700;
-    border-color: #f18700;
+.client.badge {
+    background: #db2004;
+    border-color: #db2004;
 }
 
-.leaflet-bar a.oscars:hover {
-    color: #0e64ae;
+.leaflet-bar a.client:hover {
+    color: #db2004;
 }
 
-h1.sidebar-header.eblg {
-    color: #f18700;
+.active .client,
+.client:hover {
+    color: #db2004;
 }
 
-.active .eblg.liege,
-.eblg.liege:hover {
-    color: #0e64ae;
+.about.client {
+    background-image: url(i/red-32.png);
 }
+
