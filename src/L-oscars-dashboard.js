@@ -3,12 +3,10 @@
  * 2020 Pierre M
  * License: MIT
  */
-
 /*  Dashboard helper connects external sources (websocket)
  *  and broadcast events inside a web page to destination giplet.
  *  A giplet is an HTML element with id and receives messages through jquery trigger(msg, payload)/on(msg, payload => {}).
  */
-
 "use strict"
 
 Oscars = Oscars || {}
