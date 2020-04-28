@@ -19,34 +19,25 @@ import * as Util from './O-utils.js'
 const DEFAULTS = {
     debug: false,
     elemid: "wire_id",
-    wire_message: "wire",
+    msgtype: "wire",
     voice: false,
     wire_container: "ul",
     markRead: null, // 'gipadmin/wire/read'
     // General presentation
-    "icon-color": 'default',
     icon: 'la-info',
+    "icon-color": 'default',
     "icon-set": "la-",
     size: 'medium',
     speed: 500,
+    dateReminder: 3, // minutes
     // More
     numWords: 50,
-    dateReminder: 3, // minutes
     ellipsestext: '<i class="fa la-ellipsis-h"></i>',
     moretext: '<i class="fa la-angle-double-right"></i>',
     lesstext: '<i class="fa la-angle-double-left"></i>',
     //
     ignoreTags: ['default', 'unknown'],
-    filterNewMessage: false,
-    priority_map: [
-        '1',
-        '2',
-        '3'
-    ],
-    dashboard_options: {
-        elemprefix: "",
-        msgprefix: "GIP-"
-    }
+    filterNewMessage: false
 }
 
 const BOOTSTRAP_COLORS = [
@@ -60,9 +51,9 @@ const BOOTSTRAP_COLORS = [
     'default'
 ]
 const BOOTSTRAP_COLOR_VARIANTS = [
-    'normal',
     'bright',
     'light',
+    'normal',
     'dark'
 ]
 
@@ -88,7 +79,6 @@ function init(options, dashboard) { // note Oscars.Dashboard.init should have be
     if (_options)
         return _options
 
-    //console.log(options)
     _options = Util.extend(DEFAULTS, options)
 
     _options.id = _options.elemid + ' ' + _options.wire_container
@@ -97,9 +87,6 @@ function init(options, dashboard) { // note Oscars.Dashboard.init should have be
         _dashboard = dashboard
     }
 
-    console.log(MODULE_NAME, "::options", DEFAULTS, options,_options)
-
-    //console.log(_options, _options.voice)
     install_handlers()
     install_wire()
 
@@ -129,7 +116,6 @@ function init(options, dashboard) { // note Oscars.Dashboard.init should have be
 
 
 function getElemId() {
-    console.log(MODULE_NAME, "::options", _options)
     return _options.elemid
 }
 
@@ -170,7 +156,7 @@ function install_handlers() {
                     id: vid
                 },
                 function() {
-                    console.log('marked as read ' + vid)
+                    console.log(MODULE_NAME, "::onClick: marked as read " + vid)
                 }
             )
             $(this).prop('disabled', true)
@@ -213,7 +199,7 @@ function install_handlers() {
     _dashboard.register(_options.elemid, _options.msgtype)
     $("#" + _dashboard.getElemPrefix() + _options.elemid).on(_dashboard.getMessagePrefix() + _options.msgtype, function(event, message) {
         if (_options.debug)
-            console.log("Wire::on", message, _options)
+            console.log(MODULE_NAME, "on", _options.elemid, _options.msgtype, message)
 
         if (!message.hasOwnProperty("id"))
             message.id = (new Date()).getTime()
@@ -235,8 +221,8 @@ function install_handlers() {
             return // they may be handled by other giplet handlers, but they are not displayed on the wire.
 
         // Priority
-        var priority = setPriority(message, _options.priority_map.length)
-        var priority_string = '★'.repeat(priority) + '☆'.repeat(_options.priority_map.length - priority)
+        var priority = setPriority(message, _options.BOOTSTRAP_COLOR_VARIANTS.length)
+        var priority_string = '★'.repeat(priority) + '☆'.repeat(_options.BOOTSTRAP_COLOR_VARIANTS.length - priority)
 
         // Tags
         addTags(priority_string)
@@ -304,7 +290,7 @@ function install_handlers() {
         }
 
         // Do we need a new Date reminder in the margin?
-        if (_lastDateReminder == null || ((Date() - _lastDateReminder) > (_options.dateReminder * 6000))) {
+        if (_lastDateReminder == null || ((Date() - _lastDateReminder) > (_options.dateReminder * 60000))) {
             $('<li>').addClass('time-label')
                 .append($('<span>').addClass('bg-blue').html(moment().format("ddd D MMM H:mm")))
                 .prependTo("#" + _options.id)

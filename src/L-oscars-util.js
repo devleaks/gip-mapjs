@@ -40,7 +40,7 @@ Oscars.Util = (function() {
         INFO_CONTENT_ID: "device-info"
     };
     // new defaults
-    var _options = {};
+    var _options = false;
     /**
      *  PRIVATE VARIABLES
      */

@@ -9,6 +9,7 @@
 const VERSION = "5.0.0"
 const MODULE_NAME = "Flightboard"
 
+import * as Util from './O-utils.js'
 
 /**
  *  DEFAULT VALUES
@@ -22,7 +23,7 @@ var DEFAULTS = {
 /**
  *  PRIVATE VARIABLES
  */
-var _options = {}
+var _options = false
 var _dashboard = null
 var _flightboard = {
     arrival: {},

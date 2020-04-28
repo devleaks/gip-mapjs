@@ -43,7 +43,7 @@ var DEFAULT = {
  *  PRIVATE VARIABLES
  */
 // new defaults
-var _options = {};
+var _options = false;
 // small graphs
 var _sparklines = {};
 // Track keeping
@@ -232,7 +232,7 @@ function bindTexts(feature, layer) {
                             layer.on("contextmenu", function onClick(e) {
                                 var defs = getDefaults();
                                 if (isSet(feature.properties._texts.sidebar)) {
-                                    Oscars.Map.setSidebarContent(feature.properties._texts.sidebar)
+                                    Oscars.Map.setSidebarInfo(feature.properties._texts.sidebar)
                                 } else {
                                     console.log("Oscars.Util::bindTexts: Warning - No sidebar text.", feature);
                                 }

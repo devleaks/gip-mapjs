@@ -22,7 +22,7 @@ var DEFAULTS = {
 /**
  *  PRIVATE VARIABLES
  */
-var _options = {}
+var _options = false
 var _dashboard = null
 var _charts = {}
 

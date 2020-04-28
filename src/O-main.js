@@ -6,10 +6,12 @@
  * Starts main viewer application.
  */
 import * as Dashboard from "./O-dashboard.js"
+import * as Sidebar from "./O-sidebar.js"
+import * as Omap from "./O-map.js"
 import * as Flightboard from "./O-flightboard.js"
 import * as Wire from "./O-wire.js"
-import * as Chart from "./O-chart.js"
-import * as Omap from "./O-map.js"
+import * as ChartParking from "./O-chart-parking.js"
+import * as ChartStress from "./O-chart-stress.js"
 
 /*  DASHBOARD
  */
@@ -17,10 +19,9 @@ Dashboard.init({
     elemprefix: "",
     msgprefix: "GIP-",
     websocket: 'ws://localhost:8051',
-    reconnect_retry: 30, // seconds
+    reconnect_retry: 300, // seconds
     debug: false
 })
-
 
 /*  MAP
  */
@@ -106,19 +107,24 @@ var r3 = L.polyline.antPath([
 var night = L.layerGroup([airportNightOverlay, r1, r2, r3])
 var day = airportOverlay
 
+
+/*  SIDEBAR
+ */
 Omap.init({
     elemid: "map",
     msgtype: "map",
 
     center: [50.64, 5.445],
     zoom: 15,
+    zoom_overview: 8,
+
     layers: [OpenStreetMap_France],
 
     layerControl: {
         baseLayers: baseLayers,
         overlays: {
             "<span style='color: #0C64AF;'><img src='src/i/liegeairport-14.png'>&nbsp;Liège Airport</span>": {
-                "<span style='color: #EE850A;'>Day</span>"  : day,
+                "<span style='color: #EE850A;'>Day</span>": day,
                 "<span style='color: #EE850A;'>Night</span>": night
             }
         },
@@ -128,54 +134,92 @@ Omap.init({
 
     betterScale: true,
 
-    track: false,           // @todo: should move to layer
-    speedVector: false,
-
-    sidebar: {          // set it to false to disable siebar
-        elemid: "sidebar_id",
-        msgtype: "sidebar",
-                        // SIDE BUTTONS
-        reset: true,    // includes overview as well
-        search: false,
-        stylesets: false,
-        about: true,
-
-        wire: Wire,     // MODULES
-        flightboard: Flightboard
-        /*
-        info: {
-            info_id: "info",
-            info_content_id: "device-info"
-        }
-        */
-    },
-
-    debug: false
-}, Dashboard)
+    themes: {
+        dark: [night, CartoDB_DarkMatterNoLabels],
+        light: [day, OpenStreetMap_France]
+    }
+}, Dashboard, Sidebar)
 
 /*  WIRE
  */
-Wire.init({
-    elemid: "wire_id",
-    msgtype: "wire",
-    voice: false,
-    debug: false
-}, Dashboard)
+Sidebar.addModule({ //id, title, subtitle, icon, zone, icon_extra, tab_content
+    id: "messages",
+    zone: 1,
+    title: 'Messages<span class="clean-wire"><i class="la la-trash-o"></i>&nbsp</span>' +
+        '               <span class="sound-onoff"><i class="la"></i>&nbsp</span>',
+    info: 'Wire Messages',
+    subtitle: "Last Updated:&nbsp<span id='last-updated-time'>just now</span>",
+    icon: "envelope",
+    icon_extra: "<span id='alert-counter' class='badge client'>0</span></a>",
+    tab_content: Wire.getTemplate(),
+    wrap: false
+})
+Wire.init({}, Dashboard)
+
 
 /*  FLIGHT BOARD
  */
+Sidebar.addModule({ //id, title, subtitle, icon, zone, icon_extra, tab_content
+    zone: 1,
+    id: "flightboard",
+    title: "Flight Boards",
+    info: "Flight boards",
+    subtitle: "&nbsp",
+    icon: "table",
+    icon_extra: null,
+    tab_content: Flightboard.getTemplate()
+})
 Flightboard.init({}, Dashboard)
 
 /*  CHARTS
  */
-Chart.init({}, Dashboard)
+Sidebar.addModule({ //id, title, subtitle, icon, zone, icon_extra, tab_content
+    zone: 1,
+    id: "charts",
+    title: "Status",
+    info: "Status charts",
+    subtitle: "&nbsp",
+    icon: "chart-pie",
+    icon_extra: null,
+    tab_content: $('<div>')
+        .append($('<div>')
+            .attr("id", "charts")
+            .append($('<header>')
+                .addClass("wire-top")
+                .append($('<div>')
+                    .attr("id", "gip-clock-table")))
+            .append($('<div>').attr('class', 'simulated-time'))
+            .append($('<h2>').html('Apron Occupancy'))
+            .append($('<div>')
+                .append($("<div>").attr('id', 'chart-parking'))
+            )
+            .append($('<h2>').html('Arrival'))
+            .append($('<div>')
+                .append($("<div>").attr('id', 'chart-arrival'))
+            )
+            .append($('<h2>').html('Departure'))
+            .append($('<div>')
+                .append($("<div>").attr('id', 'chart-departure'))
+            )
+        )
+})
+
+ChartParking.init({
+    elemid: 'chart-parking',
+    APRONS_MAX: [1, 1, 32, 21, 22, 5, 5],
+    APRON_NAMES: ['DEICING', 'APRON 1', 'APRON 2', 'APRON 3', 'APRON 4', 'APRON 5', 'APRON 6']
+}, Dashboard)
+
+ChartStress.init({ elemid: 'chart-arrival', move: "arrival" }, Dashboard)
+ChartStress.init({ force: true, elemid: 'chart-departure', move: "departure" }, Dashboard)
 
 
-/* TESTING
+/* VERSION INFO
  */
+Omap.version()
+Sidebar.version()
 Dashboard.version()
 Flightboard.version()
 Wire.version()
-Omap.version()
-Chart.version()
-
+ChartParking.version()
+ChartStress.version()
