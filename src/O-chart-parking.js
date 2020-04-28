@@ -44,7 +44,10 @@ function install_handler() {
             APRONS[message.parking.properties.ID_Apron_z] = APRONS[message.parking.properties.ID_Apron_z] == 0 ? 0 : APRONS[message.parking.properties.ID_Apron_z] - 1
         }
         var t = APRONS.map((x, i) => Math.round(100 * x / options.APRONS_MAX[i]))
-        update(t.slice(Math.max(t.length - 5, 1)), APRONS.reduce((a, v) => a + v))
+        update({
+            data: t.slice(Math.max(t.length - 5, 1)),
+            total: APRONS.reduce((a, v) => a + v)
+        })
     })
 
 }
@@ -82,19 +85,18 @@ function install_html() {
         labels: _options.APRON_NAMES,
     })
     _chart.render()
-    console.log("chart parking",_options.elemid)
 }
 
 
-function update(data, total = 0) {
-    _chart.updateSeries(data)
+function update(data) {
+    _chart.updateSeries(data.data)
     _chart.updateOptions({
         plotOptions: {
             radialBar: {
                 dataLabels: {
                     total: {
                         formatter: function(w) {
-                            return total
+                            return data.total
                         }
                     }
                 }

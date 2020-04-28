@@ -68,6 +68,7 @@ var _charts = {}
 const FOCUS_OVERVIEW = "o"
 const FOCUS_FOCUS = "f"
 
+
 /**
  *  PRIVATE FUNCTIONS
  */
@@ -127,6 +128,7 @@ function getMetersPerPixel() {
     var maxMeters = _map.containerPointToLatLng([0, y]).distanceTo(_map.containerPointToLatLng([x, y]));
     return maxMeters / x;
 }
+
 
 function install_hmtl() {
     var mapLoc = $('#' + _options.elemid)
@@ -224,27 +226,24 @@ function run_tests() {
     L.marker(_options.center, { icon: L.icon.pulse({ iconSize: [10, 10], color: 'red' }) }).addTo(_map);
 }
 
+
 function setTheme(themeName) {
     localStorage.setItem('theme', themeName);
     document.documentElement.className = themeName;
     if (themeName == 'theme-dark') {
         document.documentElement.setAttribute('data-theme', 'dark')
         _options.themes.dark.forEach(function f(l) {
-            console.log("doing", l)
             l.addTo(_map)
         })
         _options.themes.light.forEach(function f(l) {
-            console.log("undoing", l)
             _map.removeLayer(l)
         })
     } else {
         document.documentElement.setAttribute('data-theme', 'light')
         _options.themes.light.forEach(function f(l) {
-            console.log("doing2", l)
             l.addTo(_map)
         })
         _options.themes.dark.forEach(function f(l) {
-            console.log("undoing2", l)
             _map.removeLayer(l)
         })
     }
@@ -288,6 +287,7 @@ function findGIPLayer(name) {
     return _gipLayers[name]
 }
 
+
 // Adds a layer to the supplied control layer. If the device/zone layers has a "grouping category", places it in,
 // otherwise, uses generic Devices/Zones layers.
 function addLayerToControlLayer(featureCollection, layer) {
@@ -322,12 +322,14 @@ function addLayerToControlLayer(featureCollection, layer) {
     }
 }
 
+
 function setStats(statname) {
     if (typeof _stats[statname] == "undefined") {
         _stats[statname] = 0
     }
     _stats[statname]++
 }
+
 
 function getStats() {
     var features = {}
@@ -345,6 +347,7 @@ function getStats() {
     }
 }
 
+
 function addDeviceLayer(featureCollection, options) {
     var l = L.Oscars.deviceLayer(featureCollection, options)
     // l.addTo(this._map)
@@ -352,12 +355,14 @@ function addDeviceLayer(featureCollection, options) {
     return l
 }
 
+
 function addZoneLayer(featureCollection, options) {
     var l = L.Oscars.zoneLayer(featureCollection, options)
     // l.addTo(this._map)
     Oscars.Map.addLayerToControlLayer(featureCollection, l)
     return l
 }
+
 
 /**
  *  MODULE EXPORTS

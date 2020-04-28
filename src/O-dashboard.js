@@ -174,9 +174,8 @@ function unregister(elemid, msgtype) {
     }
 }
 
-/*
-    data = {type: "string", payload: "string"}
-*/
+
+// data = {type: "string", payload: "string"}
 function broadcast(data) {
     var msg = null
     if (typeof data == "string") {
@@ -197,10 +196,12 @@ function broadcast(data) {
                 if (_options.debug)
                     console.log("Dashboard::broadcast", "#" + _options.elemprefix + dst, _options.msgprefix + msgtype)
                 try {
+                    $("#" + _options.elemprefix + dst).trigger(_options.msgprefix + msgtype, msg[PAYLOAD])
+                    /*
                     let el = document.getElementById(_options.elemprefix + dst)
                     let event = new CustomEvent(_options.msgprefix + msgtype, { detail: msg[_options.msgPAYLOAD] });
                     el.dispatchEvent(event)
-                    // $("#" + ).trigger(_options.msgprefix + msgtype, msg[PAYLOAD])
+                    */
                 } catch (e) {
                     console.log('Dashboard::broadcast: problem during broadcast', msg[_options.msgPAYLOAD], e)
                 }
@@ -214,9 +215,11 @@ function broadcast(data) {
     }
 }
 
+
 function getElemPrefix() {
     return _options.elemprefix
 }
+
 
 function getMessagePrefix() {
     return _options.msgprefix

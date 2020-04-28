@@ -33,19 +33,14 @@ var _charts = new Map() // accessed by _options.move as key
  *  PRIVATE FUNCTIONS
  */
 function install_handler() {
-    _dashboard.register(_options.elemid, _options.msgtype)
-    $("#" + _dashboard.getElemPrefix() + _options.elemid).on(_dashboard.getMessagePrefix() + _options.msgtype, function(event, message) {
+    _dashboard.register(MODULE_NAME, _options.msgtype)
+    $("#" + _dashboard.getElemPrefix() + MODULE_NAME).on(_dashboard.getMessagePrefix() + _options.msgtype, function(event, message) {
         if (_options.debug)
-            console.log("Map::on:parking", message)
+            console.log(MODULE_NAME+"::on:Chart-Stress", message)
         if (message.move == _options.move) {
-            var chart = _charts.get(_options.move)
-            chart.updateSeries([{
-                name: message.move,
-                data: message.forecast
-            }])
+            update([message])
         }
     })
-
 }
 
 
@@ -85,6 +80,12 @@ function install_html() {
     })
     _charts.set(_options.move, chart)
     chart.render()
+}
+
+
+function update(data) {
+    var chart = _charts.get(data.move)
+    chart.updateSeries(data)
 }
 
 

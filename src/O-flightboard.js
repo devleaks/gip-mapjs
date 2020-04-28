@@ -33,6 +33,30 @@ var _flightboard = {
 /**
  *  PRIVATE FUNCTIONS
  */
+function install_handler() {
+    _dashboard.register(_options.elemid, _options.msgtype)
+    $("#" + _dashboard.getElemPrefix() + _options.elemid).on(_dashboard.getMessagePrefix() + _options.msgtype, function(event, message) {
+        if (dashboard_options.debug)
+            console.log("Flightboard::on", _options.msgtype, message)
+        /* message payload: {
+              info: "actual",
+              move: "departure",
+              flight: flight.flight,
+              airport: flight.airport,
+              date: dept.format("DD/MM"),
+              time: dept.format("HH:mm"),
+              parking: flight.parking,
+              timestamp: iso8601 of emission of message
+        } // api:
+        Oscars.Util.flightboard(move, flight, airport, timetype, day, time, note)
+        */
+        flightboard(message.move, message.flight, message.airport, message.info, moment(message.date + " " + message.time, message.info == "scheduled" ? "YYYY-MM-DD HH:mm" : "DD/MM HH:mm"), "")
+        updateFlightboard(message.move, undefined, moment(message.timestamp, moment.ISO_8601), true)
+        updateFlightboardCharts(message.move, moment(message.timestamp, moment.ISO_8601))
+    })
+}
+
+
 
 
 /**
@@ -76,6 +100,7 @@ function getElemId() {
     return _options.elemid
 }
 
+
 function getTemplate() {
     return $('<div>')
         .append($('<div>')
@@ -115,31 +140,6 @@ function getTemplate() {
                     .append($('<tbody>'))
                 ))
         )
-}
-
-
-
-function install_handler() {
-    _dashboard.register(_options.elemid, _options.msgtype)
-    $("#" + _dashboard.getElemPrefix() + _options.elemid).on(_dashboard.getMessagePrefix() + _options.msgtype, function(event, message) {
-        if (dashboard_options.debug)
-            console.log("Flightboard::on", _options.msgtype, message)
-        /* message payload: {
-              info: "actual",
-              move: "departure",
-              flight: flight.flight,
-              airport: flight.airport,
-              date: dept.format("DD/MM"),
-              time: dept.format("HH:mm"),
-              parking: flight.parking,
-              timestamp: iso8601 of emission of message
-        } // api:
-        Oscars.Util.flightboard(move, flight, airport, timetype, day, time, note)
-        */
-        flightboard(message.move, message.flight, message.airport, message.info, moment(message.date + " " + message.time, message.info == "scheduled" ? "YYYY-MM-DD HH:mm" : "DD/MM HH:mm"), "")
-        updateFlightboard(message.move, undefined, moment(message.timestamp, moment.ISO_8601), true)
-        updateFlightboardCharts(message.move, moment(message.timestamp, moment.ISO_8601))
-    })
 }
 
 
@@ -377,11 +377,12 @@ function updateFlightboardCharts(move, datetime) {
     var hourNow = ts.hours()
     hours = hours.concat(hours)
     var forecast = hours.slice(hourNow, hourNow + 6)
-    Oscars.Map.updateChart(move, [{
+
+    // @HARDCODED!!
+    $("#" + _dashboard.getElemPrefix() + "Chart-Stress").trigger(_dashboard.getMessagePrefix() + "move", {
         name: move == "arrival" ? 'Arrival' : 'Departure',
         data: forecast
-    }])
-
+    })
 }
 
 /**

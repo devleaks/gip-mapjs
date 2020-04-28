@@ -37,6 +37,7 @@ const DEFAULTS = {
     debug: false
 }
 
+
 /**
  *  PRIVATE VARIABLES
  */
@@ -44,6 +45,7 @@ var _options = false
 var _sidebar = null
 
 var _dashboard = false
+
 
 /**
  *  PRIVATE FUNCTIONS
@@ -77,9 +79,10 @@ function install_hmtl() {
     })
 }
 
+
 // Add sidebar tab and content
 function addSidebarTab(options) {
-    console.log(MODULE_NAME + "::addSidebarTab", options.id, options)
+//    console.log(MODULE_NAME + "::addSidebarTab", options.id, options)
     var content = $('<p>')
     if (!!Util.isSet(options.nocontent) || !options.nocontent) {
         content = (Util.isSet(options.wrap) && !options.wrap) ? options.tab_content :
@@ -104,6 +107,7 @@ function addSidebarTab(options) {
         position: (options.hasOwnProperty("zone") && options.zone == 2) ? 'bottom' : 'top'
     })
 }
+
 
 function install_panels() {
     // LAYER CONTROL
@@ -288,6 +292,7 @@ function install_handlers() {
     })
 } // install_handlers()
 
+
 function run_tests() {
     // L.marker(_options.center, { icon: L.icon.pulse({ iconSize: [10, 10], color: 'red' }) }).addTo(_map);
     ;
@@ -311,7 +316,8 @@ function init(options, dashboard) {
     return _options
 }
 
-function install(map) {
+
+function install(map) { // map needs to exist before we can continue here
     _sidebar.addTo(map)
     install_panels()
     install_handlers()
@@ -322,9 +328,11 @@ function addModule(module) {
     addSidebarTab(module)
 }
 
+
 function getSidebar() {
     return _options ? _sidebar : false
 }
+
 
 /**
  *  MODULE EXPORTS
