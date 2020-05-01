@@ -191,19 +191,13 @@ dashboard.init(dashboard_options)
 
 map_options.dashboard_options = dashboard_options
 map_options.wire_options = wire_options
-var map = Oscars.Map.map(map_options, dashboard)
+
+var map = Oscars.Omap.map(map_options, dashboard)
 
 wire_options.dashboard_options = dashboard_options
 var wire = Oscars.Wire.init(wire_options, dashboard)
 
 taxi.addTo(map)
-
-var geoJson = svgtogeojson.svgToGeoJson(
-  [[50.62250, 5.41630], [50.65655, 5.47567]],
-  $('svg')[0],
-  3
-)
-console.log($('svg'), geoJson)
 
 
 /* POPULATE WITH BASIC DATA
@@ -272,14 +266,14 @@ $.ajaxSetup({
 $.getJSON("test/data/eblg-taxiways.geojson", function(data) {
     taxiways = data
 })
-$.getJSON("test/data/eblg-parkings.geojson", function(data) {
+$.getJSON("test/data/json/eblg-parking-boxes.geojson", function(data) {
     parkings = data
 })
 $.ajaxSetup({
     async: true
 })
 
-var parkingStyle = {
+const parkingStyle = {
     available: {
         markerSymbol: "map-marker",
         markerSize: 24, // px
@@ -306,7 +300,7 @@ var parkingStyle = {
     }
 }
 
-var parkings = Oscars.zoneGroup({
+var parkingsZoneGroup = Oscars.zoneGroup({
     "type": "FeatureCollection",
     "properties": {
         "name": "PARKINGS",
@@ -339,28 +333,54 @@ var parkings = Oscars.zoneGroup({
 const APRONS_MAX = [1, 1, 32, 21, 22, 5, 5] // no APRON 0 or 1.
 var APRONS = [0, 0, 0, 0, 0, 0, 0]
 
-function parking(name, avail) {
-    const parr = parkings.features.filter(f => f.properties.name == name)
+function parking(parking) {
+    const parr = parkings.features.filter(f => f.properties.name == parking.name)
     if (parr.length > 0) {
-        const park = parr[0]
-        park.properties._style = parkingStyle[avail]
-        parkings.update(park)
-        if (avail == "busy") {
-            APRONS[park.properties.ID_Apron_z]++
+        const box = parr[0]
+        box.properties._style = parkingStyle[parking.available]
+        parkingsZoneGroup.update(box)
+        if (parking.available == "busy") {
+            APRONS[box.properties.apron]++
+            Oscars.Omap.createGantt(parking)
         } else {
-            APRONS[park.properties.ID_Apron_z] = APRONS[park.properties.ID_Apron_z] == 0 ? 0 : APRONS[park.properties.ID_Apron_z] - 1
+            APRONS[box.properties.apron] = APRONS[box.properties.apron] == 0 ? 0 : APRONS[box.properties.apron] - 1
+            Oscars.Omap.deleteGantt(parking)
         }
+        // update APRON chart
         var t = APRONS.map((x, i) => Math.round(100 * x / APRONS_MAX[i]))
-        Oscars.Map.updateChart("parking", t.slice(Math.max(t.length - 5, 1)), APRONS.reduce((a, v) => a + v))
+        Oscars.Omap.updateChart("parking", t.slice(Math.max(t.length - 5, 1)), APRONS.reduce((a, v) => a + v))
     }
 }
 //parking(124, "busy") // test
+//Oscars.Omap.createGantt({name: "name"})
+
+dashboard.register(map_options.map_id, "stopped")
+$("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.msgprefix + "stopped", function(event, msg) {
+    //if (dashboard_options.debug)
+        console.log("Map::on:stopped", msg.feature.id, event, msg)
+    const feature = msg.feature
+    if (feature && feature.hasOwnProperty("geometry")) {
+        // try to find parking in which feature is stopped
+        const parr = parkings.features.filter(f => turf.booleanPointInPolygon(feature.geometry.coordinates, f))
+        if (parr.length > 0) {
+            const box = parr[0]
+            Oscars.Omap.updateGantt({
+                parking: box.properties.name,
+                feature: feature
+            })
+        } else {
+            console.log("Map::on:stopped: not parked", feature)
+        }
+    } else {
+        console.log("Map::on:stopped: Issue?", feature)
+    }
+})
 
 dashboard.register(map_options.map_id, "parking")
 $("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.msgprefix + "parking", function(event, msg) {
     if (dashboard_options.debug)
         console.log("Map::on:parking", msg)
-    parking(msg.name, msg.available)
+    parking(msg)
 })
 
 dashboard.register(map_options.map_id, "flightboard")
@@ -377,9 +397,9 @@ $("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.
           parking: flight.parking,
           timestamp: iso8601 of emission of message
     } // api:
-    Oscars.Util.flightboard(move, flight, airport, timetype, day, time, note)
+    Oscars.Util.flightboard(move, flight, airport, timetype, day, time, note, parking)
     */
-    Oscars.Util.flightboard(msg.move, msg.flight, msg.airport, msg.info, moment(msg.date + " " + msg.time, msg.info == "scheduled" ? "YYYY-MM-DD HH:mm" : "DD/MM HH:mm"), "")
+    Oscars.Util.flightboard(msg.move, msg.flight, msg.airport, msg.info, moment(msg.date + " " + msg.time, msg.info == "scheduled" ? "YYYY-MM-DD HH:mm" : "DD/MM HH:mm"), "", msg.parking)
     Oscars.Util.updateFlightboard(msg.move, undefined, moment(msg.timestamp, moment.ISO_8601), true)
     Oscars.Util.updateFlightboardCharts(msg.move, moment(msg.timestamp, moment.ISO_8601))
     $('.simulated-time').html("Last updated at " + moment(msg.timestamp, moment.ISO_8601).format("HH:mm"))
@@ -427,12 +447,6 @@ function toggleTheme() {
         document.getElementById('i_1st-toggle-btn').checked = false;
     }
 })();
-
-function f() {
-console.log($('#Calque_2'))
-}
-f()
-
 
 /*
 {

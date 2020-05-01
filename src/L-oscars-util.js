@@ -52,12 +52,11 @@ Oscars.Util = (function() {
     var _showInfo = false;
     // Markers that have a physical size and need adjustments on zoom changes
     var _phyMarkers = {};
+
     var _flightboard = {
         arrival: {},
         departure: {}
     }
-
-
 
     /**
      *  PRIVATE FUNCTIONS
@@ -227,7 +226,7 @@ Oscars.Util = (function() {
                                 layer.on("contextmenu", function onClick(e) {
                                     var defs = getDefaults();
                                     if (isSet(feature.properties._texts.sidebar)) {
-                                        Oscars.Map.setSidebarContent(feature.properties._texts.sidebar)
+                                        Oscars.Omap.setSidebarContent(feature.properties._texts.sidebar)
                                     } else {
                                         console.log("Oscars.Util::bindTexts: Warning - No sidebar text.", feature);
                                     }
@@ -333,7 +332,7 @@ Oscars.Util = (function() {
         bindTexts(feature, layer);
 
         // Add vector
-        Oscars.Map.vector(vector, layer)
+        Oscars.Omap.vector(vector, layer)
 
         return layer ? layer : L.marker(latlng, _options.MARKER);
     }
@@ -403,8 +402,20 @@ Oscars.Util = (function() {
         },
 
 
-        //
-        flightboard: function(move, flightname, airport, timetype, time, note) {
+        /*
+        flight structure:
+        {
+            name: ,
+            airport: ,
+            scheduled: , 
+            planned: ,
+            actual: ,
+            note: ,
+            isnew: ,
+            removeAt: 
+        }
+        */
+        flightboard: function(move, flightname, airport, timetype, time, note, parking) {
             var lnote = note != "" ? note : (timetype == "actual" ? (move == "departure" ? "" : "Landed") : "")
             _flightboard[move] = _flightboard.hasOwnProperty(move) ? _flightboard[move] : {}
             _flightboard[move][flightname] = _flightboard[move].hasOwnProperty(flightname) ? _flightboard[move][flightname] : {}
@@ -413,10 +424,37 @@ Oscars.Util = (function() {
             flight.airport = airport
             flight[timetype] = time
             flight.note = lnote
+            flight.parking = parking
             flight.isnew = true
             if (timetype == "actual") { // if move completed, schedule removal from flightboard
                 flight.removeAt = moment(time).add(move == "arrival" ? 30 : 10, "minutes")
             }
+        },
+
+
+        getFlight: function(flightname) {
+            if(_flightboard["arrival"].hasOwnProperty(flightname)) {
+                return _flightboard["arrival"][flightname]
+            }
+            if(_flightboard["departure"].hasOwnProperty(flightname)) {
+                return _flightboard["departure"][flightname]
+            }
+            return null
+        },
+
+        getDepartureFlight: function(flightname) {
+            const arrival = _flightboard["arrival"][flightname]
+            var departure = false
+            for(var f in _flightboard["departure"]) {
+                if(!departure && _flightboard["departure"].hasOwnProperty(f)) {
+                    const flight = _flightboard["departure"][f]
+                    if( (flight.parking == arrival.parking) && 
+                        flight.scheduled.isAfter(arrival.scheduled) ) {
+                        departure = flight
+                    }
+                }
+            }
+            return departure
         },
 
         //
@@ -480,7 +518,7 @@ Oscars.Util = (function() {
             var hourNow = ts.hours()
             hours = hours.concat(hours)
             var forecast = hours.slice(hourNow, hourNow + 6)
-            Oscars.Map.updateChart(move, [{
+            Oscars.Omap.updateChart(move, [{
                 name: 'Arrival',
                 data: forecast
             }])
@@ -590,9 +628,9 @@ Oscars.Util = (function() {
                 }
             }
 
-            $('.scrolling').textMarquee({
+            /*$('.scrolling').textMarquee({
                 mode: 'loop'
-            })
+            })*/
             $('#flightboard-' + move + ' tbody').replaceWith(tb)
             if (solari) {
                 $('#flightboard-' + move + ' tbody tr td').each(function(td) {
@@ -637,7 +675,7 @@ Oscars.Util = (function() {
             var hourNow = ts.hours()
             hours = hours.concat(hours)
             var forecast = hours.slice(hourNow, hourNow + 6)
-            Oscars.Map.updateChart(move, [{
+            Oscars.Omap.updateChart(move, [{
                 name: 'Arrival',
                 data: forecast
             }])

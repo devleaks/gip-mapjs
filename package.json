@@ -58,6 +58,7 @@
     "gulp-concat": "^2.6.1",
     "leaflet-zoom-min": "^1.1.0",
     "list.js": "^1.5.0",
+    "rollup": "^2.7.3",
     "typeahead.js": "^0.11.1"
   }
 }

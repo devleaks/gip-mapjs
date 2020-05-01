@@ -404,7 +404,7 @@ Oscars.Flightboard = (function($) {
         })
 
         setInterval(function() {
-            var stats = Oscars.Map.getStats()
+            var stats = Oscars.Omap.getStats()
             console.log('stats', stats)
             _dashboard.broadcast({type: "wire", payload: {
                 source: 'gip',

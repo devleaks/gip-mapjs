@@ -16,17 +16,17 @@ Oscars.ZoneGroup = L.GeoJSON.extend({
         start: false, // no auto-update of GeoJSON.
 
         getFeatureId: function(feature) {
-            Oscars.Map.setStats('OZGFID')
+            Oscars.Omap.setStats('OZGFID')
             return Oscars.Util.getFeatureId(feature, "ZoneGroup::getFeatureId: Warning - Feature has no name, will never be updated or removed")
         },
 
         style: function(feature) {
-            Oscars.Map.setStats('OZGSTY')
+            Oscars.Omap.setStats('OZGSTY')
             return Oscars.Util.style(feature)
         },
 
         onEachFeature: function(feature, layer) {
-            Oscars.Map.setStats('OZGOEF')
+            Oscars.Omap.setStats('OZGOEF')
             Oscars.Util.onEachFeature(feature, layer)
         }
 
@@ -36,17 +36,17 @@ Oscars.ZoneGroup = L.GeoJSON.extend({
      *  Merge defaults with user-supplied defaults and install initial collection
      */
     initialize: function(featureCollection, moreoptions) {
-        Oscars.Map.setStats('OZGINI')
+        Oscars.Omap.setStats('OZGINI')
         L.setOptions(this, this.options)
         if (moreoptions && moreoptions.hasOwnProperty("gipDefaults")) {
             Oscars.Util.setDefaults(moreoptions.gipDefaults)
         }
         L.GeoJSON.prototype.initialize.call(this, featureCollection, this.options)
-        Oscars.Map.addLayerToControlLayer(featureCollection, this)
+        Oscars.Omap.addLayerToControlLayer(featureCollection, this)
     },
 
     update: function(geojson) { // this is not very efficient, but it does not consume any extra data structure. it's just processing.
-        Oscars.Map.setStats('OZGUPD')
+        Oscars.Omap.setStats('OZGUPD')
         var fids = Oscars.Util.featureIds(geojson)
         //console.log("to update", fids)
         var layers_to_delete = []

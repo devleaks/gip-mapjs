@@ -1,5 +1,5 @@
 /*
- * jQuery Oscars GIP Map Widget Helper
+ * jQuery Oscars GIP Omap Widget Helper
  * 2017 Pierre M
  * License: MIT
  */
@@ -7,7 +7,7 @@
 
 Oscars = Oscars || {}
 
-Oscars.Map = (function($) {
+Oscars.Omap = (function($) {
     "use strict"
     /**
      *  DEFAULT VALUES
@@ -19,7 +19,7 @@ Oscars.Map = (function($) {
         center: [50.487729, 5.100128], // Oscars sa, Mannekenpis[50.8449933,4.3477891]
         zoom: 15,
         name: "GIP_MAP",
-        display_name: "GIP Map",
+        display_name: "GIP Omap",
         layers: null,
         layerControl: null,
         layerControlOptions: { useGrouped: false, groupCheckboxes: true, collapsed: false },
@@ -88,10 +88,12 @@ Oscars.Map = (function($) {
     //
     var _charts = {}
 
+    var _gantt = new Map()
 
-    var Map = function() {}
 
-    Map.prototype.init = function(options, dashboard) {
+    var Omap = function() {}
+
+    Omap.prototype.init = function(options, dashboard) {
         if (_options) return _options
         if (dashboard) _dashboard = dashboard
         _options = $.extend({}, DEFAULTS)
@@ -213,7 +215,7 @@ Oscars.Map = (function($) {
     function install_map() {
         var mapLoc = $('#' + _options.map_id)
         if (!mapLoc.length) {
-            console.log("Map::install_map: Error - cannot find map at #" + _options.id)
+            console.log("Omap::install_map: Error - cannot find map at #" + _options.id)
             return _map
         }
 
@@ -343,7 +345,7 @@ Oscars.Map = (function($) {
             addSidebarTab({
                 zone: 1,
                 id: _options.map_focus_id,
-                title: "Local Map",
+                title: "Local Omap",
                 info: "Center map and focus on airport",
                 subtitle: "&nbsp",
                 icon: "plane",
@@ -354,7 +356,7 @@ Oscars.Map = (function($) {
             addSidebarTab({
                 zone: 1,
                 id: _options.map_overview_id,
-                title: "Area Map",
+                title: "Area Omap",
                 info: "Wide area map around airport",
                 subtitle: "&nbsp",
                 icon: "globe-europe",
@@ -448,14 +450,14 @@ Oscars.Map = (function($) {
             })
 
             setInterval(function() {
-                var stats = Oscars.Map.getStats()
+                var stats = Oscars.Omap.getStats()
                 console.log('stats', stats)
                 _dashboard.broadcast({
                     type: "wire",
                     payload: {
                         source: 'gip',
                         type: 'stats',
-                        subject: 'Map Usage Statistics',
+                        subject: 'Omap Usage Statistics',
                         body: '<pre>' + JSON.stringify(stats, null, 2) + '</pre>',
                         priority: 1,
                         icon: 'fa-bar-chart',
@@ -552,6 +554,29 @@ Oscars.Map = (function($) {
             })
         }
 
+        // Add sidebar panel for charts
+        if (_options.sidebar && _options.charts) {
+            addSidebarTab({
+                zone: 1,
+                id: "gantt",
+                title: "Plane Services",
+                info: "Plane service status",
+                subtitle: "&nbsp",
+                icon: "stream",
+                icon_extra: null,
+                tab_content: $('<div>')
+                    .append($('<div>')
+                        .attr("id", "gantt")
+                        .append($('<header>')
+                            .addClass("wire-top")
+                            .append($('<div>')
+                                .attr("id", "gip-clock-table")))
+                        .append($('<div>').attr('class', 'simulated-time'))
+                        .append($('<div>').attr('id', 'gantt-content'))
+                    )
+            })
+        }
+
         // Add bottom of sidebar elements
         if (_options.sidebar && _options.stylesets) {
             addSidebarTab({
@@ -618,11 +643,11 @@ Oscars.Map = (function($) {
                     '</tr>' +
                     '<tr>' +
                     '   <td><div class="stamen-logo"></div></td>' +
-                    '   <td>A library of awesome styles for OpenStreetMap data.</td>' +
+                    '   <td>A library of awesome styles for OpenStreetOmap data.</td>' +
                     '</tr>' +
                     '<tr>' +
                     '   <td><div class="stadia-logo"></div></td>' +
-                    '   <td>Stadia Maps: Location made human.</td>' +
+                    '   <td>Stadia Omaps: Location made human.</td>' +
                     '</tr>' +
                     '       </table>' +
                     '   </div>' +
@@ -646,7 +671,7 @@ Oscars.Map = (function($) {
         if (resetloc.length > 0) {
             resetloc.click(function(event) {
                 event.preventDefault()
-                Oscars.Map.resetLocation(false)
+                Oscars.Omap.resetLocation(false)
             })
         }
 
@@ -654,7 +679,7 @@ Oscars.Map = (function($) {
         if (overviewloc.length > 0) {
             overviewloc.click(function(event) {
                 event.preventDefault()
-                Oscars.Map.resetLocation(true)
+                Oscars.Omap.resetLocation(true)
             })
         }
 
@@ -667,8 +692,8 @@ Oscars.Map = (function($) {
             payload: {
                 source: 'gip',
                 type: 'news',
-                subject: 'GIP Map ready.',
-                body: "Map initialized and ready",
+                subject: 'GIP Omap ready.',
+                body: "Omap initialized and ready",
                 priority: 2,
                 icon: 'fa-info',
                 "icon-color": 'success',
@@ -679,6 +704,108 @@ Oscars.Map = (function($) {
 
         return _map
     } // install_map()
+
+
+    function createGanttChart(parking) {
+        // Parkings
+        var chartname = "gantt-" + parking
+
+
+        // Create chart entry:
+        $('#gantt-content')
+            .append($('<div>')
+                .append($('<h3>').html("Parking " + parking))
+                .append($('<div>')
+                    .append($("<div>").attr('id', 'chart-' + chartname))
+                )
+            )
+        var now = moment()
+        _charts[chartname] = new ApexCharts(document.querySelector("#chart-" + chartname), {
+            series: [{
+                data: [{
+                        x: 'Deboarding',
+                        y: [
+                            moment(now).subtract(40, "minutes").valueOf(),
+                            moment(now).subtract(5, "minutes").valueOf()
+                        ],
+                        fillColor: '#008FFB'
+                    },
+                    {
+                        x: 'Fuel',
+                        y: [
+                            moment(now).subtract(15, "minutes").valueOf(),
+                            moment(now).add(15, "minutes").valueOf()
+                        ],
+                        fillColor: '#00E396'
+                    },
+                    {
+                        x: 'Catering',
+                        y: [
+                            moment(now).subtract(25, "minutes").valueOf(),
+                            moment(now).add(1, "minutes").valueOf()
+                        ],
+                        fillColor: '#775DD0'
+                    },
+                    {
+                        x: 'Boarding',
+                        y: [
+                            moment(now).add(15, "minutes").valueOf(),
+                            moment(now).add(45, "minutes").valueOf()
+                        ],
+                        fillColor: '#FEB019'
+                    },
+                    {
+                        x: 'Cleaning',
+                        y: [
+                            moment(now).subtract(25, "minutes").valueOf(),
+                            moment(now).add(10, "minutes").valueOf()
+                        ],
+                        fillColor: '#FF4560'
+                    }
+                ]
+            }],
+            chart: {
+                height: 150,
+                type: 'rangeBar'
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    distributed: true,
+                    dataLabels: {
+                        hideOverflowingLabels: false
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function(val, opts) {
+                    var label = opts.w.globals.labels[opts.dataPointIndex]
+                    var a = moment(val[0])
+                    var b = moment(val[1])
+                    var diff = moment.duration(b.diff(a)).humanize()
+                    return label + ': ' + diff + (diff > 1 ? ' days' : ' day')
+                },
+                style: {
+                    colors: ['#f3f4f5', '#fff']
+                }
+            },
+            xaxis: {
+                type: 'datetime'
+            },
+            yaxis: {
+                show: false
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f4f5', '#fff'],
+                    opacity: 1
+                }
+            }
+        })
+        _charts[chartname].render()
+    }
+
 
 
     function install_charts() {
@@ -785,26 +912,142 @@ Oscars.Map = (function($) {
     }
 
 
+    /*
+    gantt object: key: parking: A51 = {
+        from: {
+            name: ,
+            airport: ,
+            scheduled: ,
+            planned: ,
+            actual: ,
+            note: ,
+            isnew: ,
+            removeAt:
+        },
+        to: {
+            name: ,
+            airport: ,
+            scheduled: ,
+            planned: ,
+            actual: ,
+            note: ,
+            isnew: ,
+            removeAt:
+        },
+        services: [{
+                vehicle: fuel01,
+                type: fuel,
+                firstseen: "2020-04-29T16:51:23.000+02:00",
+                lastseen: "2020-04-29T17:21:54.000+02:00",
+                status: "service"
+                "left"
+                "arrived" ?
+            },
+            {
+                vehicle: catering01,
+                type: catering,
+                firstseen: "2020-04-29T16:51:23.000+02:00",
+                lastseen: "2020-04-29T16:51:23.000+02:00",
+                status: "arrived"
+            }
+        ]
+    }
+
+    */
+    // creates a chart for a new parking arrival
+    function createGantt(parking) {
+        const flight = Oscars.Util.getFlight(parking.flight)
+        const departure = Oscars.Util.getDepartureFlight(parking.flight)
+
+        var r = _gantt.get('' + stopped.parking)
+        console.log("createGantt", stopped, r)
+        if (!r) { // we see a service vehicle before the plane, we need to record it...
+            _gantt.set('' + parking.name, { // force key to string
+                arrival: flight,
+                departure: departure,
+                services: {}
+            })
+        } else { // there is already a service vehicle that arrived on the parking before the place...
+            console.log("createGantt","plane arrived after service?",parking)
+            r.arrival = flight
+            r.departure = departure
+        }
+
+        console.log("createGantt", _gantt.get('' + parking.name))
+        createGanttChart(parking.name)
+    }
+
+    // record a stopped event and update the chart
+    function updateGantt(stopped) {
+        if (stopped.feature.properties.type == "SERVICE") {
+            const vehicle = stopped.feature.id
+            const sarr = vehicle.split(':') // id = "catering:0"
+            const service = sarr[0]
+            var r = _gantt.get('' + stopped.parking)
+
+            console.log("updateGantt1", stopped, r)
+            if (!r) { // we see a service vehicle before the plane, we need to record it...
+                r = {
+                    services: {}
+                }
+                _gantt.set('' + stopped.parking, r)
+                console.log("updateGantt","service arrived before plane?",stopped)
+            }
+
+            r.services[service] = r.services.hasOwnProperty(service) ?
+                r.services[service] : {}
+            var thisservice = r.services[service]
+
+            thisservice[vehicle] = thisservice.hasOwnProperty(vehicle) ?
+                thisservice[vehicle] : {}
+
+            var thisvehicle = thisservice[vehicle]
+
+            if (!thisvehicle.hasOwnProperty("firstseen")) {
+                thisvehicle.firstseen = stopped.feature.properties._timestamp
+            }
+            thisvehicle.lastseen = stopped.feature.properties._timestamp
+
+            // do we need to push r back on map??
+            // map.set('' + stopped.parking, r)
+
+            var r = getStopped(stopped.parking)
+            console.log("updateGantt2", stopped, r)
+        }
+
+        //updateGanttChart(stopped.parking, getStopped(stopped.parking))
+    }
+
+    // returns a structure ready for chart update
+    function getStopped(parking) { // force key to string
+        return _gantt.get('' + parking)
+    }
+
+
     function install_handlers() {
         $("#" + _options.dashboard_options.elemprefix + _options.map_id).on(_options.dashboard_options.msgprefix + _options.map_message, function(event, feature) {
             // we need to find which layer to update.
             // the layer is supplied through the *_group name property.
             //console.log('L.Oscars::gip:update: Info - ', feature)
             if (_options.debug)
-                console.log("Map::on", feature)
+                console.log("Omap::on", feature)
             if (feature.properties && feature.properties.group_name) {
-                var layer = Oscars.Map.findGIPLayer(feature.properties.group_name)
+                var layer = Oscars.Omap.findGIPLayer(feature.properties.group_name)
                 if (layer) {
                     layer.update(feature)
                 } else {
-                    console.log("Map::gip:update: Warning - Cannot find GIP layer", feature)
+                    console.log("Omap::gip:update: Warning - Cannot find GIP layer", feature)
+                }
+                if (feature.properties.speed == 0) {
+                    //console.log("Omap::trigger:stopped", feature)
+                    $("#" + _options.dashboard_options.elemprefix + _options.map_id).trigger(_options.dashboard_options.msgprefix + "stopped", { feature: feature })
                 }
             } else {
-                console.log("Map::gip:update: Warning - Feature has no group name", feature)
+                console.log("Omap::gip:update: Warning - Feature has no group name", feature)
             }
         })
         if (_options.debug)
-            console.log("Map::install_handlers: added", "#" + _options.dashboard_options.elemprefix + _options.map_id, _options.dashboard_options.msgprefix + _options.map_message)
+            console.log("Omap::install_handlers: added", "#" + _options.dashboard_options.elemprefix + _options.map_id, _options.dashboard_options.msgprefix + _options.map_message)
     } // install_handlers()
 
     function run_tests() {
@@ -816,11 +1059,28 @@ Oscars.Map = (function($) {
      */
     return {
         map: function(options, dashboard = false) {
-            Map.prototype.init(options) // creates _options
+            Omap.prototype.init(options) // creates _options
             var map = install_map()
             if (dashboard)
                 dashboard.register(_options.map_id, _options.map_message)
             return map
+        },
+
+        createGantt: function(parking) {
+            createGantt(parking)
+        },
+
+        updateGantt: function(stopped) {
+            updateGantt(stopped)
+        },
+
+        deleteGantt: function(parking) {
+            const chartname = "gantt-" + parking.name
+            $('#chart-' + chartname).parent().parent().remove()
+            if (_charts.hasOwnProperty(chartname)) {
+                delete _charts[chartname]
+            }
+            _gantt.delete(''+parking.name)
         },
 
         resetLocation: function(mode) {
@@ -890,13 +1150,13 @@ Oscars.Map = (function($) {
             if (_layerControl) {
                 _layerControl.addGipOverlay(layer, display_name, layer_group_display_name)
                 if (name) {
-                    // console.log('Map::addLayerToControlLayer: Info - Adding', name)
+                    // console.log('Omap::addLayerToControlLayer: Info - Adding', name)
                     _gipLayers[name] = layer
                 } else {
-                    console.log('Map::addLayerToControlLayer: featureCollection has no group name', featureCollection)
+                    console.log('Omap::addLayerToControlLayer: featureCollection has no group name', featureCollection)
                 }
             } else {
-                console.log('Map::addLayerToControlLayer: _layerControl not set', featureCollection)
+                console.log('Omap::addLayerToControlLayer: _layerControl not set', featureCollection)
             }
         },
 
@@ -981,14 +1241,14 @@ Oscars.Map = (function($) {
         addDeviceGroup: function(featureCollection, options) {
             var l = L.Oscars.deviceGroup(featureCollection, options)
             // l.addTo(this._map)
-            Oscars.Map.addLayerToControlLayer(featureCollection, l)
+            Oscars.Omap.addLayerToControlLayer(featureCollection, l)
             return l
         },
 
         addZoneGroup: function(featureCollection, options) {
             var l = L.Oscars.zoneGroup(featureCollection, options)
             // l.addTo(this._map)
-            Oscars.Map.addLayerToControlLayer(featureCollection, l)
+            Oscars.Omap.addLayerToControlLayer(featureCollection, l)
             return l
         },
 
