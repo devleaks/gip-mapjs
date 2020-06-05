@@ -42,7 +42,7 @@ var eblgAircrafts = {
                     "popup": "{{feature.properties.display_name}} is {{feature.properties.display_status}} / {{feature.properties.status}}",
                     "sidebar": "{{feature.properties.display_name}} is {{feature.properties.display_status}} / {{feature.properties.status}}.<br/>" +
                         "Last seen at formated date: {{#templates.formatDate}}" +
-                        "{{feature.properties._timestamp}}" +
+                        "{{feature.properties._touched}}" +
                         "{{/templates.formatDate}}.<br/>" +
                         "Available {{&texts.linkURL}}.",
                     "linkText": "Link to {{feature.properties.display_name}}",
@@ -91,7 +91,7 @@ var eblgAircrafts = {
                     "popup": "{{feature.properties.display_name}} is {{feature.properties.display_status}} / {{feature.properties.status}}",
                     "sidebar": "{{feature.properties.display_name}} is {{feature.properties.display_status}} / {{feature.properties.status}}.<br/>" +
                         "Last seen at formated date: {{#templates.formatDate}}" +
-                        "{{feature.properties._timestamp}}" +
+                        "{{feature.properties._touched}}" +
                         "{{/templates.formatDate}}.<br/>" +
                         "Available {{&texts.linkURL}}.",
                     "linkText": "Link to {{feature.properties.display_name}}",

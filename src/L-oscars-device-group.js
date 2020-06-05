@@ -102,7 +102,7 @@ Oscars.DeviceGroup = L.Realtime.extend({
             Oscars.Omap.setStats('ODGCLU')
             if (this._features.hasOwnProperty(fid)) {
                 var feature = this._features[fid]
-                var ts = feature.properties._timestamp
+                var ts = feature.properties._touched
                 if (this.options.greyOut) {
                     var cleanUpStatus = Oscars.Util.getDefaults().CLEANUP_STATUS
                     if (((ts + this.options.greyOut) < now) && (feature.properties.status != cleanUpStatus)) {

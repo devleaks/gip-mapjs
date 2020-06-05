@@ -355,11 +355,17 @@ function parking(parking) {
 //Oscars.Omap.createGantt({name: "name"})
 
 dashboard.register(map_options.map_id, "stopped")
-$("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.msgprefix + "stopped", function(event, msg) {
-    //if (dashboard_options.debug)
+$("#" + dashboard_options.elemprefix + map_options.map_id).on(
+        dashboard_options.msgprefix + "stopped" + " " +
+        dashboard_options.msgprefix + "just-stopped" + " " +
+        dashboard_options.msgprefix + "just-started" + " " +
+        dashboard_options.msgprefix + "just-moved", function(event, msg) {
+    if (dashboard_options.debug)
         console.log("Map::on:stopped", msg.feature.id, event, msg)
     const feature = msg.feature
-    if (feature && feature.hasOwnProperty("geometry")) {
+    if (    (event.type == (dashboard_options.msgprefix + "stopped"))
+         && feature
+         && feature.hasOwnProperty("geometry")) {
         // try to find parking in which feature is stopped
         const parr = parkings.features.filter(f => turf.booleanPointInPolygon(feature.geometry.coordinates, f))
         if (parr.length > 0) {
@@ -368,11 +374,11 @@ $("#" + dashboard_options.elemprefix + map_options.map_id).on(dashboard_options.
                 parking: box.properties.name,
                 feature: feature
             })
-        } else {
-            console.log("Map::on:stopped: not parked", feature)
+//        } else {
+//            console.log("Map::on:stopped: not parked", feature.id, feature)
         }
-    } else {
-        console.log("Map::on:stopped: Issue?", feature)
+//    } else {
+//        console.log("Map::on:stopped: not processed", feature)
     }
 })
 

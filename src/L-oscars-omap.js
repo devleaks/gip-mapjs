@@ -90,6 +90,8 @@ Oscars.Omap = (function($) {
 
     var _gantt = new Map()
 
+    var _devices = {}
+
 
     var Omap = function() {}
 
@@ -516,6 +518,7 @@ Oscars.Omap = (function($) {
                                     ))
                                 .append($('<tbody>'))
                             ))
+                        .append($('<div>').html('&nbsp;'))
                     )
             })
         }
@@ -706,10 +709,121 @@ Oscars.Omap = (function($) {
     } // install_map()
 
 
-    function createGanttChart(parking) {
-        // Parkings
-        var chartname = "gantt-" + parking
+    // returns a structure ready for chart update
+    function getServices(parking) { // force key to string
+        const colors = {
+            plane: "#db2004",
+            fuel: '#008FFB',
+            catering: '#00E396',
+            sewage: '#775DD0',
+            cargo: '#FEB019',
+            default: '#FF4560'
+        }
+        var r = _gantt.get('' + parking)
+        console.log("getServices::r", r)
+        var now = moment()
+        var data = [],data2,
+            arrt = false,
+            dept = false
 
+        if (r.arrival) {
+            arrt = moment(r.arrival.scheduled).subtract(60, "minutes")
+            if (r.departure) {
+                dept = moment(r.arrival.scheduled).add(60, "minutes")
+            }
+        }
+
+        if (arrt && dept) {
+            data.push({
+                x: "Plane OO-123",
+                y: [arrt.valueOf(), dept.valueOf()],
+                fillColor: colors["plane"]
+            })
+        }
+
+        if (r) {
+            for (var service in r.services) {
+                if (r.services.hasOwnProperty(service)) {
+                    var s = r.services[service]
+                    for (var vehicle in s) {
+                        if (s.hasOwnProperty(vehicle)) {
+                            var v = s[vehicle]
+                            var e = v.firstseen == v.lastseen ? 20 * 60 * 1000 : 0
+                            data.push({
+                                x: service,
+                                y: [v.firstseen, v.lastseen + e],
+                                fillColor: colors[service]
+                            })
+                        }
+                    }
+                }
+            }
+        }
+
+        // console.log("getServices::data", data)
+
+        data2 = [{
+                    x: 'Plane',
+                    y: [
+                        arrt.valueOf(),
+                        dept.valueOf()
+                    ],
+                    fillColor: '#008FFB'
+                },
+                {
+                    x: 'Deboarding',
+                    y: [
+                        moment(now).subtract(40, "minutes").valueOf(),
+                        moment(now).subtract(5, "minutes").valueOf()
+                    ],
+                    fillColor: '#008FFB'
+                },
+                {
+                    x: 'Fuel',
+                    y: [
+                        moment(now).subtract(15, "minutes").valueOf(),
+                        moment(now).add(15, "minutes").valueOf()
+                    ],
+                    fillColor: '#00E396'
+                },
+                {
+                    x: 'Catering',
+                    y: [
+                        moment(now).subtract(25, "minutes").valueOf(),
+                        moment(now).add(1, "minutes").valueOf()
+                    ],
+                    fillColor: '#775DD0'
+                },
+                {
+                    x: 'Boarding',
+                    y: [
+                        moment(now).add(15, "minutes").valueOf(),
+                        moment(now).add(45, "minutes").valueOf()
+                    ],
+                    fillColor: '#FEB019'
+                },
+                {
+                    x: 'Cleaning',
+                    y: [
+                        moment(now).subtract(25, "minutes").valueOf(),
+                        moment(now).add(10, "minutes").valueOf()
+                    ],
+                    fillColor: '#FF4560'
+                }
+            ]
+
+        // console.log("getServices::returned", data)
+
+        return [{
+            data: data
+        }];
+
+    }
+
+
+    function createGanttChart(parking) {
+        var chartname = "gantt-" + parking
+        var data = getServices(parking)
 
         // Create chart entry:
         $('#gantt-content')
@@ -719,51 +833,9 @@ Oscars.Omap = (function($) {
                     .append($("<div>").attr('id', 'chart-' + chartname))
                 )
             )
-        var now = moment()
+
         _charts[chartname] = new ApexCharts(document.querySelector("#chart-" + chartname), {
-            series: [{
-                data: [{
-                        x: 'Deboarding',
-                        y: [
-                            moment(now).subtract(40, "minutes").valueOf(),
-                            moment(now).subtract(5, "minutes").valueOf()
-                        ],
-                        fillColor: '#008FFB'
-                    },
-                    {
-                        x: 'Fuel',
-                        y: [
-                            moment(now).subtract(15, "minutes").valueOf(),
-                            moment(now).add(15, "minutes").valueOf()
-                        ],
-                        fillColor: '#00E396'
-                    },
-                    {
-                        x: 'Catering',
-                        y: [
-                            moment(now).subtract(25, "minutes").valueOf(),
-                            moment(now).add(1, "minutes").valueOf()
-                        ],
-                        fillColor: '#775DD0'
-                    },
-                    {
-                        x: 'Boarding',
-                        y: [
-                            moment(now).add(15, "minutes").valueOf(),
-                            moment(now).add(45, "minutes").valueOf()
-                        ],
-                        fillColor: '#FEB019'
-                    },
-                    {
-                        x: 'Cleaning',
-                        y: [
-                            moment(now).subtract(25, "minutes").valueOf(),
-                            moment(now).add(10, "minutes").valueOf()
-                        ],
-                        fillColor: '#FF4560'
-                    }
-                ]
-            }],
+            series: data,
             chart: {
                 height: 150,
                 type: 'rangeBar'
@@ -784,7 +856,7 @@ Oscars.Omap = (function($) {
                     var a = moment(val[0])
                     var b = moment(val[1])
                     var diff = moment.duration(b.diff(a)).humanize()
-                    return label + ': ' + diff + (diff > 1 ? ' days' : ' day')
+                    return label + ': ' + diff
                 },
                 style: {
                     colors: ['#f3f4f5', '#fff']
@@ -806,6 +878,12 @@ Oscars.Omap = (function($) {
         _charts[chartname].render()
     }
 
+
+    function updateGanttChart(parking) {
+        var chartname = "gantt-" + parking
+        var data = getServices(parking)
+        _charts[chartname].updateSeries(data)
+    }
 
 
     function install_charts() {
@@ -958,23 +1036,25 @@ Oscars.Omap = (function($) {
     function createGantt(parking) {
         const flight = Oscars.Util.getFlight(parking.flight)
         const departure = Oscars.Util.getDepartureFlight(parking.flight)
-
-        var r = _gantt.get('' + stopped.parking)
-        console.log("createGantt", stopped, r)
+        var r = _gantt.get('' + parking.name)
         if (!r) { // we see a service vehicle before the plane, we need to record it...
             _gantt.set('' + parking.name, { // force key to string
                 arrival: flight,
                 departure: departure,
                 services: {}
             })
+            createGanttChart(parking.name)
         } else { // there is already a service vehicle that arrived on the parking before the place...
-            console.log("createGantt","plane arrived after service?",parking)
-            r.arrival = flight
-            r.departure = departure
+            if (flight) {
+                console.log("createGantt", "plane arrived after service?", parking)
+                r.arrival = flight
+            }
+            if (departure) {
+                console.log("createGantt", "plane arrived after service, has departure", parking)
+                r.departure = departure
+            }
+            updateGanttChart(parking.name)
         }
-
-        console.log("createGantt", _gantt.get('' + parking.name))
-        createGanttChart(parking.name)
     }
 
     // record a stopped event and update the chart
@@ -984,14 +1064,26 @@ Oscars.Omap = (function($) {
             const sarr = vehicle.split(':') // id = "catering:0"
             const service = sarr[0]
             var r = _gantt.get('' + stopped.parking)
+            var create = false
 
-            console.log("updateGantt1", stopped, r)
             if (!r) { // we see a service vehicle before the plane, we need to record it...
                 r = {
                     services: {}
                 }
-                _gantt.set('' + stopped.parking, r)
-                console.log("updateGantt","service arrived before plane?",stopped)
+                create = true
+                console.log("updateGantt", "service arrived before plane?", stopped)
+            }
+
+            if (!r.departure) {
+                if (r.arrival) {
+                    console.log("updateGantt", "service has arrival", r, stopped)
+                    r.departure = Oscars.Util.getDepartureFlight(r.arrival.name)
+                    if (r.departure) {
+                        console.log("updateGantt", "service has departure", r, stopped)
+                    }
+                } else {
+                    console.log("updateGantt", "service has no flight assigned", r, stopped)
+                }
             }
 
             r.services[service] = r.services.hasOwnProperty(service) ?
@@ -1003,24 +1095,26 @@ Oscars.Omap = (function($) {
 
             var thisvehicle = thisservice[vehicle]
 
+            console.log("updateGantt", moment().valueOf(), stopped.feature)
+
             if (!thisvehicle.hasOwnProperty("firstseen")) {
-                thisvehicle.firstseen = stopped.feature.properties._timestamp
+                // console.log("updateGantt: First visit...", moment(stopped.feature.properties._timestamp_emission, moment.ISO_8601).valueOf(), stopped.feature)
+                // console.log("updateGantt: First visit...", StackTrace.getSync())
+                thisvehicle.firstseen = moment(stopped.feature.properties._timestamp_emission, moment.ISO_8601).valueOf()
+            } else {
+                console.log("updateGantt: Second visit...", thisvehicle.firstseen, moment(stopped.feature.properties._timestamp_emission, moment.ISO_8601).valueOf(), stopped.feature)
+                // console.log("updateGantt: Second visit...", StackTrace.getSync())
             }
-            thisvehicle.lastseen = stopped.feature.properties._timestamp
+            thisvehicle.lastseen = moment(stopped.feature.properties._timestamp_emission, moment.ISO_8601).valueOf()
 
             // do we need to push r back on map??
-            // map.set('' + stopped.parking, r)
+            _gantt.set('' + stopped.parking, r)
 
-            var r = getStopped(stopped.parking)
-            console.log("updateGantt2", stopped, r)
+            if (create)
+                createGanttChart(stopped.parking)
+            else
+                updateGanttChart(stopped.parking)
         }
-
-        //updateGanttChart(stopped.parking, getStopped(stopped.parking))
-    }
-
-    // returns a structure ready for chart update
-    function getStopped(parking) { // force key to string
-        return _gantt.get('' + parking)
     }
 
 
@@ -1034,13 +1128,28 @@ Oscars.Omap = (function($) {
             if (feature.properties && feature.properties.group_name) {
                 var layer = Oscars.Omap.findGIPLayer(feature.properties.group_name)
                 if (layer) {
+                    const fid = Oscars.Util.getFeatureId(feature)
+                    var oldf = _devices.hasOwnProperty(fid) ? _devices[fid] : false
                     layer.update(feature)
+
+                    if (feature.properties.hasOwnProperty("speed") && feature.properties.speed == 0) {
+                        //console.log("Omap::trigger:stopped", feature)
+                        $("#" + _options.dashboard_options.elemprefix + _options.map_id).trigger(_options.dashboard_options.msgprefix + "stopped", { feature: feature })
+                    }
+                    if (oldf && oldf.properties.hasOwnProperty("speed")) {
+                        // console.log("oldf", fid, oldf.properties.speed, feature.properties.speed)
+                        if (oldf.properties.speed > 0 && feature.properties.speed == 0) { // device has stopped
+                            $("#" + _options.dashboard_options.elemprefix + _options.map_id).trigger(_options.dashboard_options.msgprefix + "just-stopped", { feature: feature })
+                        } else if (oldf.properties.speed == 0 && feature.properties.speed > 0) {
+                            $("#" + _options.dashboard_options.elemprefix + _options.map_id).trigger(_options.dashboard_options.msgprefix + "just-started", { feature: feature })
+                        } else if (oldf.properties.speed == 0 && feature.properties.speed == 0 &&
+                            turf.distance(oldf.geometry.coordinates, feature.geometry.coordinates, { units: 'kilometers' }) > 0.05) { // still stopped but moved 50 meters
+                            $("#" + _options.dashboard_options.elemprefix + _options.map_id).trigger(_options.dashboard_options.msgprefix + "just-moved", { feature: feature })
+                        }
+                    }
+                    _devices[fid] = feature
                 } else {
                     console.log("Omap::gip:update: Warning - Cannot find GIP layer", feature)
-                }
-                if (feature.properties.speed == 0) {
-                    //console.log("Omap::trigger:stopped", feature)
-                    $("#" + _options.dashboard_options.elemprefix + _options.map_id).trigger(_options.dashboard_options.msgprefix + "stopped", { feature: feature })
                 }
             } else {
                 console.log("Omap::gip:update: Warning - Feature has no group name", feature)
@@ -1076,11 +1185,11 @@ Oscars.Omap = (function($) {
 
         deleteGantt: function(parking) {
             const chartname = "gantt-" + parking.name
-            $('#chart-' + chartname).parent().parent().remove()
+            //$('#chart-' + chartname).parent().parent().remove()
             if (_charts.hasOwnProperty(chartname)) {
                 delete _charts[chartname]
             }
-            _gantt.delete(''+parking.name)
+            _gantt.delete('' + parking.name)
         },
 
         resetLocation: function(mode) {

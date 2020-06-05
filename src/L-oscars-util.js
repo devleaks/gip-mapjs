@@ -354,9 +354,9 @@ Oscars.Util = (function() {
         }
     }
 
-    // Set feature.properties._timestamp to now().  
+    // Set feature.properties._touched to now().  
     function touch(feature) {
-        feature.properties._timestamp = Date.now();
+        feature.properties._touched = Date.now();
     }
 
 
@@ -432,27 +432,40 @@ Oscars.Util = (function() {
         },
 
 
-        getFlight: function(flightname) {
-            if(_flightboard["arrival"].hasOwnProperty(flightname)) {
-                return _flightboard["arrival"][flightname]
+        getFlight: function(flightname, move = false) {
+            if (!move) {
+                if (_flightboard["arrival"].hasOwnProperty(flightname)) {
+                    return _flightboard["arrival"][flightname]
+                }
+                if (_flightboard["departure"].hasOwnProperty(flightname)) {
+                    return _flightboard["departure"][flightname]
+                }
+            } else {
+                if (_flightboard[move].hasOwnProperty(flightname)) {
+                    return _flightboard[move][flightname]
+                }
             }
-            if(_flightboard["departure"].hasOwnProperty(flightname)) {
-                return _flightboard["departure"][flightname]
-            }
+            console.log("getFlight", "flight not found", flightname, move, _flightboard)
             return null
         },
 
         getDepartureFlight: function(flightname) {
-            const arrival = _flightboard["arrival"][flightname]
+            const arrival = Oscars.Util.getFlight(flightname, "arrival")
             var departure = false
-            for(var f in _flightboard["departure"]) {
-                if(!departure && _flightboard["departure"].hasOwnProperty(f)) {
+            for (var f in _flightboard["departure"]) {
+                if (!departure && _flightboard["departure"].hasOwnProperty(f)) {
                     const flight = _flightboard["departure"][f]
-                    if( (flight.parking == arrival.parking) && 
-                        flight.scheduled.isAfter(arrival.scheduled) ) {
-                        departure = flight
+                    if (flight.parking == arrival.parking) {
+                        if (flight.scheduled &&
+                            arrival.scheduled &&
+                            flight.scheduled.isAfter(arrival.scheduled)) {
+                            departure = flight
+                        }
                     }
                 }
+            }
+            if (!departure) {
+                console.log("getDepartureFlight", "flight not found", flightname, _flightboard)
             }
             return departure
         },
@@ -649,7 +662,7 @@ Oscars.Util = (function() {
                 P = "planned",
                 A = "actual"
 
-             function getTime(f) { // returns the most recent known time for flight
+            function getTime(f) { // returns the most recent known time for flight
                 var t = f.hasOwnProperty(S) ? f[S] : false
                 if (f[A]) {
                     t = f[A]
@@ -751,7 +764,7 @@ Oscars.Util = (function() {
             return _options;
         },
 
-        // Set feature.properties._timestamp to now().  
+        // Set feature.properties._touched to now().  
         touch: function() {
             touch(feature);
         },
